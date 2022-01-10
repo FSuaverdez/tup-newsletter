@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import { authActions } from './app/slices/authSlice'
