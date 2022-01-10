@@ -4,20 +4,28 @@ import { FcGoogle } from 'react-icons/fc'
 import logo from '../assets/logo.png'
 import background from '../assets/background.jpg'
 import { useLoginMutation } from '../app/services/authApi'
+import { useDispatch, useSelector } from 'react-redux'
+import { authActions } from '../app/slices/authSlice'
+import { useEffect } from 'react'
 
 const Login = () => {
+  const user = useSelector(state => state.user)
   const navigate = useNavigate()
-  const [login, result] = useLoginMutation()
+  const dispatch = useDispatch()
+  const [login] = useLoginMutation()
+
+  useEffect(() => {
+    if (user) {
+      navigate('/')
+    }
+  }, [user, navigate])
 
   const responseGoogle = async res => {
-    const user = res?.profileObj
-    const token = res?.tokenId
-
+    const googleUser = res?.profileObj
     try {
-      const ok = await login({ user, token }).unwrap()
-      console.log(result)
-      console.log(ok)
-      // navigate('/')
+      const { user, token } = await login(googleUser).unwrap()
+      dispatch(authActions.AUTH({ ...user, token }))
+      navigate('/')
     } catch (error) {
       console.log(error)
     }

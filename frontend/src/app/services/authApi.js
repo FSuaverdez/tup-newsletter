@@ -6,10 +6,10 @@ export const authApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: builder => ({
     login: builder.mutation({
-      query: ({ user, token }) => ({
+      query: googleUser => ({
         url: 'user/auth',
         method: 'POST',
-        body: { ...user, token },
+        body: googleUser,
       }),
     }),
   }),
