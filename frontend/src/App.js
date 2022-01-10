@@ -11,7 +11,6 @@ const App = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const user = useSelector(state => state.user)
-  const [userData, setUserData] = useState(user)
 
   const logout = useCallback(() => {
     dispatch(authActions.LOGOUT())
@@ -27,8 +26,7 @@ const App = () => {
         logout()
       }
     }
-    setUserData(JSON.parse(localStorage.getItem('profile')))
-  }, [user, logout, setUserData])
+  }, [user, logout])
 
   return (
     <div>
