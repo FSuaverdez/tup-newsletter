@@ -1,6 +1,5 @@
 import { NavLink, Link, Routes, Route } from 'react-router-dom'
 import { RiHomeFill } from 'react-icons/ri'
-import { IoIosArrowForward } from 'react-icons/io'
 
 import logo from '../assets/logo.png'
 import { useSelector } from 'react-redux'
