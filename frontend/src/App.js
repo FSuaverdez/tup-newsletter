@@ -31,8 +31,7 @@ const App = () => {
   }, [user, logout, setUserData])
 
   return (
-    <div className='bg-gray-100'>
-      {userData && userData.name}
+    <div>
       <Routes>
         <Route path='login' element={<Login />} />
         <Route path='/*' element={<Home />} />
