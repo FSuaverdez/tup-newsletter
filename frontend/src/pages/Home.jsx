@@ -20,11 +20,11 @@ const Home = () => {
     scrollRef.current.scrollTo(0, 0)
   }, [])
   return (
-    <div className='flex bg-gray-50 md:flex-row flex-col h-screen transition-height duration-75 ease-out'>
-      <div className='hidden md:flex h-screen flex-initial'>
+    <div className='flex bg-gray-50 lg:flex-row flex-col h-screen transition-height duration-75 ease-out'>
+      <div className='hidden lg:flex h-screen flex-initial'>
         <Sidebar />
       </div>
-      <div className='flex md:hidden flex-row'>
+      <div className='flex lg:hidden flex-row'>
         <div className='p-2 w-full flex flex-row justify-between items-center shadow-md'>
           <HiMenu
             fontSize={40}
