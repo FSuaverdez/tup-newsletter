@@ -1,14 +1,16 @@
-import { NavLink, Link, Routes, Route } from 'react-router-dom'
+import { NavLink, Link, useNavigate } from 'react-router-dom'
 import { RiHomeFill } from 'react-icons/ri'
 
 import logo from '../assets/logo.png'
-import { useSelector } from 'react-redux'
-import SidebarCategory from './SidebarCategory'
+import { useDispatch, useSelector } from 'react-redux'
+import { authActions } from '../app/slices/authSlice'
+import { useCallback } from 'react'
+import SidebarRoutes from './SidebarRoutes'
 
 const isNotActiveStyle =
-  'flex items-center px-5 gap-3 text-gray-500 hover:text-red-400 transition-all duration-200 ease-in-out capitalize'
+  'flex items-center px-5 gap-3 text-gray-500 hover:text-red-400 transition-all duration-200 ease-in-out capitalize py-2'
 const isActiveStyle =
-  'flex items-center px-5 gap-3 font-bold text-red-600 border-r-2 border-red-600 border-black  transition-all duration-200 ease-in-out capitalize'
+  'flex items-center px-5 gap-3 font-bold text-red-600 border-r-2 border-red-500 border-black  transition-all duration-200 ease-in-out capitalize py-2'
 
 const categories = [
   {
@@ -54,22 +56,82 @@ const categories = [
 const Sidebar = ({ closeToggle }) => {
   const user = useSelector(state => state.user)
 
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const handleCloseSidebar = () => {
     if (closeToggle) closeToggle(false)
   }
+
+  const logout = useCallback(() => {
+    dispatch(authActions.LOGOUT())
+    navigate('/')
+  }, [navigate, dispatch])
+
   return (
-    <div className='flex flex-col justify-between bg-white h-full overflow-y-scroll min-w-350 hide-scrollbar'>
+    <div className='flex flex-col  bg-white h-full overflow-y-scroll min-w-350 hide-scrollbar'>
       <div className='flex flex-col'>
         <Link
           to='/'
-          className='flex px-5 gap-2 my-6 pt-1 items-center'
+          className='flex px-5 gap-2 pt-1 items-center mt-4'
           onClick={handleCloseSidebar}
         >
           <img src={logo} alt='logo' className='w-16 drop-shadow-md ' />
-          <h2 className='text-2xl font-bold ml-4 text-red-600 w-fu'>
+          <h2 className='text-2xl font-bold ml-4 text-red-500 w-full'>
             TUP NewsLetter
           </h2>
         </Link>
+        {user ? (
+          <div className='bg-white rounded-lg shadow-lg mx-3 p-2 mt-5 my-6 '>
+            <div className='flex items-center  '>
+              <Link
+                to={`user-profile/${user._id}`}
+                className='flex   gap-2  items-center justify-center '
+                onClick={handleCloseSidebar}
+              >
+                <img
+                  src={user.imageUrl}
+                  alt='user-rpofile'
+                  className='w-10 h-10 rounded-full'
+                />
+                <p className='text-sm'>{user.name}</p>
+              </Link>
+              <button
+                type='button'
+                className='text-sm text-white rounded bg-red-500 items-center justify-center mx-auto py-1 px-3'
+                onClick={logout}
+              >
+                Logout
+              </button>
+            </div>
+            <div className='p-2'>
+              <NavLink
+                to='/admin'
+                className={({ isActive }) =>
+                  isActive ? isActiveStyle : isNotActiveStyle
+                }
+              >
+                Admin Dashboard
+              </NavLink>
+              <NavLink
+                to='/content'
+                className={({ isActive }) =>
+                  isActive ? isActiveStyle : isNotActiveStyle
+                }
+              >
+                Content Management
+              </NavLink>
+            </div>
+          </div>
+        ) : (
+          <Link
+            to={`login`}
+            className='text-white rounded bg-red-500 items-center justify-center mx-auto py-1 px-3'
+            onClick={handleCloseSidebar}
+          >
+            Login
+          </Link>
+        )}
         <div className='flex flex-col gap-5'>
           <NavLink
             to='/'
@@ -80,42 +142,12 @@ const Sidebar = ({ closeToggle }) => {
           >
             <RiHomeFill /> Home
           </NavLink>
-          <Routes>
-            <Route path='/admin/category' element={<>admintabs</>} />
-            <Route
-              path='/*'
-              element={
-                <>
-                  <h3 className='mt-2 px-5 text-base 2xl:text-xl'>
-                    Categories
-                  </h3>
-                  {categories.map(category => (
-                    <SidebarCategory
-                      key={category.name}
-                      category={category}
-                      handleCloseSidebar={handleCloseSidebar}
-                    />
-                  ))}
-                </>
-              }
-            />
-          </Routes>
+          <SidebarRoutes
+            categories={categories}
+            handleCloseSidebar={handleCloseSidebar}
+          />
         </div>
       </div>
-      {user && (
-        <Link
-          to={`user-profile/${user._id}`}
-          className='flex my-5 mb-3 gap-2 p-2 items-center bg-white rounded-lg shadow-lg mx-3'
-          onClick={handleCloseSidebar}
-        >
-          <img
-            src={user.imageUrl}
-            alt='user-rpofile'
-            className='w-10 h-10 rounded-full'
-          />
-          <p>{user.name}</p>
-        </Link>
-      )}
     </div>
   )
 }

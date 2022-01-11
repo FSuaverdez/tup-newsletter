@@ -11,11 +11,11 @@ export const authSlice = createSlice({
   reducers: {
     AUTH(state, action) {
       localStorage.setItem('profile', JSON.stringify({ ...action?.payload }))
-      state = action.payload
+      return action.payload
     },
     LOGOUT(state, action) {
       localStorage.clear()
-      state = null
+      return null
     },
   },
 })

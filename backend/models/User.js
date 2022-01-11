@@ -6,6 +6,11 @@ const userSchema = mongoose.Schema(
     email: { type: String, required: true, unique: true },
     imageUrl: { type: String, required: true },
     googleId: { type: String },
+    isAdmin: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
     categoryPermission: {
       type: [
         {

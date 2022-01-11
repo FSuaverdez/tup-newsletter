@@ -1,15 +1,12 @@
 import { useState, useRef, useEffect } from 'react'
 import { HiMenu } from 'react-icons/hi'
 import { AiFillCloseCircle } from 'react-icons/ai'
-import { Link, Route, Routes } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-import { Sidebar, UserProfile } from '../components'
-import AdminCategory from './AdminCategory'
 import logo from '../assets/logo.png'
 import { useSelector } from 'react-redux'
-import Posts from './Posts'
-import Category from './Category'
-import SubCategory from './SubCategory'
+import Sidebar from '../components/Sidebar'
+import HomeRoutes from '../components/HomeRoutes'
 
 const Home = () => {
   const [toggleSidebar, setToggleSidebar] = useState(false)
@@ -37,13 +34,15 @@ const Home = () => {
               TUP NewsLetter
             </h2>
           </Link>
-          <Link to={`user-profile/${user?._id}`}>
-            <img
-              src={user.imageUrl}
-              alt='logo'
-              className='w-16 rounded-full border border-gray-200 shadow-md'
-            />
-          </Link>
+          {user && (
+            <Link to={`user-profile/${user?._id}`}>
+              <img
+                src={user.imageUrl}
+                alt='logo'
+                className='w-16 rounded-full border border-gray-200 shadow-md'
+              />
+            </Link>
+          )}
         </div>
         {toggleSidebar && (
           <div className='fixed w-4/5 bg-white h-screen overflow-y-auto shadow-md z-10 animate-slide-in '>
@@ -58,18 +57,8 @@ const Home = () => {
           </div>
         )}
       </div>
-
       <div className='pb-2 flex-1 h-screen overflow-y-scroll' ref={scrollRef}>
-        <Routes>
-          <Route path='/user-profile/:userId' element={<UserProfile />} />
-          <Route path='/category/:categoryName' element={<Category />} />
-          <Route
-            path='/category/:categoryName/:subCategoryName'
-            element={<SubCategory />}
-          />
-          <Route path='/admin/category' element={<AdminCategory />} />
-          <Route path='/*' element={<Posts />} />
-        </Routes>
+        <HomeRoutes />
       </div>
     </div>
   )
