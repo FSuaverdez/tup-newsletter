@@ -1,8 +1,5 @@
 import { Link } from 'react-router-dom';
-import {
-  useGetCategoriesQuery,
-  usePrefetch,
-} from '../app/services/categoryApi';
+import { useGetCategoriesQuery } from '../app/services/categoryApi';
 
 const AdminCategory = () => {
   const { data: categories, isLoading: isCategoriesLoading } =

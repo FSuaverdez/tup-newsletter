@@ -11,7 +11,7 @@ const AdminAddCategory = () => {
     e.preventDefault();
 
     if (name) {
-      const response = await addCategory({ name }).unwrap();
+      await addCategory({ name }).unwrap();
       navigate('/admin/category');
     }
   };
