@@ -4,6 +4,9 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 
 import userRoutes from './routes/userRoutes.js'
+import categoryRoutes from './routes/categoryRoutes.js'
+import SubCategory from './models/SubCategory.js'
+import Category from './models/Category.js'
 
 dotenv.config()
 
@@ -18,6 +21,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/user', userRoutes)
+app.use('/category', categoryRoutes)
 
 const CONNECTION_URL = process.env.CONNECTION_URL
 const PORT = process.env.PORT || 5000

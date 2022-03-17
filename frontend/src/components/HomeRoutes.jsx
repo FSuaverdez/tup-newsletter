@@ -4,6 +4,7 @@ import Posts from '../pages/Posts'
 import SubCategory from '../pages/SubCategory'
 import UserProfile from './UserProfile'
 import AdminCategory from '../pages/AdminCategory'
+import AdminAddCategory from '../pages/AdminAddCategory'
 
 const HomeRoutes = () => {
   return (
@@ -15,6 +16,7 @@ const HomeRoutes = () => {
         element={<SubCategory />}
       />
       <Route path='/admin/category' element={<AdminCategory />} />
+      <Route path='/admin/category/add' element={<AdminAddCategory />} />
       <Route path='/*' element={<Posts />} />
     </Routes>
   )

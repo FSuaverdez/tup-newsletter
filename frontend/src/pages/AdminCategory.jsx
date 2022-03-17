@@ -1,47 +1,48 @@
-const AdminCategory = () => {
-  return (
-    <div className='p-5'>
-      <h1 className='text-3xl'>Manage Categories</h1>
-      <div className='bg-white p-5 rounded-lg shadow-lg'>
-        <h2 className='text-2xl'>Categories</h2>
+import { Link } from 'react-router-dom';
+import {
+  useGetCategoriesQuery,
+  usePrefetch,
+} from '../app/services/categoryApi';
 
+const AdminCategory = () => {
+  const { data: categories, isLoading: isCategoriesLoading } =
+    useGetCategoriesQuery();
+  if (isCategoriesLoading) {
+    return 'Loading...';
+  }
+
+  return (
+    <div className='p-5  max-w-5xl mx-auto'>
+      <h1 className='text-2xl font-bold my-5'>Manage Category</h1>
+      <div className='bg-white p-5 rounded-lg shadow-lg mx-auto'>
         <div className='flex items-center w-full justify-end mb-5'>
-          <button
-            type='button'
+          <Link
+            to='add'
             className='bg-green-500 text-white rounded py-2 px-3 hover:bg-green-600'
           >
             Add Category
-          </button>
+          </Link>
         </div>
-        <table class='table-auto w-full'>
-          <thead>
-            <tr>
-              <th>Song</th>
-              <th>Artist</th>
-              <th>Year</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>The Sliding Mr. Bones (Next Stop, Pottersville)</td>
-              <td>Malcolm Lockyer</td>
-              <td>1961</td>
-            </tr>
-            <tr>
-              <td>Witchy Woman</td>
-              <td>The Eagles</td>
-              <td>1972</td>
-            </tr>
-            <tr>
-              <td>Shining Star</td>
-              <td>Earth, Wind, and Fire</td>
-              <td>1975</td>
-            </tr>
-          </tbody>
-        </table>
+        <div>
+          {categories &&
+            categories.map(c => (
+              <div
+                className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center'
+                key={c._id}
+              >
+                <p className='text-xl font-bold'>{c.name}</p>
+                <Link
+                  to={`edit/${c._id}`}
+                  className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
+                >
+                  Edit
+                </Link>
+              </div>
+            ))}
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AdminCategory
+export default AdminCategory;
