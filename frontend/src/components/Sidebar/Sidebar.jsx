@@ -1,16 +1,16 @@
-import { NavLink, Link, useNavigate } from 'react-router-dom'
-import { RiHomeFill } from 'react-icons/ri'
+import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { RiHomeFill } from 'react-icons/ri';
 
-import logo from '../assets/logo.png'
-import { useDispatch, useSelector } from 'react-redux'
-import { authActions } from '../app/slices/authSlice'
-import { useCallback } from 'react'
-import SidebarRoutes from './SidebarRoutes'
+import logo from '../../assets/logo.png';
+import { useDispatch, useSelector } from 'react-redux';
+import { authActions } from '../../app/slices/authSlice';
+import { useCallback } from 'react';
+import SidebarRoutes from '../../routes/SidebarRoutes';
 
 const isNotActiveStyle =
-  'flex items-center px-5 gap-3 text-gray-500 hover:text-red-400 transition-all duration-200 ease-in-out capitalize py-2'
+  'flex items-center px-5 gap-3 text-gray-500 hover:text-red-400 transition-all duration-200 ease-in-out capitalize py-2';
 const isActiveStyle =
-  'flex items-center px-5 gap-3 font-bold text-red-600 border-r-2 border-red-500 border-black  transition-all duration-200 ease-in-out capitalize py-2'
+  'flex items-center px-5 gap-3 font-bold text-red-600 border-r-2 border-red-500 border-black  transition-all duration-200 ease-in-out capitalize py-2';
 
 const categories = [
   {
@@ -51,22 +51,22 @@ const categories = [
       },
     ],
   },
-]
+];
 
 const Sidebar = ({ closeToggle }) => {
-  const user = useSelector(state => state.user)
+  const user = useSelector(state => state.user);
 
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleCloseSidebar = () => {
-    if (closeToggle) closeToggle(false)
-  }
+    if (closeToggle) closeToggle(false);
+  };
 
   const logout = useCallback(() => {
-    dispatch(authActions.LOGOUT())
-    navigate('/')
-  }, [navigate, dispatch])
+    dispatch(authActions.LOGOUT());
+    navigate('/');
+  }, [navigate, dispatch]);
 
   return (
     <div className='flex flex-col  bg-white h-full overflow-y-scroll min-w-350 hide-scrollbar'>
@@ -149,7 +149,7 @@ const Sidebar = ({ closeToggle }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

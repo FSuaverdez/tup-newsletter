@@ -1,10 +1,10 @@
-import { Route, Routes } from 'react-router-dom'
-import Category from '../pages/Category'
-import Posts from '../pages/Posts'
-import SubCategory from '../pages/SubCategory'
-import UserProfile from './UserProfile'
-import AdminCategory from '../pages/AdminCategory'
-import AdminAddCategory from '../pages/AdminAddCategory'
+import { Route, Routes } from 'react-router-dom';
+import Category from '../pages/Category';
+import Posts from '../pages/Posts';
+import SubCategory from '../pages/SubCategory';
+import UserProfile from '../pages/UserProfile';
+import AdminCategory from '../pages/Admin/Category/AdminCategory';
+import AdminAddCategory from '../pages/Admin/Category/AdminAddCategory';
 
 const HomeRoutes = () => {
   return (
@@ -19,7 +19,7 @@ const HomeRoutes = () => {
       <Route path='/admin/category/add' element={<AdminAddCategory />} />
       <Route path='/*' element={<Posts />} />
     </Routes>
-  )
-}
+  );
+};
 
-export default HomeRoutes
+export default HomeRoutes;

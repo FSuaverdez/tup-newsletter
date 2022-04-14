@@ -1,21 +1,21 @@
-import { useState, useRef, useEffect } from 'react'
-import { HiMenu } from 'react-icons/hi'
-import { AiFillCloseCircle } from 'react-icons/ai'
-import { Link } from 'react-router-dom'
+import { useState, useRef, useEffect } from 'react';
+import { HiMenu } from 'react-icons/hi';
+import { AiFillCloseCircle } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 
-import logo from '../assets/logo.png'
-import { useSelector } from 'react-redux'
-import Sidebar from '../components/Sidebar'
-import HomeRoutes from '../components/HomeRoutes'
+import logo from '../assets/logo.png';
+import { useSelector } from 'react-redux';
+import Sidebar from '../components/Sidebar/Sidebar';
+import HomeRoutes from '../routes/HomeRoutes';
 
 const Home = () => {
-  const [toggleSidebar, setToggleSidebar] = useState(false)
-  const user = useSelector(state => state.user)
-  const scrollRef = useRef(null)
+  const [toggleSidebar, setToggleSidebar] = useState(false);
+  const user = useSelector(state => state.user);
+  const scrollRef = useRef(null);
 
   useEffect(() => {
-    scrollRef.current.scrollTo(0, 0)
-  }, [])
+    scrollRef.current.scrollTo(0, 0);
+  }, []);
   return (
     <div className='flex bg-gray-50 lg:flex-row flex-col h-screen transition-height duration-75 ease-out'>
       <div className='hidden lg:flex h-screen flex-initial'>
@@ -61,7 +61,7 @@ const Home = () => {
         <HomeRoutes />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

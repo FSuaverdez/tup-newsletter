@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAddCategoryMutation } from '../app/services/categoryApi';
+import { useAddCategoryMutation } from '../../../app/services/categoryApi';
 
 const AdminAddCategory = () => {
   const [name, setName] = useState('');
@@ -30,6 +30,7 @@ const AdminAddCategory = () => {
               className='max-w-xl w-full block border-2 border-gray-500 rounded px-2 py-1'
               type='text'
               name='name'
+              s
               id='name'
               onChange={e => setName(e.target.value)}
               value={name}

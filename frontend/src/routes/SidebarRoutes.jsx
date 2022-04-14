@@ -1,6 +1,6 @@
-import { Route, Routes } from 'react-router-dom'
-import SidebarAdmin from './SidebarAdmin'
-import SidebarCategory from './SidebarCategory'
+import { Route, Routes } from 'react-router-dom';
+import SidebarAdmin from '../components/Sidebar/SidebarAdmin';
+import SidebarCategory from '../components/Sidebar/SidebarCategory';
 
 const SidebarRoutes = ({ categories, handleCloseSidebar }) => {
   return (
@@ -28,7 +28,7 @@ const SidebarRoutes = ({ categories, handleCloseSidebar }) => {
         }
       />
     </Routes>
-  )
-}
+  );
+};
 
-export default SidebarRoutes
+export default SidebarRoutes;
