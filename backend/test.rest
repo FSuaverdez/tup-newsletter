@@ -1,0 +1,7 @@
+POST http://localhost:5000/user/auth
+content-type: application/json
+
+{
+    "name": "test"
+}
+
