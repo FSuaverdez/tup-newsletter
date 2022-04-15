@@ -1,6 +1,9 @@
 import asyncHandler from 'express-async-handler';
 import Category from '../models/Category.js';
 
+// @desc    Create a new category
+// @router  POST /category/add
+// @access  Admin Role Required
 export const addCategory = asyncHandler(async (req, res) => {
   const user = req.user;
   const { name } = req.body;
@@ -18,6 +21,9 @@ export const addCategory = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Get all categories
+// @router  GET /category/getAll
+// @access  Public
 export const getCategories = asyncHandler(async (req, res) => {
   try {
     const categories = await Category.find({});

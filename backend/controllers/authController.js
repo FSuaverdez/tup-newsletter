@@ -2,6 +2,9 @@ import asyncHandler from 'express-async-handler';
 import User from '../models/User.js';
 import generateToken from '../utils/generateToken.js';
 
+// @desc    Get all categories
+// @router  GET /category/getAll
+// @access  Public
 export const userAuth = asyncHandler(async (req, res) => {
   const { googleId, imageUrl, email, name } = req.body;
   try {

@@ -1,7 +1,12 @@
-POST http://localhost:5000/user/auth
+### Create Category
+POST http://localhost:5000/category/add
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZGVjYWU2NWEwOWY1NWFmYzk4NGJlZCIsImlhdCI6MTY0OTkxOTc5MCwiZXhwIjoxNjUwMTc4OTkwfQ.I-LS0R6TIOdMbc05go5dG4JcqRqjqQJ5WzCHGZvp-SY
 
 {
-    "name": "test"
+    "name": "test",
+    "user":{"_id":"61decae65a09f55afc984bed","name":"FRANNZ SUAVERDEZ","email":"frannz.suaverdez@tup.edu.ph","imageUrl":"https://lh3.googleusercontent.com/a-/AOh14GgREaiEW8OsPhR6xhl8os7L2WGYR8_OQfgiV-IJaQ=s96-c","googleId":"118121206790889149785","isAdmin":true,"categoryPermission":[],"subCategoryPermission":[],"createdAt":"2022-01-12T12:34:46.571Z","updatedAt":"2022-04-14T07:03:10.586Z","__v":0,"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZGVjYWU2NWEwOWY1NWFmYzk4NGJlZCIsImlhdCI6MTY0OTkxOTc5MCwiZXhwIjoxNjUwMTc4OTkwfQ.I-LS0R6TIOdMbc05go5dG4JcqRqjqQJ5WzCHGZvp-SY"}
 }
 
+### Get All Categories
+GET http://localhost:5000/category/getAll

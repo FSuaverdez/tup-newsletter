@@ -8,6 +8,6 @@ import { requireAuth } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 router.post('/add', requireAuth, addCategory);
-router.get('/getAll', requireAuth, getCategories);
+router.get('/getAll', getCategories);
 
 export default router;
