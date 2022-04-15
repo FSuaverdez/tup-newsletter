@@ -106,7 +106,7 @@ const Sidebar = ({ closeToggle }) => {
             </div>
             <div className='p-2'>
               <NavLink
-                to='/admin'
+                to='/admin/category'
                 className={({ isActive }) =>
                   isActive ? isActiveStyle : isNotActiveStyle
                 }

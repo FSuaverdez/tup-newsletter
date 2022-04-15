@@ -4,6 +4,7 @@ import Posts from '../pages/Posts';
 import SubCategory from '../pages/SubCategory/SubCategory';
 import UserProfile from '../pages/UserProfile/UserProfile';
 import AdminCategory from '../pages/Admin/Category/AdminCategory';
+import NotFound from '../pages/NotFound/NotFound';
 
 const HomeRoutes = () => {
   return (
@@ -15,7 +16,8 @@ const HomeRoutes = () => {
         element={<SubCategory />}
       />
       <Route path='/admin/category' element={<AdminCategory />} />
-      <Route path='/*' element={<Posts />} />
+      <Route path='/' element={<Posts />} />
+      <Route path='/*' element={<NotFound />} />
     </Routes>
   );
 };
