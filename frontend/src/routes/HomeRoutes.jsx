@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
-import Category from '../pages/Category';
+import Category from '../pages/Category/Category';
 import Posts from '../pages/Posts';
-import SubCategory from '../pages/SubCategory';
-import UserProfile from '../pages/UserProfile';
+import SubCategory from '../pages/SubCategory/SubCategory';
+import UserProfile from '../pages/UserProfile/UserProfile';
 import AdminCategory from '../pages/Admin/Category/AdminCategory';
 import AdminAddCategory from '../pages/Admin/Category/AdminAddCategory';
 

@@ -1,35 +1,35 @@
-import GoogleLogin from 'react-google-login'
-import { useNavigate } from 'react-router-dom'
-import { FcGoogle } from 'react-icons/fc'
-import logo from '../assets/logo.png'
-import background from '../assets/background.jpg'
-import { useLoginMutation } from '../app/services/authApi'
-import { useDispatch, useSelector } from 'react-redux'
-import { authActions } from '../app/slices/authSlice'
-import { useEffect } from 'react'
+import GoogleLogin from 'react-google-login';
+import { useNavigate } from 'react-router-dom';
+import { FcGoogle } from 'react-icons/fc';
+import logo from '../../assets/logo.png';
+import background from '../../assets/background.jpg';
+import { useLoginMutation } from '../../app/services/authApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { authActions } from '../../app/slices/authSlice';
+import { useEffect } from 'react';
 
 const Login = () => {
-  const user = useSelector(state => state.user)
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const [login] = useLoginMutation()
+  const user = useSelector(state => state.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [login] = useLoginMutation();
 
   useEffect(() => {
     if (user) {
-      navigate('/')
+      navigate('/');
     }
-  }, [user, navigate])
+  }, [user, navigate]);
 
   const responseGoogle = async res => {
-    const googleUser = res?.profileObj
+    const googleUser = res?.profileObj;
     try {
-      const { user, token } = await login(googleUser).unwrap()
-      dispatch(authActions.AUTH({ ...user, token }))
-      navigate('/')
+      const { user, token } = await login(googleUser).unwrap();
+      dispatch(authActions.AUTH({ ...user, token }));
+      navigate('/');
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   return (
     <div className='flex justify-center items-center flex-col h-screen'>
       <div className='relative w-full h-full'>
@@ -61,7 +61,7 @@ const Login = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

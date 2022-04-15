@@ -3,10 +3,10 @@ import { HiMenu } from 'react-icons/hi';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 
-import logo from '../assets/logo.png';
+import logo from '../../assets/logo.png';
 import { useSelector } from 'react-redux';
-import Sidebar from '../components/Sidebar/Sidebar';
-import HomeRoutes from '../routes/HomeRoutes';
+import Sidebar from '../Sidebar/Sidebar';
+import HomeRoutes from '../../routes/HomeRoutes';
 
 const Home = () => {
   const [toggleSidebar, setToggleSidebar] = useState(false);
