@@ -110,6 +110,7 @@ const Sidebar = ({ closeToggle }) => {
                 className={({ isActive }) =>
                   isActive ? isActiveStyle : isNotActiveStyle
                 }
+                onClick={handleCloseSidebar}
               >
                 Admin Dashboard
               </NavLink>
@@ -118,6 +119,7 @@ const Sidebar = ({ closeToggle }) => {
                 className={({ isActive }) =>
                   isActive ? isActiveStyle : isNotActiveStyle
                 }
+                onClick={handleCloseSidebar}
               >
                 Content Management
               </NavLink>

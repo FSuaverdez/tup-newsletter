@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAddCategoryMutation } from '../../../app/services/categoryApi';
+import Button from '../../../components/Button/Button';
 
 const AdminAddCategoryModal = ({ handleCloseAdd }) => {
   const [name, setName] = useState('');
@@ -47,18 +48,12 @@ const AdminAddCategoryModal = ({ handleCloseAdd }) => {
         </div>
 
         <div className='flex gap-2 justify-end'>
-          <button
-            className='bg-red-500 text-white rounded py-2 px-3 hover:bg-red-600 mt-5'
-            onClick={handleCloseAdd}
-          >
+          <Button type='danger' onClick={handleCloseAdd}>
             Close
-          </button>
-          <button
-            className='bg-green-500 text-white rounded py-2 px-3 hover:bg-green-600 mt-5'
-            onClick={handleSubmit}
-          >
+          </Button>
+          <Button type='success' onClick={handleSubmit}>
             Create Category
-          </button>
+          </Button>
         </div>
       </div>
     </div>
