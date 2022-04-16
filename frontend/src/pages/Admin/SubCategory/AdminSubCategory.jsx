@@ -1,7 +1,7 @@
 import React from 'react';
 
 const AdminSubCategory = () => {
-  return <div>AdminSubCategory Test</div>;
+  return <div>AdminSubCategory</div>;
 };
 
 export default AdminSubCategory;
