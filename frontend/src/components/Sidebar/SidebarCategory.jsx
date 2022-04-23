@@ -1,14 +1,14 @@
-import { NavLink } from 'react-router-dom'
-import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai'
-import { useState } from 'react'
+import { NavLink } from 'react-router-dom';
+import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai';
+import { useState } from 'react';
 
 const isNotActiveStyle =
-  'flex items-center pl-5 gap-3 text-gray-500 hover:text-red-400 transition-all duration-200 ease-in-out capitalize pr-5'
+  'flex items-center pl-5 gap-3 text-gray-500 hover:text-red-400 transition-all duration-200 ease-in-out capitalize pr-5';
 const isActiveStyle =
-  'flex items-center pl-5 gap-3 font-bold text-red-600 border-r-2 border-red-600 border-black  transition-all duration-200 ease-in-out capitalize pr-5'
+  'flex items-center pl-5 gap-3 font-bold text-red-600 border-r-2 border-red-600 transition-all duration-200 ease-in-out capitalize pr-5';
 
 const SidebarCategory = ({ category, handleCloseSidebar }) => {
-  const [toggleSubCategories, setToggleSubCategories] = useState(false)
+  const [toggleSubCategories, setToggleSubCategories] = useState(false);
   return (
     <div>
       <div className='flex items-center justify-between'>
@@ -46,13 +46,13 @@ const SidebarCategory = ({ category, handleCloseSidebar }) => {
               `${isActive ? isActiveStyle : isNotActiveStyle} ml-5`
             }
             onClick={handleCloseSidebar}
-            key={subCat}
+            key={subCat.slug}
           >
             {subCat.name}
           </NavLink>
         ))}
     </div>
-  )
-}
+  );
+};
 
-export default SidebarCategory
+export default SidebarCategory;

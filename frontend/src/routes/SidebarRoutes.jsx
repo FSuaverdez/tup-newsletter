@@ -1,10 +1,11 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import SidebarAdmin from '../components/Sidebar/SidebarAdmin';
 import SidebarCategory from '../components/Sidebar/SidebarCategory';
 
 const SidebarRoutes = ({ categories, handleCloseSidebar }) => {
   return (
     <Routes>
+      <Route path='/admin' element={<Navigate to='/admin/category' />} />
       <Route
         path='/admin/*'
         element={<SidebarAdmin handleCloseSidebar={handleCloseSidebar} />}

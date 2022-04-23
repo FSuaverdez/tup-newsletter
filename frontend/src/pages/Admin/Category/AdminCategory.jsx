@@ -38,7 +38,7 @@ const AdminCategory = () => {
           {categories &&
             categories.map(c => (
               <div
-                className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center'
+                className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
                 key={c._id}
               >
                 <p className='text-xl font-bold'>{c.name}</p>
@@ -54,7 +54,10 @@ const AdminCategory = () => {
       </div>
       {openAdd && (
         <Modal handleClose={handleCloseAdd}>
-          <AdminAddCategoryModal handleCloseAdd={handleCloseAdd} />
+          <AdminAddCategoryModal
+            handleCloseAdd={handleCloseAdd}
+            className='p-8'
+          />
         </Modal>
       )}
     </div>
