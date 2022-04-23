@@ -1,8 +1,9 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
 const categorySchema = mongoose.Schema(
   {
     name: { type: String, required: true },
+    description: { type: String, required: true },
     creator: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -33,7 +34,7 @@ const categorySchema = mongoose.Schema(
     },
   },
   { timestamps: true }
-)
+);
 
-const Category = mongoose.model('Category', categorySchema)
-export default Category
+const Category = mongoose.model('Category', categorySchema);
+export default Category;
