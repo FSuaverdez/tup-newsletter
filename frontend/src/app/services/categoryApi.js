@@ -20,10 +20,10 @@ export const categoryApi = createApi({
       providesTags: ['Categories'],
     }),
     addCategory: builder.mutation({
-      query: ({ name }) => ({
+      query: ({ name, description }) => ({
         url: 'category/add',
         method: 'POST',
-        body: { name },
+        body: { name, description },
       }),
       invalidatesTags: ['Categories'],
     }),

@@ -2,29 +2,33 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAddCategoryMutation } from '../../../app/services/categoryApi';
 import Button from '../../../components/Button/Button';
+import Input from '../../../components/Input/Input';
 
-const AdminAddCategoryModal = ({ handleCloseAdd }) => {
+const AdminAddCategoryModal = ({ handleCloseAdd, className: classes }) => {
   const [name, setName] = useState('');
   const [nameError, setNameError] = useState(false);
+  const [description, setDescription] = useState('');
+  const [descriptionError, setDescriptionError] = useState(false);
   const [addCategory] = useAddCategoryMutation();
   const navigate = useNavigate();
 
   const handleSubmit = async e => {
     e.preventDefault();
 
-    if (name) {
-      await addCategory({ name }).unwrap();
+    if (name && description) {
+      await addCategory({ name, description }).unwrap();
       navigate('/admin/category');
       setNameError(false);
       handleCloseAdd();
     } else {
-      setNameError(true);
+      !name && setNameError(true);
+      !description && setDescriptionError(true);
     }
   };
 
   return (
     <div
-      className='w-656 shadow-xl bg-white p-5 rounded'
+      className={`w-656 shadow-xl bg-white p-5 rounded ${classes}`}
       onClick={e => e.stopPropagation()}
     >
       <h1 className='text-2xl font-bold my-5'>Add Category</h1>
@@ -33,17 +37,30 @@ const AdminAddCategoryModal = ({ handleCloseAdd }) => {
           <label htmlFor='name' className='font-bold text-gray-600'>
             Category Name:
           </label>
-          <input
-            className='w-full block border-2 border-gray-500 rounded px-2 py-1'
+          <Input
+            fullWidth
             type='text'
             name='name'
-            id='name'
             onChange={e => setName(e.target.value)}
             value={name}
             required
           />
           {nameError && (
             <p className='text-red-500 text-sm'>Category Name is required.</p>
+          )}
+          <label htmlFor='name' className='font-bold text-gray-600'>
+            Description:
+          </label>
+          <Input
+            fullWidth
+            type='textarea'
+            name='name'
+            onChange={e => setDescription(e.target.value)}
+            value={description}
+            required
+          />
+          {descriptionError && (
+            <p className='text-red-500 text-sm'>Description is required.</p>
           )}
         </div>
 

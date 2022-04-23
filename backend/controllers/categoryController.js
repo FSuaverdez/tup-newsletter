@@ -6,10 +6,14 @@ import Category from '../models/Category.js';
 // @access  Admin Role Required
 export const addCategory = asyncHandler(async (req, res) => {
   const user = req.user;
-  const { name } = req.body;
+  const { name, description } = req.body;
   try {
     if (user.isAdmin) {
-      let category = await Category.create({ name, creator: user._id });
+      let category = await Category.create({
+        name,
+        creator: user._id,
+        description,
+      });
 
       res.status(201).json(category);
     } else {
