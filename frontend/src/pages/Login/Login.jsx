@@ -45,6 +45,7 @@ const Login = () => {
           </div>
           <GoogleLogin
             clientId='1099313794047-4m3h89s72r18vrmc6d91954r2tacutck.apps.googleusercontent.com'
+            hostedDomain='tup.edu.ph'
             render={renderProps => (
               <button
                 type='button'
