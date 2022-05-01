@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Category from '../pages/Category/Category';
 import Posts from '../pages/Posts';
 import SubCategory from '../pages/SubCategory/SubCategory';
@@ -23,6 +23,7 @@ const HomeRoutes = () => {
         path='/admin/category/edit/:categoryId'
         element={<AdminCategoryEdit />}
       />
+      <Route path='/admin' element={<Navigate to='/admin/category' />} />
       <Route path='/' element={<Posts />} />
       <Route path='/*' element={<NotFound />} />
     </Routes>
