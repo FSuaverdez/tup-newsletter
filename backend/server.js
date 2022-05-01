@@ -6,6 +6,7 @@ import 'colors';
 
 import userRoutes from './routes/userRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
+import subCategoryRoutes from './routes/subCategoryRoutes.js';
 import { errorHandler, notFound } from './middleware/errorMiddleware.js';
 
 dotenv.config();
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 
 app.use('/user', userRoutes);
 app.use('/category', categoryRoutes);
+app.use('/subcategory', subCategoryRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

@@ -1,9 +1,76 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { useGetCategoryQuery } from '../../../app/services/categoryApi';
+import { useGetSubCategoriesQuery } from '../../../app/services/subCategoryApi';
+import Modal from '../../../components/Modal/Modal';
+import AdminAddSubCategoryModal from '../SubCategory/AdminAddSubCategoryModal';
 
 const AdminCategoryEdit = () => {
   const { categoryId } = useParams();
-  return <div>{categoryId}</div>;
+  const { data: category, isLoading } = useGetCategoryQuery({ id: categoryId });
+  const { data: subCategories, isLoading: isSubCategoriesLoading } =
+    useGetSubCategoriesQuery();
+  const [openAdd, setOpenAdd] = useState(false);
+
+  if (isLoading && isSubCategoriesLoading) {
+    return 'Loading...';
+  }
+
+  const handleOpenAdd = () => {
+    setOpenAdd(true);
+  };
+  const handleCloseAdd = () => {
+    setOpenAdd(false);
+  };
+
+  return (
+    <div className='p-5 max-w-5xl mx-auto'>
+      <h1 className='text-2xl font-bold my-5'>Manage {category.name}</h1>
+      <div className='bg-white p-5 rounded-lg shadow-lg mx-auto'>
+        <h2 className=' text-black text-xl font-semibold'>{category.name}</h2>
+        <p className='text-black '>{category.description}</p>
+        <div>
+          <h1 className='text-lg font-bold mt-5'>Manage Subcategories</h1>
+          <div className='flex items-center w-full justify-end mb-5'>
+            <button
+              className='bg-green-500 text-white rounded py-2 px-3 hover:bg-green-600'
+              onClick={() => {
+                handleOpenAdd();
+              }}
+            >
+              Add Subcategory
+            </button>
+          </div>
+          <div>
+            {subCategories &&
+              subCategories.map(c => (
+                <div
+                  className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
+                  key={c._id}
+                >
+                  <p className='text-xl font-bold'>{c.name}</p>
+                  <Link
+                    to={`edit/${c._id}`}
+                    className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
+                  >
+                    Edit
+                  </Link>
+                </div>
+              ))}
+          </div>
+        </div>
+      </div>
+      {openAdd && (
+        <Modal handleClose={handleCloseAdd}>
+          <AdminAddSubCategoryModal
+            handleCloseAdd={handleCloseAdd}
+            categoryId={categoryId}
+            className='p-8'
+          />
+        </Modal>
+      )}
+    </div>
+  );
 };
 
 export default AdminCategoryEdit;

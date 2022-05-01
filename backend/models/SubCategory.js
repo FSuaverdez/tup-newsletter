@@ -1,8 +1,9 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
 const subCategorySchema = mongoose.Schema(
   {
     name: { type: String, required: true },
+    description: { type: String, required: true },
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category',
@@ -25,6 +26,6 @@ const subCategorySchema = mongoose.Schema(
     },
   },
   { timestamps: true }
-)
-const SubCategory = mongoose.model('SubCategory', subCategorySchema)
-export default SubCategory
+);
+const SubCategory = mongoose.model('SubCategory', subCategorySchema);
+export default SubCategory;

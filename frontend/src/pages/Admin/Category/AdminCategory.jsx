@@ -22,7 +22,7 @@ const AdminCategory = () => {
 
   return (
     <div className='p-5 max-w-5xl mx-auto'>
-      <h1 className='text-2xl font-bold my-5'>Manage Category</h1>
+      <h1 className='text-2xl font-bold my-5'>Manage Categories</h1>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto'>
         <div className='flex items-center w-full justify-end mb-5'>
           <button

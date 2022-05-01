@@ -38,3 +38,17 @@ export const getCategories = asyncHandler(async (req, res) => {
     throw new Error('Something went wrong. Unable to retrieve Categories.');
   }
 });
+
+// @desc    Get a category
+// @router  GET /category/:id
+// @access  Public
+export const getCategory = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const category = await Category.findById(id);
+    res.status(200).json(category);
+  } catch (error) {
+    res.status(401);
+    throw new Error('Something went wrong. Unable to retrieve Category.');
+  }
+});
