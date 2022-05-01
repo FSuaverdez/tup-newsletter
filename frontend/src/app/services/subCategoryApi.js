@@ -19,6 +19,10 @@ export const subCategoryApi = createApi({
       query: () => ({ url: 'subcategory/getAll' }),
       providesTags: ['SubCategories'],
     }),
+    getSubCategoriesByCategory: builder.query({
+      query: categoryId => ({ url: `subcategory/getAll/${categoryId}` }),
+      providesTags: ['SubCategories'],
+    }),
     getSubCategory: builder.query({
       query: ({ id }) => ({ url: `subcategory/${id}` }),
     }),
@@ -37,4 +41,5 @@ export const {
   useGetSubCategoriesQuery,
   useGetSubCategoryQuery,
   useAddSubCategoryMutation,
+  useGetSubCategoriesByCategoryQuery,
 } = subCategoryApi;

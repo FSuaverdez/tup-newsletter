@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useGetCategoryQuery } from '../../../app/services/categoryApi';
-import { useGetSubCategoriesQuery } from '../../../app/services/subCategoryApi';
+import { useGetSubCategoriesByCategoryQuery } from '../../../app/services/subCategoryApi';
 import Modal from '../../../components/Modal/Modal';
 import AdminAddSubCategoryModal from '../SubCategory/AdminAddSubCategoryModal';
 
@@ -9,7 +9,7 @@ const AdminCategoryEdit = () => {
   const { categoryId } = useParams();
   const { data: category, isLoading } = useGetCategoryQuery({ id: categoryId });
   const { data: subCategories, isLoading: isSubCategoriesLoading } =
-    useGetSubCategoriesQuery();
+    useGetSubCategoriesByCategoryQuery(categoryId);
   const [openAdd, setOpenAdd] = useState(false);
 
   if (isLoading && isSubCategoriesLoading) {
@@ -25,10 +25,10 @@ const AdminCategoryEdit = () => {
 
   return (
     <div className='p-5 max-w-5xl mx-auto'>
-      <h1 className='text-2xl font-bold my-5'>Manage {category.name}</h1>
+      <h1 className='text-2xl font-bold my-5'>Manage {category?.name}</h1>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto'>
-        <h2 className=' text-black text-xl font-semibold'>{category.name}</h2>
-        <p className='text-black '>{category.description}</p>
+        <h2 className=' text-black text-xl font-semibold'>{category?.name}</h2>
+        <p className='text-black '>{category?.description}</p>
         <div>
           <h1 className='text-lg font-bold mt-5'>Manage Subcategories</h1>
           <div className='flex items-center w-full justify-end mb-5'>

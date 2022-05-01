@@ -26,9 +26,7 @@ export const addSubCategory = asyncHandler(async (req, res) => {
           { new: true }
         );
 
-        console.log(updatedCategory);
-
-        res.status(201).json({ subCategory });
+        res.status(201).json(subCategory);
       } else {
         res.status(401);
         throw new Error('Category not found');
@@ -49,6 +47,20 @@ export const addSubCategory = asyncHandler(async (req, res) => {
 export const getSubCategories = asyncHandler(async (req, res) => {
   try {
     const subCategories = await SubCategory.find({});
+
+    res.status(200).json(subCategories);
+  } catch (error) {
+    res.status(401);
+    throw new Error('Something went wrong. Unable to retrieve Categories.');
+  }
+});
+
+// @desc    Get all subcategories from a category
+// @router  GET /subcategory/getAll/:id
+// @access  Public
+export const getSubCategoriesByCategory = asyncHandler(async (req, res) => {
+  try {
+    const subCategories = await SubCategory.find({ category: req.params.id });
 
     res.status(200).json(subCategories);
   } catch (error) {
