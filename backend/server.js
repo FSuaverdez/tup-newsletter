@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import 'colors';
 
 import userRoutes from './routes/userRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
@@ -31,8 +32,13 @@ const PORT = process.env.PORT || 5000;
 mongoose
   .connect(CONNECTION_URL)
   .then(conn => {
-    console.log(`MongoDB Conencted: ${conn.connection.host}`);
-    app.listen(PORT, () => console.log(`Server running on port : ${PORT}`));
+    console.log(`MongoDB Conencted: ${conn.connection.host}`.yellow.bold);
+    app.listen(PORT, () => {
+      console.log(`Server running on port : ${PORT}`.yellow.bold);
+      console.log(
+        `Server Link: `.green + `http://localhost:${PORT}`.green.underline
+      );
+    });
   })
   .catch(error => {
     console.log(error.message);
