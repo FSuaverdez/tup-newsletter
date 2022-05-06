@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useGetCategoriesQuery } from '../../../app/services/categoryApi';
 import Modal from '../../../components/Modal/Modal';
-import AdminAddCategoryModal from './AdminAddCategoryModal';
+import AdminCategoryModal from './AdminCategoryModal';
 
 const AdminCategory = () => {
   const [openAdd, setOpenAdd] = useState(false);
-
   const { data: categories, isLoading: isCategoriesLoading } =
     useGetCategoriesQuery();
   if (isCategoriesLoading) {
@@ -54,10 +53,7 @@ const AdminCategory = () => {
       </div>
       {openAdd && (
         <Modal handleClose={handleCloseAdd}>
-          <AdminAddCategoryModal
-            handleCloseAdd={handleCloseAdd}
-            className='p-8'
-          />
+          <AdminCategoryModal handleCloseAdd={handleCloseAdd} className='p-8' />
         </Modal>
       )}
     </div>

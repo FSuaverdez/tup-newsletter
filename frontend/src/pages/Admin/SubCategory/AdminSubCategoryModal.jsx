@@ -1,23 +1,27 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAddCategoryMutation } from '../../../app/services/categoryApi';
+import { useAddSubCategoryMutation } from '../../../app/services/subCategoryApi';
 import Button from '../../../components/Button/Button';
 import Input from '../../../components/Input/Input';
 
-const AdminAddCategoryModal = ({ handleCloseAdd, className: classes }) => {
+const AdminSubCategoryModal = ({
+  handleCloseAdd,
+  className: classes,
+  categoryId,
+}) => {
   const [name, setName] = useState('');
   const [nameError, setNameError] = useState(false);
   const [description, setDescription] = useState('');
   const [descriptionError, setDescriptionError] = useState(false);
-  const [addCategory] = useAddCategoryMutation();
+  const [addSubCategory] = useAddSubCategoryMutation();
   const navigate = useNavigate();
 
   const handleSubmit = async e => {
     e.preventDefault();
 
     if (name && description) {
-      await addCategory({ name, description }).unwrap();
-      navigate('/admin/category');
+      await addSubCategory({ name, description, categoryId }).unwrap();
+      navigate('/admin/category/edit/' + categoryId);
       setNameError(false);
       handleCloseAdd();
     } else {
@@ -69,7 +73,7 @@ const AdminAddCategoryModal = ({ handleCloseAdd, className: classes }) => {
             Close
           </Button>
           <Button type='success' onClick={handleSubmit}>
-            Create Category
+            Create Subcategory
           </Button>
         </div>
       </div>
@@ -77,4 +81,4 @@ const AdminAddCategoryModal = ({ handleCloseAdd, className: classes }) => {
   );
 };
 
-export default AdminAddCategoryModal;
+export default AdminSubCategoryModal;

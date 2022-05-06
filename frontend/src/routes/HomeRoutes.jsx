@@ -7,6 +7,7 @@ import AdminCategory from '../pages/Admin/Category/AdminCategory';
 import NotFound from '../pages/NotFound/NotFound';
 import AdminCategoryEdit from '../pages/Admin/Category/AdminCategoryEdit';
 import AdminSubCategory from '../pages/Admin/SubCategory/AdminSubCategory';
+import AdminAllCategory from '../pages/Admin/Category/AdminAllCategory';
 
 const HomeRoutes = () => {
   return (
@@ -22,6 +23,10 @@ const HomeRoutes = () => {
       <Route
         path='/admin/category/edit/:categoryId'
         element={<AdminCategoryEdit />}
+      />
+      <Route
+        path='/admin/category/edit/:categoryId/all-categories'
+        element={<AdminAllCategory />}
       />
       <Route path='/admin' element={<Navigate to='/admin/category' />} />
       <Route path='/' element={<Posts />} />
