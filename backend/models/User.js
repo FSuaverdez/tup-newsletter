@@ -1,4 +1,22 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
+
+const catPermission = {
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
+  },
+  userId: { type: String },
+  role: { type: String },
+};
+
+const subCatPermission = {
+  subCategory: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'SubCategory',
+  },
+  userId: { type: String },
+  role: { type: String },
+};
 
 const userSchema = mongoose.Schema(
   {
@@ -12,26 +30,16 @@ const userSchema = mongoose.Schema(
       default: false,
     },
     categoryPermission: {
-      type: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Category',
-        },
-      ],
+      type: [catPermission],
       default: [],
     },
     subCategoryPermission: {
-      type: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'SubCategory',
-        },
-      ],
+      type: [subCatPermission],
       default: [],
     },
   },
   { timestamps: true }
-)
+);
 
-const User = mongoose.model('User', userSchema)
-export default User
+const User = mongoose.model('User', userSchema);
+export default User;
