@@ -19,15 +19,8 @@ const categorySchema = mongoose.Schema(
     userPermissions: {
       type: [
         {
-          user: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-          },
-          role: {
-            type: String,
-            required: true,
-            default: 'ADMIN',
-          },
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'UserPermission',
         },
       ],
       default: [],

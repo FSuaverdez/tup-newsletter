@@ -15,14 +15,18 @@ const AdminCategoryModal = ({ handleCloseAdd, className: classes }) => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    if (name && description) {
-      await addCategory({ name, description }).unwrap();
-      navigate('/admin/category');
-      setNameError(false);
-      handleCloseAdd();
-    } else {
-      !name && setNameError(true);
-      !description && setDescriptionError(true);
+    try {
+      if (name && description) {
+        await addCategory({ name, description }).unwrap();
+        navigate('/admin/category');
+        setNameError(false);
+        handleCloseAdd();
+      } else {
+        !name && setNameError(true);
+        !description && setDescriptionError(true);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

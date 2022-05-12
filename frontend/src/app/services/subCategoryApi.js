@@ -34,6 +34,14 @@ export const subCategoryApi = createApi({
       }),
       invalidatesTags: ['SubCategories'],
     }),
+    addUserPermission: builder.mutation({
+      query: ({ email, role, subCategoryId }) => ({
+        url: 'subcategory/addPermission',
+        method: 'POST',
+        body: { email, role, subCategoryId },
+      }),
+      invalidatesTags: ['SubCategories'],
+    }),
   }),
 });
 
@@ -42,4 +50,5 @@ export const {
   useGetSubCategoryQuery,
   useAddSubCategoryMutation,
   useGetSubCategoriesByCategoryQuery,
+  useAddUserPermissionMutation,
 } = subCategoryApi;

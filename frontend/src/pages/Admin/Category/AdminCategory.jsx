@@ -12,10 +12,10 @@ const AdminCategory = () => {
     return 'Loading...';
   }
 
-  const handleOpenAdd = () => {
+  const handleOpenAddCategory = () => {
     setOpenAdd(true);
   };
-  const handleCloseAdd = () => {
+  const handleCloseAddCategory = () => {
     setOpenAdd(false);
   };
 
@@ -27,7 +27,7 @@ const AdminCategory = () => {
           <button
             className='bg-green-500 text-white rounded py-2 px-3 hover:bg-green-600'
             onClick={() => {
-              handleOpenAdd();
+              handleOpenAddCategory();
             }}
           >
             Add Category
@@ -52,8 +52,11 @@ const AdminCategory = () => {
         </div>
       </div>
       {openAdd && (
-        <Modal handleClose={handleCloseAdd}>
-          <AdminCategoryModal handleCloseAdd={handleCloseAdd} className='p-8' />
+        <Modal handleClose={handleCloseAddCategory}>
+          <AdminCategoryModal
+            handleCloseAdd={handleCloseAddCategory}
+            className='p-8'
+          />
         </Modal>
       )}
     </div>

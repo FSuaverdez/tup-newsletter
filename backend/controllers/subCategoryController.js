@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import Category from '../models/Category.js';
 import SubCategory from '../models/SubCategory.js';
+import UserPermission from '../models/UserPermission.js';
 
 // @desc    Create a new subcategory
 // @router  POST /subcategory/add
@@ -8,7 +9,6 @@ import SubCategory from '../models/SubCategory.js';
 export const addSubCategory = asyncHandler(async (req, res) => {
   const user = req.user;
   const { name, description, categoryId } = req.body;
-  console.log(req.body);
   try {
     if (user.isAdmin) {
       let category = await Category.findById(categoryId);
@@ -80,5 +80,49 @@ export const getSubCategory = asyncHandler(async (req, res) => {
   } catch (error) {
     res.status(401);
     throw new Error('Something went wrong. Unable to retrieve Category.');
+  }
+});
+
+// @desc    Add A user Permission
+// @router  GET /subcategory/addPermission
+// @access  Private Required Auth
+export const addPermission = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { email, role, subCategoryId } = req.body;
+  try {
+    if (user.isAdmin) {
+      let subCategory = await SubCategory.findById(subCategoryId);
+      if (!subCategory) {
+        res.status(401);
+        throw new Error('SubCategory not found');
+      }
+
+      let user = await User.findOne({ email });
+      if (!user) {
+        res.status(401);
+        throw new Error(`Cannot find User with email ${email}.`);
+      }
+
+      let newPermission = await UserPermission.create({
+        user: user._id,
+        role,
+      });
+
+      subCategory.userPermissions.push(newPermission._id);
+
+      const updatedSubCategory = await SubCategory.findByIdAndUpdate(
+        subCategoryId,
+        subCategory,
+        { new: true }
+      );
+
+      res.status(201).json(updatedSubCategory);
+    } else {
+      res.status(401);
+      throw new Error('Not Authorized');
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error('Invalid Category Data');
   }
 });
