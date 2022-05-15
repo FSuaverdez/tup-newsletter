@@ -55,6 +55,25 @@ export const getCategory = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Get a category
+// @router  GET /category/:id/userPermissions
+// @access  Public
+export const getCategoryUserPermissions = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const category = await Category.findById(id).populate({
+      path: 'userPermissions',
+      populate: { path: 'user' },
+    });
+    res.status(200).json(category.userPermissions);
+  } catch (error) {
+    res.status(401);
+    throw new Error(
+      'Something went wrong. Unable to retrieve Category User Permissions.'
+    );
+  }
+});
+
 // @desc    Add A user Permission
 // @router  GET /category/addPermission
 // @access  Private Required Auth

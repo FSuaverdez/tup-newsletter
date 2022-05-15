@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import Category from '../models/Category.js';
 import SubCategory from '../models/SubCategory.js';
+import User from '../models/User.js';
 import UserPermission from '../models/UserPermission.js';
 
 // @desc    Create a new subcategory
@@ -80,6 +81,25 @@ export const getSubCategory = asyncHandler(async (req, res) => {
   } catch (error) {
     res.status(401);
     throw new Error('Something went wrong. Unable to retrieve Category.');
+  }
+});
+
+// @desc    Get a category
+// @router  GET /subcategory/:id/userPermissions
+// @access  Public
+export const getCategoryUserPermissions = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const subCategory = await SubCategory.findById(id).populate({
+      path: 'userPermissions',
+      populate: { path: 'user' },
+    });
+    res.status(200).json(subCategory.userPermissions);
+  } catch (error) {
+    res.status(401);
+    throw new Error(
+      'Something went wrong. Unable to retrieve Sub Category User Permissions.'
+    );
   }
 });
 

@@ -20,11 +20,16 @@ export const subCategoryApi = createApi({
       providesTags: ['SubCategories'],
     }),
     getSubCategoriesByCategory: builder.query({
-      query: categoryId => ({ url: `subcategory/getAll/${categoryId}` }),
+      query: subCategoryId => ({ url: `subcategory/getAll/${subCategoryId}` }),
       providesTags: ['SubCategories'],
     }),
     getSubCategory: builder.query({
       query: ({ id }) => ({ url: `subcategory/${id}` }),
+      providesTags: ['SubCategories'],
+    }),
+    getCategoryUserPermissions: builder.query({
+      query: ({ id }) => ({ url: `subcategory/${id}/userPermissions` }),
+      providesTags: ['UserPermissions'],
     }),
     addSubCategory: builder.mutation({
       query: ({ name, description, categoryId }) => ({
@@ -40,7 +45,7 @@ export const subCategoryApi = createApi({
         method: 'POST',
         body: { email, role, subCategoryId },
       }),
-      invalidatesTags: ['SubCategories'],
+      invalidatesTags: ['UserPermissions'],
     }),
   }),
 });
@@ -51,4 +56,5 @@ export const {
   useAddSubCategoryMutation,
   useGetSubCategoriesByCategoryQuery,
   useAddUserPermissionMutation,
+  useGetCategoryUserPermissionsQuery,
 } = subCategoryApi;

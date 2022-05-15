@@ -1,7 +1,66 @@
-import React from 'react';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useGetSubCategoriesQuery } from '../../../app/services/subCategoryApi';
+import Modal from '../../../components/Modal/Modal';
+import AdminSubCategoryModal from './AdminSubCategoryModal';
 
 const AdminSubCategory = () => {
-  return <div>AdminSubCategory</div>;
+  const [openAdd, setOpenAdd] = useState(false);
+  const { data: subCategories, isLoading: isSubCategoriesLoading } =
+    useGetSubCategoriesQuery();
+  if (isSubCategoriesLoading) {
+    return 'Loading...';
+  }
+
+  const handleOpenAddSubCategory = () => {
+    setOpenAdd(true);
+  };
+  const handleCloseAddSubCategory = () => {
+    setOpenAdd(false);
+  };
+
+  return (
+    <div className='p-5 max-w-5xl mx-auto'>
+      <h1 className='text-2xl font-bold my-5'>Manage Subategories</h1>
+      <div className='bg-white p-5 rounded-lg shadow-lg mx-auto'>
+        <div className='flex items-center w-full justify-end mb-5'>
+          <button
+            className='bg-green-500 text-white rounded py-2 px-3 hover:bg-green-600'
+            onClick={() => {
+              handleOpenAddSubCategory();
+            }}
+          >
+            Add Subcategory
+          </button>
+        </div>
+        <div>
+          {subCategories &&
+            subCategories.map(c => (
+              <div
+                className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
+                key={c._id}
+              >
+                <p className='font-bold'>{c.name}</p>
+                <Link
+                  to={`edit/${c._id}`}
+                  className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
+                >
+                  Edit
+                </Link>
+              </div>
+            ))}
+        </div>
+      </div>
+      {openAdd && (
+        <Modal handleClose={handleCloseAddSubCategory}>
+          <AdminSubCategoryModal
+            handleCloseAdd={handleCloseAddSubCategory}
+            className='p-8'
+          />
+        </Modal>
+      )}
+    </div>
+  );
 };
 
 export default AdminSubCategory;

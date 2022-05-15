@@ -21,6 +21,11 @@ export const categoryApi = createApi({
     }),
     getCategory: builder.query({
       query: ({ id }) => ({ url: `category/${id}` }),
+      providesTags: ['Categories'],
+    }),
+    getCategoryUserPermissions: builder.query({
+      query: ({ id }) => ({ url: `category/${id}/userPermissions` }),
+      providesTags: ['UserPermissions'],
     }),
     addCategory: builder.mutation({
       query: ({ name, description }) => ({
@@ -36,7 +41,7 @@ export const categoryApi = createApi({
         method: 'POST',
         body: { email, role, categoryId },
       }),
-      invalidatesTags: ['SubCategories'],
+      invalidatesTags: ['UserPermissions'],
     }),
   }),
 });
@@ -46,4 +51,5 @@ export const {
   useGetCategoriesQuery,
   useGetCategoryQuery,
   useAddUserPermissionMutation,
+  useGetCategoryUserPermissionsQuery,
 } = categoryApi;
