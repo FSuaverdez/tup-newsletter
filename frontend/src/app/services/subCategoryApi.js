@@ -27,7 +27,7 @@ export const subCategoryApi = createApi({
       query: ({ id }) => ({ url: `subcategory/${id}` }),
       providesTags: ['SubCategories'],
     }),
-    getCategoryUserPermissions: builder.query({
+    getSubCategoryUserPermissions: builder.query({
       query: ({ id }) => ({ url: `subcategory/${id}/userPermissions` }),
       providesTags: ['UserPermissions'],
     }),
@@ -56,5 +56,5 @@ export const {
   useAddSubCategoryMutation,
   useGetSubCategoriesByCategoryQuery,
   useAddUserPermissionMutation,
-  useGetCategoryUserPermissionsQuery,
+  useGetSubCategoryUserPermissionsQuery,
 } = subCategoryApi;

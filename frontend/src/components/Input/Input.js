@@ -6,13 +6,16 @@ const Input = ({
   name,
   placeholder,
   isRequired,
-  id,
   onChange: handleChange,
   fullWidth,
   value,
+  label,
 }) => {
   return (
-    <>
+    <div className='mb-2'>
+      <label htmlFor='name' className='font-bold text-gray-600'>
+        {label}:
+      </label>
       {type !== 'textarea' ? (
         <input
           type={type}
@@ -41,7 +44,7 @@ const Input = ({
           style={{ resize: 'none' }}
         />
       )}
-    </>
+    </div>
   );
 };
 

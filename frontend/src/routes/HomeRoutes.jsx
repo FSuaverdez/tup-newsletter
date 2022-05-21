@@ -9,7 +9,8 @@ import AdminCategoryManage from '../pages/Admin/Category/AdminCategoryManage';
 import AdminSubCategory from '../pages/Admin/SubCategory/AdminSubCategory';
 import AdminSubCategoryManage from '../pages/Admin/SubCategory/AdminSubCategoryManage';
 import AdminAllCategory from '../pages/Admin/Category/AdminAllCategory';
-import AdminAllUserPermissions from '../pages/Admin/Components/AdminAllUserPermissions';
+import AdminCategoryAllUserPermissions from '../pages/Admin/Components/AdminCategoryAllUserPermissions';
+import AdminSubCategoryAllUserPermissions from '../pages/Admin/Components/AdminSubCategoryAllUserPermissions';
 
 const HomeRoutes = () => {
   return (
@@ -36,7 +37,11 @@ const HomeRoutes = () => {
       />
       <Route
         path='/admin/category/edit/:categoryId/all-permissions'
-        element={<AdminAllUserPermissions />}
+        element={<AdminCategoryAllUserPermissions />}
+      />
+      <Route
+        path='/admin/subcategory/edit/:subCategoryId/all-permissions'
+        element={<AdminSubCategoryAllUserPermissions />}
       />
       <Route path='/admin' element={<Navigate to='/admin/category' />} />
       <Route path='/' element={<Posts />} />

@@ -1,20 +1,23 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
+  useGetSubCategoryQuery,
+  useGetSubCategoryUserPermissionsQuery,
   useAddUserPermissionMutation,
-  useGetCategoryQuery,
-  useGetCategoryUserPermissionsQuery,
-} from '../../../app/services/categoryApi';
+} from '../../../app/services/subCategoryApi';
 import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
-import AddUserPermissionModal from './AddUserPermissionModal';
-const AdminAllUserPermissions = () => {
-  const { categoryId } = useParams();
-  const { data: category, isLoading } = useGetCategoryQuery({ id: categoryId });
+import UserPermissionModal from './UserPermissionModal';
+const AdminSubCategoryAllUserPermissions = () => {
+  const { subCategoryId } = useParams();
+  const { data: subCategory, isLoading } = useGetSubCategoryQuery({
+    id: subCategoryId,
+  });
   const { data: userPermissions, isLoading: isUserPermissionsLoading } =
-    useGetCategoryUserPermissionsQuery({ id: categoryId });
+    useGetSubCategoryUserPermissionsQuery({ id: subCategoryId });
   const [openAdd, setOpenAdd] = useState(false);
   const [addUserPermission] = useAddUserPermissionMutation();
+  const [userPermissionData, setUserPermissionData] = useState(null);
   const navigate = useNavigate();
 
   if (isLoading && isUserPermissionsLoading) {
@@ -25,22 +28,25 @@ const AdminAllUserPermissions = () => {
     setOpenAdd(true);
   };
   const handleCloseAdd = () => {
+    setUserPermissionData(null);
     setOpenAdd(false);
   };
   const handleSubmitUserPermission = async (email, role) => {
-    await addUserPermission({ email, role, categoryId }).unwrap();
+    await addUserPermission({ email, role, subCategoryId }).unwrap();
   };
 
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>
-      <h1 className='text-2xl font-bold my-5'>Manage {category?.name}</h1>
+      <h1 className='text-2xl font-bold my-5'>Manage {subCategory?.name}</h1>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto'>
-        <h2 className=' text-black text-xl font-semibold'>{category?.name}</h2>
-        <p className='text-black '>{category?.description}</p>
+        <h2 className=' text-black text-xl font-semibold'>
+          {subCategory?.name}
+        </h2>
+        <p className='text-black '>{subCategory?.description}</p>
         <div>
           <h1 className='text-lg font-bold mt-5'>
-            Manage All {category?.name} User Permissions
+            Manage All {subCategory?.name} User Permissions
           </h1>
           <div className='flex items-center w-full justify-end mb-5 gap-3'>
             <Button
@@ -60,12 +66,15 @@ const AdminAllUserPermissions = () => {
                   key={c._id}
                 >
                   <p className='text-xl font-bold'>{c?.user?.name}</p>
-                  <Link
-                    to={`/admin/subcategory/edit/${c._id}`}
-                    className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
+                  <Button
+                    type='info'
+                    onClick={() => {
+                      setUserPermissionData(c);
+                      handleOpenAdd();
+                    }}
                   >
                     Edit
-                  </Link>
+                  </Button>
                 </div>
               ))}
           </div>
@@ -73,11 +82,12 @@ const AdminAllUserPermissions = () => {
       </div>
       {openAdd && (
         <Modal handleClose={handleCloseAdd}>
-          <AddUserPermissionModal
+          <UserPermissionModal
             handleCloseAdd={handleCloseAdd}
-            categoryId={categoryId}
+            categoryId={subCategoryId}
             className='p-8'
             handleSubmit={handleSubmitUserPermission}
+            userPermissionData={userPermissionData}
           />
         </Modal>
       )}
@@ -85,4 +95,4 @@ const AdminAllUserPermissions = () => {
   );
 };
 
-export default AdminAllUserPermissions;
+export default AdminSubCategoryAllUserPermissions;

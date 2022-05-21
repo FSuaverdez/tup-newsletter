@@ -8,7 +8,7 @@ import {
 import { useGetSubCategoriesByCategoryQuery } from '../../../app/services/subCategoryApi';
 import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
-import AddUserPermissionModal from '../Components/AddUserPermissionModal';
+import UserPermissionModal from '../Components/UserPermissionModal';
 import AdminSubCategoryModal from '../SubCategory/AdminSubCategoryModal';
 
 const AdminCategoryManage = () => {
@@ -21,6 +21,7 @@ const AdminCategoryManage = () => {
   const [openAddCategory, setOpenAddCategory] = useState(false);
   const [openAddUserPermission, setOpenAddUserPermission] = useState(false);
   const [addUserPermission] = useAddUserPermissionMutation();
+  const [userPermissionData, setUserPermissionData] = useState(null);
   const navigate = useNavigate();
 
   if (isLoading && isSubCategoriesLoading && isUserPermissionsLoading) {
@@ -38,6 +39,7 @@ const AdminCategoryManage = () => {
   };
   const handleCloseAddUserPermission = () => {
     setOpenAddUserPermission(false);
+    setUserPermissionData(null);
   };
   const handleSubmitUserPermission = async (email, role) => {
     await addUserPermission({ email, role, categoryId }).unwrap();
@@ -117,12 +119,15 @@ const AdminCategoryManage = () => {
                 >
                   <p className='font-bold'>{c?.user?.name}</p>
                   <p className='font-bold text-black'>{c?.role}</p>
-                  <Link
-                    to={`/admin/subcategory/edit/${c._id}`}
-                    className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
+                  <Button
+                    type='info'
+                    onClick={() => {
+                      setUserPermissionData(c);
+                      handleOpenAddUserPermission();
+                    }}
                   >
                     Edit
-                  </Link>
+                  </Button>
                 </div>
               ))}
           </div>
@@ -140,11 +145,12 @@ const AdminCategoryManage = () => {
       )}
       {openAddUserPermission && (
         <Modal handleClose={handleCloseAddUserPermission}>
-          <AddUserPermissionModal
+          <UserPermissionModal
             handleCloseAdd={handleCloseAddUserPermission}
             categoryId={categoryId}
             className='p-8'
             handleSubmit={handleSubmitUserPermission}
+            userPermissionData={userPermissionData}
           />
         </Modal>
       )}

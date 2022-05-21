@@ -1,16 +1,19 @@
 import { useState } from 'react';
 import Button from '../../../components/Button/Button';
 import Input from '../../../components/Input/Input';
+import SelectRole from '../../../components/SelectRole/SelectRole';
 
-const AddUserPermissionModal = ({
+const UserPermissionModal = ({
   handleCloseAdd,
   className: classes,
   handleSubmit: handleAdd,
+  userPermissionData,
 }) => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(userPermissionData?.user?.email || '');
   const [emailError, setEmailError] = useState(false);
-  const [role, setRole] = useState('');
+  const [role, setRole] = useState(userPermissionData?.role || '');
   const [roleError, setRoleError] = useState(false);
+  console.log(userPermissionData);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -37,13 +40,11 @@ const AddUserPermissionModal = ({
       <h1 className='text-2xl font-bold my-5'>Add User Permission</h1>
       <div className=' mx-auto'>
         <div className='py-3'>
-          <label htmlFor='name' className='font-bold text-gray-600'>
-            User Email:
-          </label>
           <Input
             fullWidth
             type='email'
             name='email'
+            label='Email'
             onChange={e => setEmail(e.target.value)}
             value={email}
             required
@@ -51,12 +52,8 @@ const AddUserPermissionModal = ({
           {emailError && (
             <p className='text-red-500 text-sm'>Email is required.</p>
           )}
-          <label htmlFor='name' className='font-bold text-gray-600'>
-            Description:
-          </label>
-          <Input
+          <SelectRole
             fullWidth
-            type='textarea'
             name='name'
             onChange={e => setRole(e.target.value)}
             value={role}
@@ -80,4 +77,4 @@ const AddUserPermissionModal = ({
   );
 };
 
-export default AddUserPermissionModal;
+export default UserPermissionModal;
