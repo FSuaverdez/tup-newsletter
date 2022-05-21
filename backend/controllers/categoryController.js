@@ -47,6 +47,10 @@ export const getCategories = asyncHandler(async (req, res) => {
 export const getCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
+    if (!id) {
+      res.status(400);
+      throw new Error('Category Id is required');
+    }
     const category = await Category.findById(id);
     res.status(200).json(category);
   } catch (error) {
@@ -61,6 +65,10 @@ export const getCategory = asyncHandler(async (req, res) => {
 export const getCategoryUserPermissions = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
+    if (!id) {
+      res.status(400);
+      throw new Error('Category Id is required');
+    }
     const category = await Category.findById(id).populate({
       path: 'userPermissions',
       populate: { path: 'user' },
@@ -82,6 +90,11 @@ export const addPermission = asyncHandler(async (req, res) => {
   const { email, role, categoryId } = req.body;
   try {
     if (user.isAdmin) {
+      if (!categoryId) {
+        res.status(400);
+        throw new Error('Category Id is required');
+      }
+
       let category = await Category.findById(categoryId);
       if (!category) {
         res.status(401);

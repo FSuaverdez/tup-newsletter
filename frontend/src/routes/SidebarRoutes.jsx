@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import SidebarAdmin from '../components/Sidebar/SidebarAdmin';
 import SidebarCategory from '../components/Sidebar/SidebarCategory';
+import SidebarContent from '../components/Sidebar/SidebarContent';
 
 const SidebarRoutes = ({ categories, handleCloseSidebar }) => {
   return (
@@ -10,7 +11,10 @@ const SidebarRoutes = ({ categories, handleCloseSidebar }) => {
         path='/admin/*'
         element={<SidebarAdmin handleCloseSidebar={handleCloseSidebar} />}
       />
-      <Route path='/content' element={<>content</>} />
+      <Route
+        path='/content/*'
+        element={<SidebarContent handleCloseSidebar={handleCloseSidebar} />}
+      />
       <Route
         path='/*'
         element={
