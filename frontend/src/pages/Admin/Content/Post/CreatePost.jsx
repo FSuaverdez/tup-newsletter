@@ -32,19 +32,23 @@ const CreatePost = () => {
         value={subCategory}
         onChange={handleSubCategoryChange}
       />
-      <>
+      <div className='m-4 bg-white'>
         <Editor
           editorState={editorState}
           toolbarClassName='toolbarClassName'
           wrapperClassName='wrapperClassName'
           editorClassName='editorClassName'
           onEditorStateChange={onEditorStateChange}
+          readOnly={true}
+          toolbarHidden={true}
         />
+      </div>
+      <div>
         <textarea
           disabled
           value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
         />
-      </>
+      </div>
     </div>
   );
 };
