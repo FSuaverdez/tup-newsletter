@@ -36,6 +36,36 @@ const ContentCategoryManage = () => {
             <Button
               type='Info'
               onClick={() => {
+                navigate('all-subcategories');
+              }}
+            >
+              View All
+            </Button>
+          </div>
+          <div>
+            {subCategories &&
+              subCategories.slice(0, 5).map(c => (
+                <div
+                  className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
+                  key={c._id}
+                >
+                  <p className='text-xl font-bold'>{c.name}</p>
+                  <Link
+                    to={`/content/subcategory/${c._id}/manage`}
+                    className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
+                  >
+                    Manage
+                  </Link>
+                </div>
+              ))}
+          </div>
+        </div>
+        <div className='border-t-2 border-black mt-10'>
+          <h2 className='text-2xl font-bold mt-2'>Manage Posts</h2>
+          <div className='flex items-center w-full justify-end mb-5 gap-3'>
+            <Button
+              type='Info'
+              onClick={() => {
                 navigate('all-categories');
               }}
             >
@@ -51,26 +81,13 @@ const ContentCategoryManage = () => {
                 >
                   <p className='text-xl font-bold'>{c.name}</p>
                   <Link
-                    to={`/admin/subcategory/edit/${c._id}`}
+                    to='manage'
                     className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
                   >
-                    Edit
+                    Manage
                   </Link>
                 </div>
               ))}
-          </div>
-        </div>
-        <div className='border-t-2 border-black mt-10'>
-          <h2 className='text-2xl font-bold mt-2'>Manage User Permissions</h2>
-          <div className='flex items-center w-full justify-end mb-5 gap-3'>
-            <Button
-              type='Info'
-              onClick={() => {
-                navigate('all-permissions');
-              }}
-            >
-              View All
-            </Button>
           </div>
         </div>
       </div>

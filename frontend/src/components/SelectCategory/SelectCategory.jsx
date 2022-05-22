@@ -1,0 +1,24 @@
+import React, { useState } from 'react';
+import Select from 'react-select';
+import { useGetCategoriesQuery } from '../../app/services/categoryApi';
+
+const SelectCategory = ({ value: stateValue, onChange: handleChange }) => {
+  const { data: categories, isLoading } = useGetCategoriesQuery();
+
+  let options = [];
+
+  if (!isLoading) {
+    options = categories.map(c => ({ ...c, value: c._id, label: c.name }));
+  }
+
+  return (
+    <div>
+      <label htmlFor='name' className='font-bold text-gray-600'>
+        Category:
+      </label>
+      <Select options={options} value={stateValue} onChange={handleChange} />
+    </div>
+  );
+};
+
+export default SelectCategory;

@@ -13,7 +13,6 @@ const UserPermissionModal = ({
   const [emailError, setEmailError] = useState(false);
   const [role, setRole] = useState(userPermissionData?.role || '');
   const [roleError, setRoleError] = useState(false);
-  console.log(userPermissionData);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -34,7 +33,7 @@ const UserPermissionModal = ({
 
   return (
     <div
-      className={`w-656 shadow-xl bg-white p-5 rounded ${classes}`}
+      className={`lg:w-656  sm:w-340shadow-xl bg-white p-5 rounded ${classes}`}
       onClick={e => e.stopPropagation()}
     >
       <h1 className='text-2xl font-bold my-5'>Add User Permission</h1>

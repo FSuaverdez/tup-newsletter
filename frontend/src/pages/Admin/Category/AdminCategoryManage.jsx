@@ -66,7 +66,7 @@ const AdminCategoryManage = () => {
             <Button
               type='Info'
               onClick={() => {
-                navigate('all-categories');
+                navigate('all-subcategories');
               }}
             >
               View All

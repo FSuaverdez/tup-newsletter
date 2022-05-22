@@ -21,7 +21,7 @@ const ContentCategory = () => {
               >
                 <p className='font-bold'>{c.name}</p>
                 <Link
-                  to={`manage/${c._id}`}
+                  to={`${c._id}`}
                   className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
                 >
                   Manage

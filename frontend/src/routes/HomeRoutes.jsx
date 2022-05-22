@@ -13,6 +13,9 @@ import AdminCategoryAllUserPermissions from '../pages/Admin/Components/AdminCate
 import AdminSubCategoryAllUserPermissions from '../pages/Admin/Components/AdminSubCategoryAllUserPermissions';
 import ContentCategory from '../pages/Admin/Content/Category/ContentCategory';
 import ContentCategoryManage from '../pages/Admin/Content/Category/ContentCategoryManage';
+import ContentSubCategoryManagePosts from '../pages/Admin/Content/SubCategory/ContentSubCategoryManagePosts';
+import ContentAllCategory from '../pages/Admin/Content/SubCategory/ContentAllSubCategory';
+import CreatePost from '../pages/Admin/Content/Post/CreatePost';
 
 const HomeRoutes = () => {
   return (
@@ -34,7 +37,7 @@ const HomeRoutes = () => {
         element={<AdminSubCategoryManage />}
       />
       <Route
-        path='/admin/category/edit/:categoryId/all-categories'
+        path='/admin/category/edit/:categoryId/all-subcategories'
         element={<AdminAllCategory />}
       />
       <Route
@@ -48,8 +51,20 @@ const HomeRoutes = () => {
       <Route path='/content' element={<Navigate to='/content/category' />} />
       <Route path='/content/category' element={<ContentCategory />} />
       <Route
-        path='/content/category/manage/:categoryId'
+        path='/content/category/:categoryId'
         element={<ContentCategoryManage />}
+      />
+      <Route
+        path='/content/subcategory/:subCategoryId/manage'
+        element={<ContentSubCategoryManagePosts />}
+      />
+      <Route
+        path='/content/subcategory/:subCategoryId/manage/create'
+        element={<CreatePost />}
+      />
+      <Route
+        path='/content/category/:categoryId/all-subcategories'
+        element={<ContentAllCategory />}
       />
       <Route path='/admin' element={<Navigate to='/admin/category' />} />
       <Route path='/' element={<Posts />} />

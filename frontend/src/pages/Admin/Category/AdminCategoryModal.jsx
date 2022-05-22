@@ -32,19 +32,18 @@ const AdminCategoryModal = ({ handleCloseAdd, className: classes }) => {
 
   return (
     <div
-      className={`w-656 shadow-xl bg-white p-5 rounded ${classes}`}
+      className={`lg:w-656  sm:w-340 shadow-xl bg-white p-5 rounded ${classes}`}
       onClick={e => e.stopPropagation()}
     >
       <h1 className='text-2xl font-bold my-5'>Add Category</h1>
       <div className=' mx-auto'>
         <div className='py-3'>
-          <label htmlFor='name' className='font-bold text-gray-600'>
-            Category Name:
-          </label>
+          <label htmlFor='name' className='font-bold text-gray-600'></label>
           <Input
             fullWidth
             type='text'
             name='name'
+            label='Category Name'
             onChange={e => setName(e.target.value)}
             value={name}
             required
@@ -52,13 +51,11 @@ const AdminCategoryModal = ({ handleCloseAdd, className: classes }) => {
           {nameError && (
             <p className='text-red-500 text-sm'>Category Name is required.</p>
           )}
-          <label htmlFor='name' className='font-bold text-gray-600'>
-            Description:
-          </label>
           <Input
             fullWidth
             type='textarea'
             name='name'
+            label='Description'
             onChange={e => setDescription(e.target.value)}
             value={description}
             required

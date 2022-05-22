@@ -6,7 +6,7 @@ const Modal = ({ handleClose, children }) => {
       className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-10 flex justify-center items-center flex-col'
       onClick={handleClose}
     >
-      <div className='p-60' onClick={e => e.stopPropagation()}>
+      <div className='lg:p-60' onClick={e => e.stopPropagation()}>
         {children}
       </div>
     </div>
