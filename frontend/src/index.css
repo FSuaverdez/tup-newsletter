@@ -51,11 +51,11 @@
 
 .editorClassName{
   @apply bg-white;
-  @apply border-2;
-  @apply border-gray-200;
-  @apply rounded;
   @apply p-2;
   @apply m-2;
-  @apply shadow-md;
   line-height: normal;
+}
+.wrapperClassName{
+  z-index: 1;
+  outline: 1px solid #444;
 }

@@ -2,7 +2,11 @@ import React from 'react';
 import Select from 'react-select';
 import { useGetCategoriesQuery } from '../../app/services/categoryApi';
 
-const SelectCategory = ({ value: stateValue, onChange: handleChange }) => {
+const SelectCategory = ({
+  value: stateValue,
+  onChange: handleChange,
+  disabled,
+}) => {
   const { data: categories, isLoading } = useGetCategoriesQuery();
 
   let options = [];
@@ -16,7 +20,12 @@ const SelectCategory = ({ value: stateValue, onChange: handleChange }) => {
       <label htmlFor='name' className='font-bold text-gray-600'>
         Category:
       </label>
-      <Select options={options} value={stateValue} onChange={handleChange} />
+      <Select
+        options={options}
+        value={stateValue}
+        onChange={handleChange}
+        isDisabled={disabled}
+      />
     </div>
   );
 };

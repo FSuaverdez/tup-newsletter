@@ -76,7 +76,7 @@ export const getSubCategoriesByCategory = asyncHandler(async (req, res) => {
 export const getSubCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
-    const subCategory = await SubCategory.findById(id);
+    const subCategory = await SubCategory.findById(id).populate('category');
     res.status(200).json(subCategory);
   } catch (error) {
     res.status(401);
@@ -87,7 +87,7 @@ export const getSubCategory = asyncHandler(async (req, res) => {
 // @desc    Get a category
 // @router  GET /subcategory/:id/userPermissions
 // @access  Public
-export const getCategoryUserPermissions = asyncHandler(async (req, res) => {
+export const getSubCategoryUserPermissions = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
     const subCategory = await SubCategory.findById(id).populate({

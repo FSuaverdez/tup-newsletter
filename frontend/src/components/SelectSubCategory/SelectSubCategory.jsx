@@ -6,6 +6,7 @@ const SelectSubCategory = ({
   categoryId,
   value: stateValue,
   onChange: handleChange,
+  disabled,
 }) => {
   const { data: subCategories, isLoading } = useGetSubCategoriesQuery();
   let options = [];
@@ -24,7 +25,12 @@ const SelectSubCategory = ({
       <label htmlFor='name' className='font-bold text-gray-600'>
         Subcategory:
       </label>
-      <Select options={options} value={stateValue} onChange={handleChange} />
+      <Select
+        options={options}
+        value={stateValue}
+        onChange={handleChange}
+        isDisabled={disabled}
+      />
     </div>
   );
 };

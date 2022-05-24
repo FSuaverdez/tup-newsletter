@@ -16,6 +16,7 @@ import ContentCategoryManage from '../pages/Admin/Content/Category/ContentCatego
 import ContentSubCategoryManagePosts from '../pages/Admin/Content/SubCategory/ContentSubCategoryManagePosts';
 import ContentAllCategory from '../pages/Admin/Content/SubCategory/ContentAllSubCategory';
 import CreatePost from '../pages/Admin/Content/Post/CreatePost';
+import PostManage from '../pages/Admin/Content/Post/PostManage';
 
 const HomeRoutes = () => {
   return (
@@ -66,6 +67,8 @@ const HomeRoutes = () => {
         path='/content/category/:categoryId/all-subcategories'
         element={<ContentAllCategory />}
       />
+      <Route path='/content/posts' element={<PostManage />} />
+      <Route path='/content/posts/create' element={<CreatePost />} />
       <Route path='/admin' element={<Navigate to='/admin/category' />} />
       <Route path='/' element={<Posts />} />
       <Route path='/*' element={<NotFound />} />
