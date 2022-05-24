@@ -8,7 +8,7 @@ const SelectRole = ({
   required,
 }) => {
   return (
-    <>
+    <div className={`${classes} my-4`}>
       <label htmlFor='name' className='font-bold text-gray-600'>
         Role:
       </label>
@@ -24,7 +24,7 @@ const SelectRole = ({
         <option value='Admin'>Admin</option>
         <option value='Editor'>Editor</option>
       </select>
-    </>
+    </div>
   );
 };
 

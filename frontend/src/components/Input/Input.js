@@ -12,14 +12,14 @@ const Input = ({
   label,
 }) => {
   return (
-    <div className='mb-2'>
+    <div className={`${classes} mb-2`}>
       <label htmlFor='name' className='font-bold text-gray-600'>
         {label}:
       </label>
       {type !== 'textarea' ? (
         <input
           type={type}
-          className={`${classes} ${
+          className={`${
             fullWidth && 'w-full'
           } block border-2 border-gray-500 rounded px-2 py-1`}
           name={name}

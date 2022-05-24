@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -49,13 +48,15 @@
   }
 }
 
-.editorClassName{
+.editorClassName {
   @apply bg-white;
   @apply p-2;
   @apply m-2;
+  min-height: 50vh;
   line-height: normal;
+  z-index: 4;
 }
-.wrapperClassName{
+.wrapperClassName {
   z-index: 1;
   outline: 1px solid #444;
 }
