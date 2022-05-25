@@ -1,7 +1,4 @@
-import React, { useState } from 'react';
-import { EditorState, convertToRaw } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import draftToHtml from 'draftjs-to-html';
+import React, { useMemo, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 // import htmlToDraft from 'html-to-draftjs';
 
@@ -10,6 +7,7 @@ import SelectPostType from '../../../../components/SelectPostType/SelectPostType
 import SelectSubCategory from '../../../../components/SelectSubCategory/SelectSubCategory';
 import Input from '../../../../components/Input/Input';
 import Button from '../../../../components/Button/Button';
+import JoditEditor from 'jodit-react';
 
 const CreatePost = () => {
   const [category, setCategory] = useState('');
@@ -19,8 +17,21 @@ const CreatePost = () => {
   const [content, setContent] = useState('');
   const [preview, setPreview] = useState(false);
   const [postType, setPostType] = useState({ value: 'post', label: 'Post' });
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const editor = useRef(null);
 
+  const config = useMemo(
+    () => ({
+      uploader: {
+        insertImageAsBase64URI: true,
+      },
+      showCharsCounter: false,
+      showXPathInStatusbar: false,
+      showWordsCounter: false,
+      toolbar: preview ? false : true,
+      readonly: preview, // all options from https://xdsoft.net/jodit/doc/,
+    }),
+    [preview]
+  );
   const handleCategoryChange = e => {
     setCategory(e);
     setSubCategory('');
@@ -31,11 +42,6 @@ const CreatePost = () => {
 
   const handlePostTypeChange = e => {
     setPostType(e);
-  };
-
-  const onEditorStateChange = editorState => {
-    setEditorState(editorState);
-    setContent(draftToHtml(convertToRaw(editorState.getCurrentContent())));
   };
 
   return (
@@ -50,6 +56,7 @@ const CreatePost = () => {
           onChange={handlePostTypeChange}
           className='mt-4'
         />
+
         {!preview ? (
           <>
             <Input
@@ -80,23 +87,20 @@ const CreatePost = () => {
           <>
             <div className='mt-5 bg-white'>
               <h2 className='text-lg font-bold text-black'>Content:</h2>
-              <Editor
-                editorState={editorState}
-                toolbarClassName='toolbarClassName'
-                wrapperClassName='wrapperClassName'
-                editorClassName='editorClassName'
-                onEditorStateChange={onEditorStateChange}
-                readOnly={preview}
-                toolbarHidden={preview}
+              <JoditEditor
+                ref={editor}
+                value={content}
+                config={config}
+                tabIndex={1} // tabIndex of textarea
+                onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
+                onChange={newContent => {
+                  console.log(newContent);
+                  setContent(newContent);
+                }}
               />
             </div>
             <div>
-              <textarea
-                disabled
-                value={draftToHtml(
-                  convertToRaw(editorState.getCurrentContent())
-                )}
-              />
+              <textarea disabled value={content} />
             </div>
           </>
         )}
@@ -121,24 +125,21 @@ const CreatePost = () => {
               <h2 className='text-lg font-bold text-black'>
                 Live Description:
               </h2>
-              <Editor
-                editorState={editorState}
-                toolbarClassName='toolbarClassName'
-                wrapperClassName='wrapperClassName'
-                editorClassName='editorClassName'
-                onEditorStateChange={onEditorStateChange}
-                readOnly={preview}
-                toolbarHidden={preview}
+              <JoditEditor
+                ref={editor}
+                value={content}
+                config={config}
+                tabIndex={1} // tabIndex of textarea
+                onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
+                onChange={newContent => {
+                  console.log(newContent);
+                  setContent(newContent);
+                }}
               />
             </div>
 
             <div>
-              <textarea
-                disabled
-                value={draftToHtml(
-                  convertToRaw(editorState.getCurrentContent())
-                )}
-              />
+              <textarea disabled value={content} />
             </div>
           </>
         )}
