@@ -127,7 +127,6 @@ export const addPermission = asyncHandler(async (req, res) => {
       throw new Error('Not Authorized');
     }
   } catch (error) {
-    console.log(error);
     throw new Error(error.message);
   }
 });
