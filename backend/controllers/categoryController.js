@@ -23,7 +23,8 @@ export const addCategory = asyncHandler(async (req, res) => {
       throw new Error('Not Authorized');
     }
   } catch (error) {
-    throw new Error('Invalid Category Data');
+    console.log(error);
+    throw new Error(error.message);
   }
 });
 
