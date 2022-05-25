@@ -104,26 +104,30 @@ const Sidebar = ({ closeToggle }) => {
                 Logout
               </button>
             </div>
-            <div className='p-2'>
-              <NavLink
-                to='/admin'
-                className={({ isActive }) =>
-                  isActive ? isActiveStyle : isNotActiveStyle
-                }
-                onClick={handleCloseSidebar}
-              >
-                Admin Dashboard
-              </NavLink>
-              <NavLink
-                to='/content'
-                className={({ isActive }) =>
-                  isActive ? isActiveStyle : isNotActiveStyle
-                }
-                onClick={handleCloseSidebar}
-              >
-                Content Management
-              </NavLink>
-            </div>
+            {user.isAdmin && (
+              <>
+                <div className='p-2'>
+                  <NavLink
+                    to='/admin'
+                    className={({ isActive }) =>
+                      isActive ? isActiveStyle : isNotActiveStyle
+                    }
+                    onClick={handleCloseSidebar}
+                  >
+                    Admin Dashboard
+                  </NavLink>
+                  <NavLink
+                    to='/content'
+                    className={({ isActive }) =>
+                      isActive ? isActiveStyle : isNotActiveStyle
+                    }
+                    onClick={handleCloseSidebar}
+                  >
+                    Content Management
+                  </NavLink>
+                </div>
+              </>
+            )}
           </div>
         ) : (
           <Link
