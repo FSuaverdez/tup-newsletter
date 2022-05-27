@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useGetAllPostsQuery } from '../../../../app/services/postApi';
 
 import {
   useGetSubCategoryQuery,
@@ -13,15 +14,17 @@ const ContentSubCategoryManagePosts = () => {
     id: subCategoryId,
   });
 
-  const { data: userPermissions, isLoading: isUserPermissionsLoading } =
-    useGetSubCategoryUserPermissionsQuery({ id: subCategoryId });
+  const { data: posts, isLoading: isPostsLoading } = useGetAllPostsQuery();
 
   const navigate = useNavigate();
 
-  if (isLoading && isUserPermissionsLoading) {
+  if (isLoading && isPostsLoading) {
     return 'Loading...';
   }
-  console.log(subCategory);
+  console.log(posts);
+  const filteredPost = posts?.filter(
+    post => post.subCategory === subCategoryId
+  );
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>
@@ -46,21 +49,21 @@ const ContentSubCategoryManagePosts = () => {
             </Button>
           </div>
           <div>
-            {/* {subCategories &&
-              subCategories.map(c => (
+            {filteredPost &&
+              filteredPost.map(c => (
                 <div
                   className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
                   key={c._id}
                 >
-                  <p className='text-xl font-bold'>{c.name}</p>
+                  <p className='text-xl font-bold'>{c.title}</p>
                   <Link
-                    to={`/content/subcategory/${c._id}/manage`}
+                    to={`/content/post/${c._id}`}
                     className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
                   >
-                    Manage
+                    View
                   </Link>
                 </div>
-              ))} */}
+              ))}
           </div>
         </div>
       </div>
