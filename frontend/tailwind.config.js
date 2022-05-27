@@ -5,6 +5,9 @@ module.exports = {
       margin: {
         320: '320px',
       },
+      maxHeight: {
+        800: '800px',
+      },
       width: {
         190: '190px',
         275: '275px',

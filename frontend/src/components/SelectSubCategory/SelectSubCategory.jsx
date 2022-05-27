@@ -10,14 +10,20 @@ const SelectSubCategory = ({
   className: classes,
 }) => {
   const { data: subCategories, isLoading } = useGetSubCategoriesQuery();
-  let options = [];
+  let options = [{ value: '', label: 'None' }];
   if (!isLoading) {
     if (categoryId) {
-      options = subCategories
-        .filter(c => c.category === categoryId)
-        .map(c => ({ ...c, value: c._id, label: c.name }));
+      options = [
+        ...options,
+        ...subCategories
+          .filter(c => c.category === categoryId)
+          .map(c => ({ ...c, value: c._id, label: c.name })),
+      ];
     } else {
-      options = subCategories.map(c => ({ ...c, value: c._id, label: c.name }));
+      options = [
+        ...options,
+        ...subCategories.map(c => ({ ...c, value: c._id, label: c.name })),
+      ];
     }
   }
 

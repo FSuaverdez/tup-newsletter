@@ -14,9 +14,11 @@ import AdminSubCategoryAllUserPermissions from '../pages/Admin/Components/AdminS
 import ContentCategory from '../pages/Admin/Content/Category/ContentCategory';
 import ContentCategoryManage from '../pages/Admin/Content/Category/ContentCategoryManage';
 import ContentSubCategoryManagePosts from '../pages/Admin/Content/SubCategory/ContentSubCategoryManagePosts';
-import ContentAllCategory from '../pages/Admin/Content/SubCategory/ContentAllSubCategory';
+
 import CreatePost from '../pages/Admin/Content/Post/CreatePost';
 import PostManage from '../pages/Admin/Content/Post/PostManage';
+import PostAllCategory from '../pages/Admin/Content/Post/PostAllCategory';
+import ContentSubCategory from '../pages/Admin/Content/SubCategory/ContentSubCategory';
 
 const HomeRoutes = () => {
   return (
@@ -51,24 +53,25 @@ const HomeRoutes = () => {
       />
       <Route path='/content' element={<Navigate to='/content/category' />} />
       <Route path='/content/category' element={<ContentCategory />} />
+      <Route path='/content/subcategory' element={<ContentSubCategory />} />
       <Route
         path='/content/category/:categoryId'
         element={<ContentCategoryManage />}
       />
       <Route
-        path='/content/subcategory/:subCategoryId/manage'
+        path='/content/subcategory/:subCategoryId'
         element={<ContentSubCategoryManagePosts />}
       />
       <Route
-        path='/content/subcategory/:subCategoryId/manage/create'
+        path='/content/subcategory/:subCategoryId/create'
         element={<CreatePost />}
       />
       <Route
-        path='/content/category/:categoryId/all-subcategories'
-        element={<ContentAllCategory />}
+        path='/content/category/:categoryId/all-posts'
+        element={<PostAllCategory />}
       />
-      <Route path='/content/posts' element={<PostManage />} />
-      <Route path='/content/posts/create' element={<CreatePost />} />
+      <Route path='/content/post' element={<PostManage />} />
+      <Route path='/content/post/create' element={<CreatePost />} />
       <Route path='/admin' element={<Navigate to='/admin/category' />} />
       <Route path='/' element={<Posts />} />
       <Route path='/*' element={<NotFound />} />

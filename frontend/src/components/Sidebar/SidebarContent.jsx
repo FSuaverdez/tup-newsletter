@@ -9,7 +9,7 @@ const SidebarContent = ({ handleCloseSidebar }) => {
   return (
     <div className='flex flex-col gap-'>
       <NavLink
-        to='/content/posts'
+        to='/content/post'
         className={({ isActive }) =>
           `${isActive ? isActiveStyle : isNotActiveStyle} ml-5`
         }

@@ -3,10 +3,10 @@ import React from 'react';
 const Modal = ({ handleClose, children }) => {
   return (
     <div
-      className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-10 flex justify-center items-center flex-col'
+      className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-10 flex justify-center items-center flex-col  max-h-screen'
       onClick={handleClose}
     >
-      <div className='lg:p-60' onClick={e => e.stopPropagation()}>
+      <div className='' onClick={e => e.stopPropagation()}>
         {children}
       </div>
     </div>

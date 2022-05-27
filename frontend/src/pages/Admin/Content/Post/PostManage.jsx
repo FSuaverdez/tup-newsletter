@@ -1,9 +1,15 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useGetAllPostsQuery } from '../../../../app/services/postApi';
 import Button from '../../../../components/Button/Button';
 
 const PostManage = () => {
   const navigate = useNavigate();
+  const { data: posts, isLoading } = useGetAllPostsQuery();
+
+  if (isLoading) {
+    return 'Loading....';
+  }
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>
@@ -28,6 +34,23 @@ const PostManage = () => {
             >
               View All
             </Button>
+          </div>
+          <div>
+            {posts &&
+              posts.map(c => (
+                <div
+                  className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
+                  key={c._id}
+                >
+                  <p className='text-xl font-bold'>{c.title}</p>
+                  <Link
+                    to={`/content/post/${c._id}`}
+                    className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
+                  >
+                    View
+                  </Link>
+                </div>
+              ))}
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import {
   useGetCategoryQuery,
   useGetCategoryUserPermissionsQuery,
 } from '../../../../app/services/categoryApi';
+import { useGetAllPostsQuery } from '../../../../app/services/postApi';
 import { useGetSubCategoriesByCategoryQuery } from '../../../../app/services/subCategoryApi';
 import Button from '../../../../components/Button/Button';
 import Modal from '../../../../components/Modal/Modal';
@@ -14,15 +15,15 @@ const ContentCategoryManage = () => {
   const { data: category, isLoading } = useGetCategoryQuery({ id: categoryId });
   const { data: subCategories, isLoading: isSubCategoriesLoading } =
     useGetSubCategoriesByCategoryQuery(categoryId);
-  const { data: userPermissions, isLoading: isUserPermissionsLoading } =
-    useGetCategoryUserPermissionsQuery({ id: categoryId });
+  const { data: posts, isLoading: isPostsLoading } = useGetAllPostsQuery();
 
   const navigate = useNavigate();
 
-  if (isLoading && isSubCategoriesLoading && isUserPermissionsLoading) {
+  if (isLoading && isSubCategoriesLoading && isPostsLoading) {
     return 'Loading...';
   }
-
+  console.log(posts);
+  const filteredPost = posts?.filter(post => post.category === categoryId);
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>
@@ -51,7 +52,7 @@ const ContentCategoryManage = () => {
                 >
                   <p className='text-xl font-bold'>{c.name}</p>
                   <Link
-                    to={`/content/subcategory/${c._id}/manage`}
+                    to={`/content/subcategory/${c._id}`}
                     className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
                   >
                     Manage
@@ -66,25 +67,25 @@ const ContentCategoryManage = () => {
             <Button
               type='Info'
               onClick={() => {
-                navigate('all-categories');
+                navigate('all-posts');
               }}
             >
               View All
             </Button>
           </div>
           <div>
-            {subCategories &&
-              subCategories.slice(0, 5).map(c => (
+            {filteredPost &&
+              filteredPost.slice(0, 5).map(c => (
                 <div
                   className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
                   key={c._id}
                 >
-                  <p className='text-xl font-bold'>{c.name}</p>
+                  <p className='text-xl font-bold'>{c.title}</p>
                   <Link
-                    to='manage'
+                    to={`/content/post/${c._id}`}
                     className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
                   >
-                    Manage
+                    View
                   </Link>
                 </div>
               ))}

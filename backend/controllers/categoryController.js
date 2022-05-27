@@ -55,8 +55,8 @@ export const getCategory = asyncHandler(async (req, res) => {
     const category = await Category.findById(id);
     res.status(200).json(category);
   } catch (error) {
-    res.status(401);
-    throw new Error('Something went wrong. Unable to retrieve Category.');
+    console.log(error);
+    throw new Error(error.message);
   }
 });
 
@@ -76,10 +76,8 @@ export const getCategoryUserPermissions = asyncHandler(async (req, res) => {
     });
     res.status(200).json(category.userPermissions);
   } catch (error) {
-    res.status(401);
-    throw new Error(
-      'Something went wrong. Unable to retrieve Category User Permissions.'
-    );
+    console.log(error);
+    throw new Error(error.message);
   }
 });
 
@@ -127,6 +125,7 @@ export const addPermission = asyncHandler(async (req, res) => {
       throw new Error('Not Authorized');
     }
   } catch (error) {
+    console.log(error);
     throw new Error(error.message);
   }
 });
