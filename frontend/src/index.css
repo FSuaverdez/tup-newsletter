@@ -22,6 +22,7 @@
 }
 
 .article-container .jodit-container {
+  min-height: fit-content !important;
 }
 
 .article-container .jodit-wysiwyg {
