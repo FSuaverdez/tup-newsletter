@@ -1,8 +1,10 @@
 import { Link, useParams } from 'react-router-dom';
 import { useGetAllPostsBySubCategoryQuery } from '../../app/services/postApi';
+import { useGetSubCategoryQuery } from '../../app/services/subCategoryApi';
 
 const SubCategory = () => {
   const { categoryName, subCategoryId } = useParams();
+  const { data: subCategory } = useGetSubCategoryQuery({id: subCategoryId});
   const { data: posts, isLoading } = useGetAllPostsBySubCategoryQuery({
     id: subCategoryId,
   });
@@ -12,7 +14,7 @@ const SubCategory = () => {
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
-        <h1 className='text-2xl font-bold mb-10'>All Posts</h1>
+        <h1 className='text-2xl font-bold mb-10'>{`All Posts from ${subCategory?.name}`}</h1>
         {posts?.map(post => (
           <Link to={`/post/${post._id}`} key={post._id}>
             <div className='shadow-lg my-5 border border-gray-200 rounded p-3'>

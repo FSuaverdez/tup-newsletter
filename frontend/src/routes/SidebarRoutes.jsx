@@ -6,7 +6,6 @@ import { useGetCategoriesQuery } from '../app/services/categoryApi';
 
 const SidebarRoutes = ({ handleCloseSidebar }) => {
   const { data: categories, isLoading } = useGetCategoriesQuery();
-  console.log(categories);
   return (
     <Routes>
       <Route path='/admin' element={<Navigate to='/admin/category' />} />

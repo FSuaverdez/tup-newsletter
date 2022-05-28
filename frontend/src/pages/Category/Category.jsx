@@ -1,8 +1,10 @@
 import { Link, useParams } from 'react-router-dom';
 import { useGetAllPostsByCategoryQuery } from '../../app/services/postApi';
+import { useGetCategoryQuery } from '../../app/services/categoryApi';
 
 const Category = () => {
   const { categoryId } = useParams();
+  const { data: category} = useGetCategoryQuery({ id: categoryId });
   const { data: posts, isLoading } = useGetAllPostsByCategoryQuery({
     id: categoryId,
   });
@@ -12,7 +14,7 @@ const Category = () => {
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
-        <h1 className='text-2xl font-bold mb-10'>All Posts</h1>
+        <h1 className='text-2xl font-bold mb-10'>{`All Posts from ${category?.name}`}</h1>
         {posts?.map(post => (
           <Link to={`/post/${post._id}`} key={post._id}>
             <div className='shadow-lg my-5 border border-gray-200 rounded p-3'>
