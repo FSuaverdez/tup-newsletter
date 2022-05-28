@@ -16,7 +16,7 @@ const Post = () => {
   const { data: post, isLoading } = useGetPostQuery({
     id: postId,
   });
-  const [comment, setComment] = useState();
+  const [comment, setComment] = useState('');
   const [isSubmiting, setIsSubmiting] = useState(false);
   const [addComment] = useAddCommentMutation();
   const user = useSelector(state => state.user);
