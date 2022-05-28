@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 const Input = ({
   type,
@@ -11,11 +11,19 @@ const Input = ({
   value,
   label,
 }) => {
+  const textAreaRef = useRef();
+  const auto_grow = element => {
+    console.log(element);
+    element.style.height = '5px';
+    element.style.height = element.scrollHeight + 'px';
+  };
   return (
     <div className={`${classes} mb-2`}>
-      <label htmlFor='name' className='font-bold text-gray-600'>
-        {label}:
-      </label>
+      {label && (
+        <label htmlFor='name' className='font-bold text-gray-600'>
+          {label}:
+        </label>
+      )}
       {type !== 'textarea' ? (
         <input
           type={type}
@@ -32,16 +40,19 @@ const Input = ({
       ) : (
         <textarea
           type={type}
+          ref={textAreaRef}
           className={`${classes} ${
             fullWidth && 'w-full'
-          } block border-2 border-gray-500 rounded px-2 py-1`}
+          } block border-2 border-gray-500 rounded px-2 py-1 max-h-fit`}
           name={name}
           placeholder={placeholder}
           required={isRequired}
           id={name}
-          onChange={handleChange}
+          onChange={e => {
+            handleChange(e);
+            auto_grow(textAreaRef);
+          }}
           value={value}
-          style={{ resize: 'none' }}
         />
       )}
     </div>

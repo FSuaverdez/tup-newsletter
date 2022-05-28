@@ -3,11 +3,11 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const baseUrl = 'http://localhost:5000/';
 export const postApi = createApi({
   reducerPath: 'postApi',
-  tagTypes: ['Post', 'Comment'],
+  tagTypes: ['Post'],
   baseQuery: fetchBaseQuery({
     baseUrl,
     prepareHeaders: (headers, { getState }) => {
-      const token = getState().user.token;
+      const token = getState().user?.token;
       if (token) {
         headers.set('authorization', `Bearer ${token}`);
       }
@@ -37,13 +37,13 @@ export const postApi = createApi({
     }),
     addComment: builder.mutation({
       query: ({ text, id }) => ({
-        url: 'post/coment/' + id,
+        url: 'post/comment/' + id,
         method: 'POST',
         body: {
           text,
         },
       }),
-      invalidatesTags: ['Comment'],
+      invalidatesTags: ['Post'],
     }),
     addPost: builder.mutation({
       query: ({ title, type, liveUrl, content, category, subCategory }) => ({

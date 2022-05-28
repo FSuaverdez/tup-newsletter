@@ -22,10 +22,12 @@
 }
 
 .article-container .jodit-container {
-  border: none !important;
 }
 
 .article-container .jodit-wysiwyg {
-  padding: 0 !important;
-  @apply mt-4 !important;
+  min-height: fit-content !important;
+}
+
+.article-container .jodit-workplace {
+  min-height: fit-content !important;
 }

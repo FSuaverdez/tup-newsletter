@@ -99,6 +99,7 @@ module.exports = {
     cursor: {
       'zoom-in': 'zoom-in',
       pointer: 'pointer',
+      'not-allowed': 'not-allowed',
     },
   },
   variants: {
