@@ -58,7 +58,6 @@ export const getAllPostsBySubCategory = asyncHandler(async (req, res) => {
       .populate('updatedBy')
       .populate('comments.postedBy');
 
-    console.log(posts);
     res.status(200);
     res.json(posts);
   } catch (error) {
