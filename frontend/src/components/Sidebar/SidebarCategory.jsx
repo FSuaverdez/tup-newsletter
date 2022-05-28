@@ -13,7 +13,7 @@ const SidebarCategory = ({ category, handleCloseSidebar }) => {
     <div>
       <div className='flex items-center justify-between'>
         <NavLink
-          to={`/category/${category.name}`}
+          to={`/category/${category._id}`}
           className={({ isActive }) =>
             `${isActive ? isActiveStyle : isNotActiveStyle} font-bold`
           }
@@ -22,31 +22,35 @@ const SidebarCategory = ({ category, handleCloseSidebar }) => {
         >
           {category.name}
         </NavLink>
-        {toggleSubCategories ? (
-          <div
-            className='text-gray-500 cursor-pointer text-xl px-3 mr-14'
-            onClick={() => setToggleSubCategories(prev => !prev)}
-          >
-            <AiFillCaretUp />
-          </div>
-        ) : (
-          <div
-            className=' text-gray-500 cursor-pointer text-xl px-3 mr-14'
-            onClick={() => setToggleSubCategories(prev => !prev)}
-          >
-            <AiFillCaretDown />
-          </div>
+        {category.subCategories.length > 0 && (
+          <>
+            {toggleSubCategories ? (
+              <div
+                className='text-gray-500 cursor-pointer text-xl px-3 mr-14'
+                onClick={() => setToggleSubCategories(prev => !prev)}
+              >
+                <AiFillCaretUp />
+              </div>
+            ) : (
+              <div
+                className=' text-gray-500 cursor-pointer text-xl px-3 mr-14'
+                onClick={() => setToggleSubCategories(prev => !prev)}
+              >
+                <AiFillCaretDown />
+              </div>
+            )}
+          </>
         )}
       </div>
       {toggleSubCategories &&
         category.subCategories.map(subCat => (
           <NavLink
-            to={`/category/${category.name}/${subCat.slug}`}
+            to={`/category/${category._id}/${subCat._id}`}
             className={({ isActive }) =>
               `${isActive ? isActiveStyle : isNotActiveStyle} ml-5`
             }
             onClick={handleCloseSidebar}
-            key={subCat.slug}
+            key={subCat._id}
           >
             {subCat.name}
           </NavLink>

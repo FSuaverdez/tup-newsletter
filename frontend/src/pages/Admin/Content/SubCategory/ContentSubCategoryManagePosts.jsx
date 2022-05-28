@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useGetAllPostsQuery } from '../../../../app/services/postApi';
 
-import {
-  useGetSubCategoryQuery,
-  useGetSubCategoryUserPermissionsQuery,
-} from '../../../../app/services/subCategoryApi';
+import { useGetSubCategoryQuery } from '../../../../app/services/subCategoryApi';
 import Button from '../../../../components/Button/Button';
 
 const ContentSubCategoryManagePosts = () => {
@@ -21,10 +18,10 @@ const ContentSubCategoryManagePosts = () => {
   if (isLoading && isPostsLoading) {
     return 'Loading...';
   }
-  console.log(posts);
   const filteredPost = posts?.filter(
     post => post.subCategory === subCategoryId
   );
+  console.log(filteredPost);
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>

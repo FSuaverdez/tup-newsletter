@@ -33,8 +33,7 @@ export const addCategory = asyncHandler(async (req, res) => {
 // @access  Public
 export const getCategories = asyncHandler(async (req, res) => {
   try {
-    const categories = await Category.find({});
-
+    const categories = await Category.find({}).populate('subCategories');
     res.status(200).json(categories);
   } catch (error) {
     res.status(401);

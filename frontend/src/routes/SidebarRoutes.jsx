@@ -2,8 +2,11 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import SidebarAdmin from '../components/Sidebar/SidebarAdmin';
 import SidebarCategory from '../components/Sidebar/SidebarCategory';
 import SidebarContent from '../components/Sidebar/SidebarContent';
+import { useGetCategoriesQuery } from '../app/services/categoryApi';
 
-const SidebarRoutes = ({ categories, handleCloseSidebar }) => {
+const SidebarRoutes = ({ handleCloseSidebar }) => {
+  const { data: categories, isLoading } = useGetCategoriesQuery();
+  console.log(categories);
   return (
     <Routes>
       <Route path='/admin' element={<Navigate to='/admin/category' />} />
@@ -22,9 +25,9 @@ const SidebarRoutes = ({ categories, handleCloseSidebar }) => {
             {/* <h3 className='mt-2 px-5 text-base 2xl:text-xl'>
             Categories
           </h3> */}
-            {categories.map(category => (
+            {categories?.map(category => (
               <SidebarCategory
-                key={category.name}
+                key={category._id}
                 category={category}
                 handleCloseSidebar={handleCloseSidebar}
               />

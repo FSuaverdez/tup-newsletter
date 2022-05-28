@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Category from '../pages/Category/Category';
-import Posts from '../pages/Posts';
+import Home from '../pages/Home';
+import ContentPost from '../pages/Admin/Content/Post/ContentPost';
 import SubCategory from '../pages/SubCategory/SubCategory';
 import UserProfile from '../pages/UserProfile/UserProfile';
 import AdminCategory from '../pages/Admin/Category/AdminCategory';
@@ -19,14 +20,16 @@ import CreatePost from '../pages/Admin/Content/Post/CreatePost';
 import PostManage from '../pages/Admin/Content/Post/PostManage';
 import PostAllCategory from '../pages/Admin/Content/Post/PostAllCategory';
 import ContentSubCategory from '../pages/Admin/Content/SubCategory/ContentSubCategory';
+import ContentAllSubCategory from '../pages/Admin/Content/SubCategory/ContentAllSubCategory';
+import Post from '../pages/Post/Post';
 
 const HomeRoutes = () => {
   return (
     <Routes>
       <Route path='/user-profile/:userId' element={<UserProfile />} />
-      <Route path='/category/:categoryName' element={<Category />} />
+      <Route path='/category/:categoryId' element={<Category />} />
       <Route
-        path='/category/:categoryName/:subCategoryName'
+        path='/category/:categoryId/:subCategoryId'
         element={<SubCategory />}
       />
       <Route path='/admin/category' element={<AdminCategory />} />
@@ -70,10 +73,16 @@ const HomeRoutes = () => {
         path='/content/category/:categoryId/all-posts'
         element={<PostAllCategory />}
       />
+      <Route
+        path='content/category/:categoryId/all-subcategories'
+        element={<ContentAllSubCategory />}
+      />
+      <Route path='/content/post/:postId' element={<ContentPost />} />
+      <Route path='/post/:postId' element={<Post />} />
       <Route path='/content/post' element={<PostManage />} />
       <Route path='/content/post/create' element={<CreatePost />} />
       <Route path='/admin' element={<Navigate to='/admin/category' />} />
-      <Route path='/' element={<Posts />} />
+      <Route path='/' element={<Home />} />
       <Route path='/*' element={<NotFound />} />
     </Routes>
   );

@@ -7,8 +7,58 @@ import asyncHandler from 'express-async-handler';
 export const getAllPosts = asyncHandler(async (req, res) => {
   try {
     // Check for permission
-    const posts = await Post.find();
+    const posts = await Post.find()
+      .populate('category')
+      .populate('subCategory')
+      .populate('postedBy')
+      .populate('updatedBy')
+      .populate('comments.postedBy');
 
+    res.status(200);
+    res.json(posts);
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
+});
+
+// @desc    get all  post by category
+// @router  GET /post/getAll/category/:id
+// @access  Public
+export const getAllPostsByCategory = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Check for permission
+    const posts = await Post.find({ category: id })
+      .populate('category')
+      .populate('subCategory')
+      .populate('postedBy')
+      .populate('updatedBy')
+      .populate('comments.postedBy');
+
+    res.status(200);
+    res.json(posts);
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
+});
+
+// @desc    get all  post by subcategory
+// @router  GET /post/getAll/subcategory/:id
+// @access  Public
+export const getAllPostsBySubCategory = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Check for permission
+    const posts = await Post.find({ subCategory: id })
+      .populate('category')
+      .populate('subCategory')
+      .populate('postedBy')
+      .populate('updatedBy')
+      .populate('comments.postedBy');
+
+    console.log(posts);
     res.status(200);
     res.json(posts);
   } catch (error) {
@@ -21,10 +71,15 @@ export const getAllPosts = asyncHandler(async (req, res) => {
 // @router  GET /post/get/:id
 // @access  Public
 export const getPost = asyncHandler(async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.params;
   try {
     // Check for permission
-    const post = await Post.findById(id);
+    const post = await Post.findById(id)
+      .populate('category')
+      .populate('subCategory')
+      .populate('postedBy')
+      .populate('updatedBy')
+      .populate('comments.postedBy');
 
     res.status(200);
     res.json(post);

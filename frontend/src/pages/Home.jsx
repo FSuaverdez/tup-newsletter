@@ -1,14 +1,13 @@
-import { Link, useParams } from 'react-router-dom';
-import { useGetAllPostsByCategoryQuery } from '../../app/services/postApi';
+import { Link } from 'react-router-dom';
+import { useGetAllPostsQuery } from '../app/services/postApi';
 
-const Category = () => {
-  const { categoryId } = useParams();
-  const { data: posts, isLoading } = useGetAllPostsByCategoryQuery({
-    id: categoryId,
-  });
+const Home = () => {
+  const { data: posts, isLoading } = useGetAllPostsQuery();
+
   if (isLoading) {
     return 'Loading...';
   }
+
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
@@ -27,4 +26,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default Home;

@@ -19,6 +19,14 @@ export const postApi = createApi({
       query: () => ({ url: 'post/getAll' }),
       providesTags: ['Post'],
     }),
+    getAllPostsByCategory: builder.query({
+      query: ({ id }) => ({ url: 'post/getAll/category/' + id }),
+      providesTags: ['Post'],
+    }),
+    getAllPostsBySubCategory: builder.query({
+      query: ({ id }) => ({ url: 'post/getAll/subcategory/' + id }),
+      providesTags: ['Post'],
+    }),
     getPost: builder.query({
       query: ({ id }) => ({ url: 'post/get/' + id }),
       providesTags: ['Post'],
@@ -85,4 +93,6 @@ export const {
   useEditPostMutation,
   useGetCommentsQuery,
   useGetPostQuery,
+  useGetAllPostsByCategoryQuery,
+  useGetAllPostsBySubCategoryQuery,
 } = postApi;
