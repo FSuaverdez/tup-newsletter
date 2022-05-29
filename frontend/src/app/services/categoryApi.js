@@ -35,6 +35,14 @@ export const categoryApi = createApi({
       }),
       invalidatesTags: ['Categories'],
     }),
+    editCategory: builder.mutation({
+      query: ({ name, description, categoryId }) => ({
+        url: `category/edit/${categoryId}`,
+        method: 'PUT',
+        body: { name, description, categoryId },
+      }),
+      invalidatesTags: ['Categories'],
+    }),
     addUserPermission: builder.mutation({
       query: ({ email, role, categoryId }) => ({
         url: 'category/addPermission',
@@ -48,6 +56,7 @@ export const categoryApi = createApi({
 
 export const {
   useAddCategoryMutation,
+  useEditCategoryMutation,
   useGetCategoriesQuery,
   useGetCategoryQuery,
   useAddUserPermissionMutation,

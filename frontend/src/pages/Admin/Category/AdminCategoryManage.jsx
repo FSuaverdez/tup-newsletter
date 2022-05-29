@@ -12,6 +12,7 @@ import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
 import UserPermissionModal from '../Components/UserPermissionModal';
 import AdminSubCategoryModal from '../SubCategory/AdminSubCategoryModal';
+import AdminEditCategoryModal from './AdminEditCategoryModal';
 
 const AdminCategoryManage = () => {
   const user = useSelector(state => state.user);
@@ -28,6 +29,7 @@ const AdminCategoryManage = () => {
   const [openAddUserPermission, setOpenAddUserPermission] = useState(false);
   const [addUserPermission] = useAddUserPermissionMutation();
   const [userPermissionData, setUserPermissionData] = useState(null);
+  const [openEdit, setOpenEdit] = useState(false);
   const navigate = useNavigate();
 
   if (isLoading && isSubCategoriesLoading && isUserPermissionsLoading) {
@@ -47,6 +49,12 @@ const AdminCategoryManage = () => {
     setOpenAddUserPermission(false);
     setUserPermissionData(null);
   };
+  const handleOpenEdit = () => {
+    setOpenEdit(true);
+  };
+  const handleCloseEdit = () =>{
+    setOpenEdit(false);
+  };
   const handleSubmitUserPermission = async (email, role) => {
     await addUserPermission({ email, role, categoryId }).unwrap();
   };
@@ -60,6 +68,16 @@ const AdminCategoryManage = () => {
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>
       <h1 className='text-3xl font-bold my-5'>Manage {category?.name}</h1>
+      <div className='w-full justify-end mb-5 gap-3'>
+            <Button
+              type='success'
+              onClick={() => {
+                handleOpenEdit();
+              }}
+            >
+              Update Category
+            </Button>
+      </div>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto'>
         <h2 className=' text-black text-xl font-semibold'>{category?.name}</h2>
         <p className='text-black '>{category?.description}</p>
@@ -178,6 +196,15 @@ const AdminCategoryManage = () => {
             className='p-8'
             handleSubmit={handleSubmitUserPermission}
             userPermissionData={userPermissionData}
+          />
+        </Modal>
+      )}
+      {openEdit && (
+        <Modal handleClose={handleCloseEdit}>
+          <AdminEditCategoryModal
+            handleCloseEdit={handleCloseEdit}
+            category={category}
+            className='p-8'
           />
         </Modal>
       )}
