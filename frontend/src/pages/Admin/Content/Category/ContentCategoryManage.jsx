@@ -1,16 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useGetPermissionsQuery } from '../../../../app/services/authApi';
-import {
-  useGetCategoryQuery,
-  useGetCategoryUserPermissionsQuery,
-} from '../../../../app/services/categoryApi';
+import { useGetCategoryQuery } from '../../../../app/services/categoryApi';
 import { useGetAllPostsQuery } from '../../../../app/services/postApi';
 import { useGetSubCategoriesByCategoryQuery } from '../../../../app/services/subCategoryApi';
 import Button from '../../../../components/Button/Button';
-import Modal from '../../../../components/Modal/Modal';
-import AdminSubCategoryModal from '../../SubCategory/AdminSubCategoryModal';
 
 const ContentCategoryManage = () => {
   const user = useSelector(state => state.user);
@@ -75,6 +70,7 @@ const ContentCategoryManage = () => {
                     </div>
                   );
                 }
+                return null;
               })}
           </div>
         </div>
@@ -120,6 +116,7 @@ const ContentCategoryManage = () => {
                     </div>
                   );
                 }
+                return null;
               })}
           </div>
         </div>

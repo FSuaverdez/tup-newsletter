@@ -8,7 +8,7 @@ import AdminCategoryModal from './AdminCategoryModal';
 
 const AdminCategory = () => {
   const user = useSelector(state => state.user);
-  const { data, isLoading } = useGetPermissionsQuery(user?._id, {
+  const { data } = useGetPermissionsQuery(user?._id, {
     skip: !user,
   });
   console.log(data);
@@ -66,6 +66,7 @@ const AdminCategory = () => {
                   </div>
                 );
               }
+              return null;
             })}
         </div>
       </div>

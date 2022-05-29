@@ -38,6 +38,7 @@ const ContentCategory = () => {
                   </div>
                 );
               }
+              return null;
             })}
         </div>
       </div>

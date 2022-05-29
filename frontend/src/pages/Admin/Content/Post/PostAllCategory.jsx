@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useGetCategoryQuery } from '../../../../app/services/categoryApi';
 import { useGetAllPostsQuery } from '../../../../app/services/postApi';
 
 import Button from '../../../../components/Button/Button';
-import Modal from '../../../../components/Modal/Modal';
 const PostAllCategory = () => {
   const { categoryId } = useParams();
   const { data: category, isLoading } = useGetCategoryQuery({ id: categoryId });

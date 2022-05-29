@@ -10,7 +10,7 @@ const isActiveStyle =
 const SidebarAdmin = ({ handleCloseSidebar }) => {
   const user = useSelector(state => state.user);
 
-  const { data, isLoading } = useGetPermissionsQuery(user?._id, {
+  const { data } = useGetPermissionsQuery(user?._id, {
     skip: !user,
   });
 

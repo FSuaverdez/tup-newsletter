@@ -111,6 +111,7 @@ const AdminCategoryManage = () => {
                     </div>
                   );
                 }
+                return null;
               })}
           </div>
         </div>

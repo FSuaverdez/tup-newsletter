@@ -40,6 +40,7 @@ const ContentSubCategory = () => {
                   </div>
                 );
               }
+              return null;
             })}
         </div>
       </div>

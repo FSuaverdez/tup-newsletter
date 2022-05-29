@@ -78,6 +78,7 @@ const AdminAllCategory = () => {
                     </div>
                   );
                 }
+                return null;
               })}
           </div>
         </div>
