@@ -28,6 +28,40 @@ export const addCategory = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Create a new category
+// @router  PUT /category/edit/:id
+// @access  Admin Role Required
+export const editCategory = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { id } = req.params;
+  const { name, description } = req.body;
+  try {
+    const category = await Category.findById(id).populate({
+      path: 'userPermissions',
+      populate: { path: 'user' },
+    });
+    if (havePermissionsCategory(user, category)) {
+      let updatedCategory = await Category.findByIdAndUpdate(
+        id,
+        {
+          name,
+          creator: user._id,
+          description,
+        },
+        { new: true }
+      );
+
+      res.status(201).json(updatedCategory);
+    } else {
+      res.status(401);
+      throw new Error('Not Authorized');
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+});
+
 // @desc    Get all categories
 // @router  GET /category/getAll
 // @access  Public
@@ -87,13 +121,13 @@ export const addPermission = asyncHandler(async (req, res) => {
   const user = req.user;
   const { email, role, categoryId } = req.body;
   try {
-    if (user.isAdmin) {
-      if (!categoryId) {
-        res.status(400);
-        throw new Error('Category Id is required');
-      }
+    if (!categoryId) {
+      res.status(400);
+      throw new Error('Category Id is required');
+    }
 
-      let category = await Category.findById(categoryId);
+    let category = await Category.findById(categoryId);
+    if (havePermissionsCategory(user, category)) {
       if (!category) {
         res.status(401);
         throw new Error('Category not found');
@@ -128,3 +162,13 @@ export const addPermission = asyncHandler(async (req, res) => {
     throw new Error(error.message);
   }
 });
+
+const havePermissionsCategory = (user, category) => {
+  if (user.isAdmin) return true;
+
+  return category.userPermissions.find(
+    p => p.user._id.toString() == user._id.toString()
+  ).role === 'Admin'
+    ? true
+    : false;
+};

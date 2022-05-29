@@ -11,8 +11,12 @@ export const addSubCategory = asyncHandler(async (req, res) => {
   const user = req.user;
   const { name, description, categoryId } = req.body;
   try {
-    if (user.isAdmin) {
-      let category = await Category.findById(categoryId);
+    let category = await Category.findById(categoryId).populate({
+      path: 'userPermissions',
+      populate: { path: 'user' },
+    });
+
+    if (havePermissionsCategory(user, category)) {
       if (category) {
         let subCategory = await SubCategory.create({
           name,
@@ -32,6 +36,44 @@ export const addSubCategory = asyncHandler(async (req, res) => {
         res.status(401);
         throw new Error('Category not found');
       }
+    } else {
+      res.status(401);
+      throw new Error('Not Authorized');
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error('Invalid Category Data');
+  }
+});
+
+// @desc    Create a new subcategory
+// @router  PUT /subcategory/edit/:id
+// @access  Admin Role Required
+export const editSubCategory = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { id } = req.params;
+  const { name, description } = req.body;
+  try {
+    const subCategory = await SubCategory.findById(id).populate({
+      path: 'userPermissions',
+      populate: { path: 'user' },
+    });
+    const category = await Category.findById(subCategory.category).populate({
+      path: 'userPermissions',
+      populate: { path: 'user' },
+    });
+
+    if (
+      havePermissionsCategory(user, category) ||
+      havePermissionsSubCategory(user, subCategory)
+    ) {
+      let updatedSubCategory = await SubCategory.findByIdAndUpdate(id, {
+        name,
+        description,
+        category: categoryId,
+      });
+
+      res.status(201).json(updatedSubCategory);
     } else {
       res.status(401);
       throw new Error('Not Authorized');
@@ -111,8 +153,18 @@ export const addPermission = asyncHandler(async (req, res) => {
   const { email, role, subCategoryId } = req.body;
   console.log(user);
   try {
-    if (user.isAdmin) {
-      let subCategory = await SubCategory.findById(subCategoryId);
+    const subCategory = await SubCategory.findById(subCategoryId).populate({
+      path: 'userPermissions',
+      populate: { path: 'user' },
+    });
+    const category = await Category.findById(subCategory.category).populate({
+      path: 'userPermissions',
+      populate: { path: 'user' },
+    });
+    if (
+      havePermissionsCategory(user, category) ||
+      havePermissionsSubCategory(user, subCategory)
+    ) {
       if (!subCategory) {
         res.status(401);
         throw new Error('SubCategory not found');
@@ -147,3 +199,23 @@ export const addPermission = asyncHandler(async (req, res) => {
     throw new Error('Invalid Category Data');
   }
 });
+
+const havePermissionsCategory = (user, category) => {
+  if (user.isAdmin) return true;
+
+  return category.userPermissions.find(
+    p => p.user._id.toString() == user._id.toString()
+  ).role === 'Admin'
+    ? true
+    : false;
+};
+
+const havePermissionsSubCategory = (user, subCategory) => {
+  if (user.isAdmin) return true;
+
+  return subCategory.userPermissions.find(
+    p => p.user._id.toString() == user._id.toString()
+  ).role === 'Admin'
+    ? true
+    : false;
+};

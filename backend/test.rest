@@ -15,3 +15,26 @@ GET http://localhost:5000/category/getAll
 
 ### Get All Categories
 GET http://localhost:5000/user/auth/permissions/628891d01fe2d3e6b44fef82
+
+###
+POST http://localhost:5000/subcategory/add
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyODg5MWQwMWZlMmQzZTZiNDRmZWY4MiIsImlhdCI6MTY1MzgyNjgxNiwiZXhwIjoxNjU0MDg2MDE2fQ.fb0x1ygnBrEFwb_TLaoEcu-jw5w96s6kzoY_oGewTPQ
+
+{
+    "name": "ASDASDASD",
+    "description": "ASDASDASD",
+    "categoryId":"62639873448ef680c7b59a7f"
+}
+
+###
+PUT http://localhost:5000/subcategory/edit/626e118bf2dff4103a9cdf25
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyODg5MWQwMWZlMmQzZTZiNDRmZWY4MiIsImlhdCI6MTY1MzgyNjgxNiwiZXhwIjoxNjU0MDg2MDE2fQ.fb0x1ygnBrEFwb_TLaoEcu-jw5w96s6kzoY_oGewTPQ
+
+{
+    "name": "ASDASDASD",
+    "description": "ASDASDASD",
+    "categoryId":"626e118bf2dff4103a9cdf25"
+}
+
