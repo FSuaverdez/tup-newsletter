@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler';
 import Category from '../models/Category.js';
 import User from '../models/User.js';
 import UserPermission from '../models/UserPermission.js';
+import { havePermissionsCategory } from '../utils/checkPermissions.js';
 
 // @desc    Create a new category
 // @router  POST /category/add
@@ -168,7 +169,7 @@ export const addPermission = asyncHandler(async (req, res) => {
 // @access  Private Required Auth
 export const addSubscriber = asyncHandler(async (req, res) => {
   const user = req.user;
-  const { email, role, categoryId } = req.body;
+  const { categoryId } = req.body;
   try {
     if (!categoryId) {
       res.status(400);
@@ -204,7 +205,7 @@ export const addSubscriber = asyncHandler(async (req, res) => {
 // @access  Private Required Auth
 export const removeSubscriber = asyncHandler(async (req, res) => {
   const user = req.user;
-  const { email, role, categoryId } = req.body;
+  const { categoryId } = req.body;
   try {
     if (!categoryId) {
       res.status(400);
@@ -234,13 +235,3 @@ export const removeSubscriber = asyncHandler(async (req, res) => {
     throw new Error(error.message);
   }
 });
-
-const havePermissionsCategory = (user, category) => {
-  if (user.isAdmin) return true;
-
-  return category.userPermissions.find(
-    p => p.user._id.toString() == user._id.toString()
-  ).role === 'Admin'
-    ? true
-    : false;
-};

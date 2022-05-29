@@ -3,6 +3,10 @@ import Category from '../models/Category.js';
 import SubCategory from '../models/SubCategory.js';
 import User from '../models/User.js';
 import UserPermission from '../models/UserPermission.js';
+import {
+  havePermissionsCategory,
+  havePermissionsSubCategory,
+} from '../utils/checkPermissions.js';
 
 // @desc    Create a new subcategory
 // @router  POST /subcategory/add
@@ -199,23 +203,3 @@ export const addPermission = asyncHandler(async (req, res) => {
     throw new Error('Invalid Category Data');
   }
 });
-
-const havePermissionsCategory = (user, category) => {
-  if (user.isAdmin) return true;
-
-  return category.userPermissions.find(
-    p => p.user._id.toString() == user._id.toString()
-  ).role === 'Admin'
-    ? true
-    : false;
-};
-
-const havePermissionsSubCategory = (user, subCategory) => {
-  if (user.isAdmin) return true;
-
-  return subCategory.userPermissions.find(
-    p => p.user._id.toString() == user._id.toString()
-  ).role === 'Admin'
-    ? true
-    : false;
-};
