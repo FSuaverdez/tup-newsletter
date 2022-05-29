@@ -55,7 +55,7 @@ const AdminSubCategoryAllUserPermissions = () => {
                 handleOpenAdd();
               }}
             >
-              Add Subcategory
+              Add User Permission
             </Button>
           </div>
           <div>

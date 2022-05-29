@@ -74,7 +74,7 @@ export const editSubCategory = asyncHandler(async (req, res) => {
       let updatedSubCategory = await SubCategory.findByIdAndUpdate(id, {
         name,
         description,
-        category: categoryId,
+        // category:categoryId,
       });
 
       res.status(201).json(updatedSubCategory);
