@@ -163,6 +163,78 @@ export const addPermission = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Add A subscriber
+// @router  POST /category/subscribe
+// @access  Private Required Auth
+export const addSubscriber = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { email, role, categoryId } = req.body;
+  try {
+    if (!categoryId) {
+      res.status(400);
+      throw new Error('Category Id is required');
+    }
+
+    let category = await Category.findById(categoryId);
+
+    if (!category) {
+      res.status(401);
+      throw new Error('Category not found');
+    }
+
+    category.subscribers.push(user._id);
+
+    let updatedCategory = await Category.findByIdAndUpdate(
+      categoryId,
+      category,
+      {
+        new: true,
+      }
+    );
+
+    res.status(201).json(updatedCategory);
+  } catch (error) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+});
+
+// @desc    remove subscriber
+// @router  PUT /category/unsubscribe
+// @access  Private Required Auth
+export const removeSubscriber = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { email, role, categoryId } = req.body;
+  try {
+    if (!categoryId) {
+      res.status(400);
+      throw new Error('Category Id is required');
+    }
+
+    let category = await Category.findById(categoryId).populate('subscribers');
+
+    if (!category) {
+      res.status(401);
+      throw new Error('Category not found');
+    }
+
+    category.subscribers.filter(u => u._id.toString() !== user._id.toString());
+
+    let updatedCategory = await Category.findByIdAndUpdate(
+      categoryId,
+      category,
+      {
+        new: true,
+      }
+    );
+
+    res.status(201).json(updatedCategory);
+  } catch (error) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+});
+
 const havePermissionsCategory = (user, category) => {
   if (user.isAdmin) return true;
 
