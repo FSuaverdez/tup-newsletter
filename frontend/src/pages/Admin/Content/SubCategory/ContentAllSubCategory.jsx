@@ -1,9 +1,15 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useGetPermissionsQuery } from '../../../../app/services/authApi';
 import { useGetCategoryQuery } from '../../../../app/services/categoryApi';
 import { useGetSubCategoriesByCategoryQuery } from '../../../../app/services/subCategoryApi';
 import Button from '../../../../components/Button/Button';
 const ContentAllSubCategory = () => {
+  const user = useSelector(state => state.user);
+  const { data } = useGetPermissionsQuery(user?._id, {
+    skip: !user,
+  });
   const { categoryId } = useParams();
   const { data: category, isLoading } = useGetCategoryQuery({ id: categoryId });
   const { data: subCategories, isLoading: isSubCategoriesLoading } =
@@ -27,20 +33,32 @@ const ContentAllSubCategory = () => {
           </h1>
           <div>
             {subCategories &&
-              subCategories.map(c => (
-                <div
-                  className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
-                  key={c._id}
-                >
-                  <p className='text-xl font-bold'>{c.name}</p>
-                  <Link
-                    to={`/content/subcategory/${c._id}`}
-                    className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
-                  >
-                    Manage
-                  </Link>
-                </div>
-              ))}
+              subCategories.map(c => {
+                const show = data?.subCategoryPermissions.find(
+                  p => p._id === c._id
+                );
+                const isCategoryAdmin =
+                  data?.categoryPermissions
+                    ?.find(p => p._id === category?._id)
+                    ?.userPermissions.find(p => p?.user === user?._id).role ===
+                  'Admin';
+                if (user.isAdmin || show || isCategoryAdmin) {
+                  return (
+                    <div
+                      className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
+                      key={c._id}
+                    >
+                      <p className='text-xl font-bold'>{c.name}</p>
+                      <Link
+                        to={`/content/subcategory/${c._id}`}
+                        className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
+                      >
+                        Manage
+                      </Link>
+                    </div>
+                  );
+                }
+              })}
           </div>
         </div>
       </div>

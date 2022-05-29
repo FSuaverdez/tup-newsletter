@@ -55,6 +55,8 @@ const Post = () => {
     }
   };
 
+  console.log(post);
+
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
       <Button className='mb-3' onClick={() => navigate(-1)}>
@@ -64,7 +66,11 @@ const Post = () => {
         <h1 className='text-5xl font-bold'>{post?.title}</h1>
         <h3 className='text-lg font-normal'>{post?.category?.name}</h3>
         <h4 className='text-lg font-normal'>{post?.subCategory?.name}</h4>
-        {post?.live && <ReactPlayer url={post?.live} controls={true} />}
+        {post?.liveUrl && (
+          <div className='flex justify-center items-center mb-5'>
+            <ReactPlayer url={post?.liveUrl} controls={true} muted={true} />
+          </div>
+        )}
         <JoditEditor value={post?.content} config={config} />
 
         <div className='p-5'>

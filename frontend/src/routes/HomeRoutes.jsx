@@ -22,8 +22,15 @@ import PostAllCategory from '../pages/Admin/Content/Post/PostAllCategory';
 import ContentSubCategory from '../pages/Admin/Content/SubCategory/ContentSubCategory';
 import ContentAllSubCategory from '../pages/Admin/Content/SubCategory/ContentAllSubCategory';
 import Post from '../pages/Post/Post';
+import { useSelector } from 'react-redux';
+import { useGetPermissionsQuery } from '../app/services/authApi';
 
 const HomeRoutes = () => {
+  const user = useSelector(state => state.user);
+
+  const { data, isLoading } = useGetPermissionsQuery(user?._id, {
+    skip: !user,
+  });
   return (
     <Routes>
       <Route path='/user-profile/:userId' element={<UserProfile />} />
@@ -81,7 +88,16 @@ const HomeRoutes = () => {
       <Route path='/post/:postId' element={<Post />} />
       <Route path='/content/post' element={<PostManage />} />
       <Route path='/content/post/create' element={<CreatePost />} />
-      <Route path='/admin' element={<Navigate to='/admin/category' />} />
+      <Route
+        path='/admin'
+        element={
+          data?.showCategoryAdmin ? (
+            <Navigate to='/admin/category' />
+          ) : (
+            <Navigate to='/admin/subcategory' />
+          )
+        }
+      />
       <Route path='/' element={<Home />} />
       <Route path='/*' element={<NotFound />} />
     </Routes>

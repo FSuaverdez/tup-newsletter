@@ -99,14 +99,14 @@ export const addPermission = asyncHandler(async (req, res) => {
         throw new Error('Category not found');
       }
 
-      let user = await User.findOne({ email });
-      if (!user) {
+      let userToUpdate = await User.findOne({ email });
+      if (!userToUpdate) {
         res.status(401);
         throw new Error(`Cannot find User with email ${email}.`);
       }
 
       let newPermission = await UserPermission.create({
-        user: user._id,
+        user: userToUpdate._id,
         role,
       });
 

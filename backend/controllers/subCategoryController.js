@@ -27,7 +27,7 @@ export const addSubCategory = asyncHandler(async (req, res) => {
           { new: true }
         );
 
-        res.status(201).json(subCategory);
+        res.status(201).json(updatedCategory);
       } else {
         res.status(401);
         throw new Error('Category not found');
@@ -109,6 +109,7 @@ export const getSubCategoryUserPermissions = asyncHandler(async (req, res) => {
 export const addPermission = asyncHandler(async (req, res) => {
   const user = req.user;
   const { email, role, subCategoryId } = req.body;
+  console.log(user);
   try {
     if (user.isAdmin) {
       let subCategory = await SubCategory.findById(subCategoryId);

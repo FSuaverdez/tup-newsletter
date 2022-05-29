@@ -11,7 +11,7 @@ const UserPermissionModal = ({
 }) => {
   const [email, setEmail] = useState(userPermissionData?.user?.email || '');
   const [emailError, setEmailError] = useState(false);
-  const [role, setRole] = useState(userPermissionData?.role || '');
+  const [role, setRole] = useState(userPermissionData?.role || 'Admin');
   const [roleError, setRoleError] = useState(false);
 
   const handleSubmit = e => {
@@ -59,7 +59,7 @@ const UserPermissionModal = ({
             required
           />
           {roleError && (
-            <p className='text-red-500 text-sm'>Rle is required.</p>
+            <p className='text-red-500 text-sm'>Role is required.</p>
           )}
         </div>
 

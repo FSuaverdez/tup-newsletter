@@ -24,7 +24,7 @@ const CreatePostConfirmationModal = ({
   );
   return (
     <div
-      className={`xl:w-880 lg:w-656  sm:w-340 shadow-xl bg-white p-5 rounded ${classes} overflow-auto h-800`}
+      className={`xl:w-880 lg:w-656  sm:w-340 shadow-xl bg-white p-5 rounded ${classes} overflow-auto h-800 article-container`}
       onClick={e => e.stopPropagation()}
     >
       <h2 className='text-xl font-bold mb-10 border-b border-b-gray-300 pb-4'>
@@ -33,7 +33,11 @@ const CreatePostConfirmationModal = ({
       <h1 className='text-5xl font-bold'>{post.title}</h1>
       <h3 className='text-lg font-normal'>{post.category.label}</h3>
       <h4 className='text-lg font-normal'>{post.subCategory.label}</h4>
-      {post.live && <ReactPlayer url={post.live} controls={true} />}
+      {post.live && (
+        <div className='flex justify-center items-center mb-5'>
+          <ReactPlayer url={post?.live} controls={true} muted={true} />
+        </div>
+      )}
       <JoditEditor value={post.content} config={config} />
       <div className='flex gap-2 justify-end mt-5'>
         <Button type='danger' onClick={handleClose}>

@@ -10,3 +10,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZGVjYWU2N
 
 ### Get All Categories
 GET http://localhost:5000/category/getAll
+
+
+
+### Get All Categories
+GET http://localhost:5000/user/auth/permissions/628891d01fe2d3e6b44fef82

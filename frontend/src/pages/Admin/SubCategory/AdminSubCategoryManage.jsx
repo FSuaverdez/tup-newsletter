@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useGetPermissionsQuery } from '../../../app/services/authApi';
 import {
   useGetSubCategoryQuery,
   useAddUserPermissionMutation,
@@ -10,6 +12,10 @@ import Modal from '../../../components/Modal/Modal';
 import UserPermissionModal from '../Components/UserPermissionModal';
 
 const AdminCategoryManage = () => {
+  const user = useSelector(state => state.user);
+  const { data } = useGetPermissionsQuery(user?._id, {
+    skip: !user,
+  });
   const { subCategoryId } = useParams();
   const { data: subCategory, isLoading } = useGetSubCategoryQuery({
     id: subCategoryId,
@@ -37,6 +43,11 @@ const AdminCategoryManage = () => {
     await addUserPermission({ email, role, subCategoryId }).unwrap();
   };
 
+  const showAddPermission =
+    data?.subCategoryPermissions
+      ?.find(p => p._id === subCategory?._id)
+      ?.userPermissions.find(p => p?.user === user?._id).role === 'Admin';
+
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>
@@ -63,25 +74,26 @@ const AdminCategoryManage = () => {
             </Button>
           </div>
           <div>
-            {userPermissions &&
-              userPermissions.slice(0, 5).map(c => (
-                <div
-                  className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
-                  key={c._id}
-                >
-                  <p className='font-bold'>{c?.user?.name}</p>
-                  <p className='font-bold text-black'>{c?.role}</p>
-                  <Button
-                    type='info'
-                    onClick={() => {
-                      setUserPermissionData(c);
-                      handleOpenAddUserPermission();
-                    }}
+            {user.isAdmin || showAddPermission
+              ? userPermissions?.slice(0, 5).map(c => (
+                  <div
+                    className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
+                    key={c._id}
                   >
-                    Edit
-                  </Button>
-                </div>
-              ))}
+                    <p className='font-bold'>{c?.user?.name}</p>
+                    <p className='font-bold text-black'>{c?.role}</p>
+                    <Button
+                      type='info'
+                      onClick={() => {
+                        setUserPermissionData(c);
+                        handleOpenAddUserPermission();
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  </div>
+                ))
+              : null}
           </div>
         </div>
       </div>

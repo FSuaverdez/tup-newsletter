@@ -29,14 +29,6 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
-    categoryPermission: {
-      type: [catPermission],
-      default: [],
-    },
-    subCategoryPermission: {
-      type: [subCatPermission],
-      default: [],
-    },
   },
   { timestamps: true }
 );

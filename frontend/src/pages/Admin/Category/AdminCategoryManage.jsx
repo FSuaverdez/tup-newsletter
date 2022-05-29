@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useGetPermissionsQuery } from '../../../app/services/authApi';
 import {
   useAddUserPermissionMutation,
   useGetCategoryQuery,
@@ -12,6 +14,10 @@ import UserPermissionModal from '../Components/UserPermissionModal';
 import AdminSubCategoryModal from '../SubCategory/AdminSubCategoryModal';
 
 const AdminCategoryManage = () => {
+  const user = useSelector(state => state.user);
+  const { data } = useGetPermissionsQuery(user?._id, {
+    skip: !user,
+  });
   const { categoryId } = useParams();
   const { data: category, isLoading } = useGetCategoryQuery({ id: categoryId });
   const { data: subCategories, isLoading: isSubCategoriesLoading } =
@@ -45,6 +51,11 @@ const AdminCategoryManage = () => {
     await addUserPermission({ email, role, categoryId }).unwrap();
   };
 
+  const showAddPermission =
+    data?.categoryPermissions
+      ?.find(p => p._id === category?._id)
+      ?.userPermissions.find(p => p?.user === user?._id).role === 'Admin';
+
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>
@@ -74,64 +85,79 @@ const AdminCategoryManage = () => {
           </div>
           <div>
             {subCategories &&
-              subCategories.slice(0, 5).map(c => (
-                <div
-                  className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
-                  key={c._id}
-                >
-                  <p className='text-xl font-bold'>{c.name}</p>
-                  <Link
-                    to={`/admin/subcategory/edit/${c._id}`}
-                    className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
-                  >
-                    Edit
-                  </Link>
-                </div>
-              ))}
+              subCategories.slice(0, 5).map(c => {
+                const show = data?.subCategoryPermissions.find(
+                  p => p._id === c._id
+                );
+                const isCategoryAdmin =
+                  data?.categoryPermissions
+                    ?.find(p => p._id === category?._id)
+                    ?.userPermissions.find(p => p?.user === user?._id).role ===
+                  'Admin';
+                console.log(isCategoryAdmin);
+                if (user.isAdmin || show || isCategoryAdmin) {
+                  return (
+                    <div
+                      className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
+                      key={c._id}
+                    >
+                      <p className='text-xl font-bold'>{c.name}</p>
+                      <Link
+                        to={`/admin/subcategory/edit/${c._id}`}
+                        className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
+                      >
+                        Edit
+                      </Link>
+                    </div>
+                  );
+                }
+              })}
           </div>
         </div>
-        <div className='border-t-2 border-black mt-10'>
-          <h2 className='text-2xl font-bold mt-2'>Manage User Permissions</h2>
-          <div className='flex items-center w-full justify-end mb-5 gap-3'>
-            <Button
-              type='success'
-              onClick={() => {
-                handleOpenAddUserPermission();
-              }}
-            >
-              Add User Permission
-            </Button>
-            <Button
-              type='Info'
-              onClick={() => {
-                navigate('all-permissions');
-              }}
-            >
-              View All
-            </Button>
-          </div>
-          <div>
-            {userPermissions &&
-              userPermissions.slice(0, 5).map(c => (
-                <div
-                  className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
-                  key={c._id}
-                >
-                  <p className='font-bold'>{c?.user?.name}</p>
-                  <p className='font-bold text-black'>{c?.role}</p>
-                  <Button
-                    type='info'
-                    onClick={() => {
-                      setUserPermissionData(c);
-                      handleOpenAddUserPermission();
-                    }}
+        {user.isAdmin || showAddPermission ? (
+          <div className='border-t-2 border-black mt-10'>
+            <h2 className='text-2xl font-bold mt-2'>Manage User Permissions</h2>
+            <div className='flex items-center w-full justify-end mb-5 gap-3'>
+              <Button
+                type='success'
+                onClick={() => {
+                  handleOpenAddUserPermission();
+                }}
+              >
+                Add User Permission
+              </Button>
+              <Button
+                type='Info'
+                onClick={() => {
+                  navigate('all-permissions');
+                }}
+              >
+                View All
+              </Button>
+            </div>
+            <div>
+              {userPermissions &&
+                userPermissions.slice(0, 5).map(c => (
+                  <div
+                    className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
+                    key={c._id}
                   >
-                    Edit
-                  </Button>
-                </div>
-              ))}
+                    <p className='font-bold'>{c?.user?.name}</p>
+                    <p className='font-bold text-black'>{c?.role}</p>
+                    <Button
+                      type='info'
+                      onClick={() => {
+                        setUserPermissionData(c);
+                        handleOpenAddUserPermission();
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  </div>
+                ))}
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
 
       {openAddCategory && (

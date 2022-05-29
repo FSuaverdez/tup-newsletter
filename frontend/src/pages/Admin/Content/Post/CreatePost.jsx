@@ -10,6 +10,7 @@ import CreatePostConfirmationModal from './CreatePostConfirmationModal';
 import JoditEditor from 'jodit-react';
 import { useAddPostMutation } from '../../../../app/services/postApi';
 import { useNavigate } from 'react-router-dom';
+import ReactPlayer from 'react-player';
 
 const CreatePost = () => {
   const [category, setCategory] = useState('');
@@ -21,6 +22,7 @@ const CreatePost = () => {
   const [content, setContent] = useState('');
   const [contentError, setContentError] = useState(false);
   const [preview, setPreview] = useState(false);
+  const [canPlay, setCanPlay] = useState(false);
   const [postType, setPostType] = useState({ value: 'post', label: 'Post' });
   const editor = useRef(null);
   const navigate = useNavigate();
@@ -132,10 +134,23 @@ const CreatePost = () => {
               type='text'
               name='liveUrl'
               label='Live URL'
-              onChange={e => setLive(e.target.value)}
+              onChange={e => {
+                console.log(ReactPlayer.canPlay(e.target.value));
+                if (ReactPlayer.canPlay(e.target.value)) {
+                  setCanPlay(true);
+                } else {
+                  setCanPlay(false);
+                }
+                setLive(e.target.value);
+              }}
               value={live}
               required
             />
+            {live !== '' && !canPlay ? (
+              <p className='text-red-500 text-sm mb-5'>
+                URL is not a valid live video URL.
+              </p>
+            ) : null}
           </>
         )}
         <div className='mt-5 bg-white'>

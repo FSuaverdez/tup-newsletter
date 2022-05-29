@@ -19,9 +19,9 @@ const ContentSubCategoryManagePosts = () => {
     return 'Loading...';
   }
   const filteredPost = posts?.filter(
-    post => post.subCategory === subCategoryId
+    post => post?.subCategory?._id === subCategoryId
   );
-  console.log(filteredPost);
+  console.log(posts);
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>

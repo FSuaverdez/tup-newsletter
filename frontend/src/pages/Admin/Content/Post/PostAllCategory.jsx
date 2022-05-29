@@ -16,7 +16,7 @@ const PostAllCategory = () => {
     return 'Loading...';
   }
 
-  const filteredPost = posts?.filter(post => post.category === categoryId);
+  const filteredPost = posts?.filter(post => post.category._id === categoryId);
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>
