@@ -58,7 +58,7 @@ export const getUserPermissions = asyncHandler(async (req, res) => {
       c.userPermissions.forEach(p => {
         if (p.user == id) {
           userPermissions.categoryPermissions.push(c);
-          if (p.role == 'Admin') {
+          if (p.role == 'Admin' || user.isAdmin) {
             userPermissions.showCategoryAdmin = true;
             userPermissions.showAdmin = true;
             userPermissions.showApproval = true;
@@ -87,6 +87,14 @@ export const getUserPermissions = asyncHandler(async (req, res) => {
         }
       })
     );
+
+    if (user.isAdmin) {
+      userPermissions.showAdmin = true;
+      userPermissions.showCategoryAdmin = true;
+      userPermissions.showSubCategoryAdmin = true;
+      userPermissions.showApproval = true;
+      userPermissions.showContent = true;
+    }
     res.status(200);
     res.json(userPermissions);
   } catch (error) {

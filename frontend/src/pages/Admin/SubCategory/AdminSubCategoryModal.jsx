@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAddSubCategoryMutation } from '../../../app/services/subCategoryApi';
+import { useAddSubCategoryMutation } from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Input from '../../../components/Input/Input';
+import SelectCategory from '../../../components/SelectCategory/SelectCategory';
 
 const AdminSubCategoryModal = ({
   handleCloseAdd,
@@ -13,15 +14,27 @@ const AdminSubCategoryModal = ({
   const [nameError, setNameError] = useState(false);
   const [description, setDescription] = useState('');
   const [descriptionError, setDescriptionError] = useState(false);
+  const [category, setCategory] = useState('');
   const [addSubCategory] = useAddSubCategoryMutation();
   const navigate = useNavigate();
+
+  const handleCategoryChange = e => {
+    setCategory(e);
+  };
 
   const handleSubmit = async e => {
     e.preventDefault();
 
     if (name && description) {
-      await addSubCategory({ name, description, categoryId }).unwrap();
-      navigate('/admin/category/edit/' + categoryId);
+      const id = categoryId ? categoryId : category.value;
+      const resp = await addSubCategory({
+        name,
+        description,
+        categoryId: id,
+      }).unwrap();
+      console.log(resp);
+
+      navigate('/admin/subcategory/edit/' + resp._id);
       setNameError(false);
       handleCloseAdd();
     } else {
@@ -38,12 +51,20 @@ const AdminSubCategoryModal = ({
       <h1 className='text-2xl font-bold my-5'>Add Category</h1>
       <div className=' mx-auto'>
         <div className='py-3'>
+          {!categoryId ? (
+            <>
+              <SelectCategory
+                value={category}
+                onChange={handleCategoryChange}
+              />
+            </>
+          ) : null}
           <label htmlFor='name' className='font-bold text-gray-600'>
-            Category Name:
+            Subcategory Name:
           </label>
           <Input
             fullWidth
-            type='text'
+            type='textarea'
             name='name'
             onChange={e => setName(e.target.value)}
             value={name}

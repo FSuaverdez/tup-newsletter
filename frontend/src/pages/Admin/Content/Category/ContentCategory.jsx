@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useGetPermissionsQuery } from '../../../../app/services/authApi';
-import { useGetCategoriesQuery } from '../../../../app/services/categoryApi';
+import { useGetCategoriesQuery } from '../../../../app/services/adminApi';
 
 const ContentCategory = () => {
   const user = useSelector(state => state.user);

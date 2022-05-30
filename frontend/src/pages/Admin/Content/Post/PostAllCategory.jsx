@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useGetCategoryQuery } from '../../../../app/services/categoryApi';
+import { useGetCategoryQuery } from '../../../../app/services/adminApi';
 import { useGetAllPostsQuery } from '../../../../app/services/postApi';
 
 import Button from '../../../../components/Button/Button';

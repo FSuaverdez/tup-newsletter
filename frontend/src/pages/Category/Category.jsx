@@ -1,10 +1,10 @@
 import { Link, useParams } from 'react-router-dom';
 import { useGetAllPostsByCategoryQuery } from '../../app/services/postApi';
-import { useGetCategoryQuery } from '../../app/services/categoryApi';
+import { useGetCategoryQuery } from '../../app/services/adminApi';
 
 const Category = () => {
   const { categoryId } = useParams();
-  const { data: category} = useGetCategoryQuery({ id: categoryId });
+  const { data: category } = useGetCategoryQuery({ id: categoryId });
   const { data: posts, isLoading } = useGetAllPostsByCategoryQuery({
     id: categoryId,
   });

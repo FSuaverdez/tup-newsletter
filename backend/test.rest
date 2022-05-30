@@ -38,3 +38,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyODg5MWQwM
     "categoryId":"626e118bf2dff4103a9cdf25"
 }
 
+###
+PUT http://localhost:5000/category/delete/62639873448ef680c7b59a7f
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyODg5MWQwMWZlMmQzZTZiNDRmZWY4MiIsImlhdCI6MTY1MzgyNjgxNiwiZXhwIjoxNjU0MDg2MDE2fQ.fb0x1ygnBrEFwb_TLaoEcu-jw5w96s6kzoY_oGewTPQ
+
+

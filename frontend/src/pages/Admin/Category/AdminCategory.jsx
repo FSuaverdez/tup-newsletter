@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useGetPermissionsQuery } from '../../../app/services/authApi';
-import { useGetCategoriesQuery } from '../../../app/services/categoryApi';
+import { useGetCategoriesQuery } from '../../../app/services/adminApi';
 import Modal from '../../../components/Modal/Modal';
 import AdminCategoryModal from './AdminCategoryModal';
 
@@ -11,7 +11,6 @@ const AdminCategory = () => {
   const { data } = useGetPermissionsQuery(user?._id, {
     skip: !user,
   });
-  console.log(data);
   const [openAdd, setOpenAdd] = useState(false);
   const { data: categories, isLoading: isCategoriesLoading } =
     useGetCategoriesQuery();

@@ -17,7 +17,17 @@ const subCategorySchema = mongoose.Schema(
       ],
       default: [],
     },
+    subscribers: {
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+        },
+      ],
+      default: [],
+    },
   },
+
   { timestamps: true }
 );
 const SubCategory = mongoose.model('SubCategory', subCategorySchema);

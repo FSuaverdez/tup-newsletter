@@ -3,8 +3,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   useGetSubCategoryQuery,
   useGetSubCategoryUserPermissionsQuery,
-  useAddUserPermissionMutation,
-} from '../../../app/services/subCategoryApi';
+  useAddUserPermissionSubCategoryMutation,
+} from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
 import UserPermissionModal from './UserPermissionModal';
@@ -16,7 +16,7 @@ const AdminSubCategoryAllUserPermissions = () => {
   const { data: userPermissions, isLoading: isUserPermissionsLoading } =
     useGetSubCategoryUserPermissionsQuery({ id: subCategoryId });
   const [openAdd, setOpenAdd] = useState(false);
-  const [addUserPermission] = useAddUserPermissionMutation();
+  const [addUserPermission] = useAddUserPermissionSubCategoryMutation();
   const [userPermissionData, setUserPermissionData] = useState(null);
   const navigate = useNavigate();
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useGetPermissionsQuery } from '../../../app/services/authApi';
-import { useGetSubCategoriesQuery } from '../../../app/services/subCategoryApi';
+import { useGetSubCategoriesQuery } from '../../../app/services/adminApi';
 import Modal from '../../../components/Modal/Modal';
 import AdminSubCategoryModal from './AdminSubCategoryModal';
 

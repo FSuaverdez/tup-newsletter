@@ -31,6 +31,7 @@ const HomeRoutes = () => {
   const { data, isLoading } = useGetPermissionsQuery(user?._id, {
     skip: !user,
   });
+
   return (
     <Routes>
       <Route path='/user-profile/:userId' element={<UserProfile />} />
@@ -91,7 +92,7 @@ const HomeRoutes = () => {
       <Route
         path='/admin'
         element={
-          data?.showCategoryAdmin ? (
+          user?.isAdmin || data?.showCategoryAdmin ? (
             <Navigate to='/admin/category' />
           ) : (
             <Navigate to='/admin/subcategory' />

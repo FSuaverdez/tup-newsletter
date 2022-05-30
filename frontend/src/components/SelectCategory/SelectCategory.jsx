@@ -1,6 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
-import { useGetCategoriesQuery } from '../../app/services/categoryApi';
+import { useGetCategoriesQuery } from '../../app/services/adminApi';
 
 const SelectCategory = ({
   value: stateValue,
@@ -16,7 +16,7 @@ const SelectCategory = ({
   }
 
   return (
-    <div>
+    <div className='mb-3'>
       <label htmlFor='name' className='font-bold text-gray-600'>
         Category:
       </label>

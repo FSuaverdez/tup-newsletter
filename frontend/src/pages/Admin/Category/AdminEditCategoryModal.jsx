@@ -1,33 +1,37 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useEditCategoryMutation } from '../../../app/services/categoryApi';
+import { useEditCategoryMutation } from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Input from '../../../components/Input/Input';
 
-const AdminEditCategoryModal = ({ handleCloseEdit, category, className: classes }) => {
+const AdminEditCategoryModal = ({
+  handleCloseEdit,
+  category,
+  className: classes,
+}) => {
   const [name, setName] = useState('');
-  const [categoryId,setCategoryId] = useState('');
+  const [categoryId, setCategoryId] = useState('');
   const [nameError, setNameError] = useState(false);
   const [description, setDescription] = useState('');
   const [descriptionError, setDescriptionError] = useState(false);
   const [editCategory] = useEditCategoryMutation();
   const navigate = useNavigate();
 
-  useEffect(()=>{
+  useEffect(() => {
     const setCurrent = () => {
-        setName(category.name)
-        setDescription(category.description)
-        setCategoryId(category._id)
-    }
+      setName(category.name);
+      setDescription(category.description);
+      setCategoryId(category._id);
+    };
     setCurrent();
-  },[category])
+  }, [category]);
   const handleSubmit = async e => {
     e.preventDefault();
 
     try {
       if (name && description) {
-        await editCategory({ name, description,categoryId }).unwrap();
-        navigate('/admin/category/edit/'+categoryId);
+        await editCategory({ name, description, categoryId }).unwrap();
+        navigate('/admin/category/edit/' + categoryId);
         setNameError(false);
         handleCloseEdit();
       } else {

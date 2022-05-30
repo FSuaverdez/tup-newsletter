@@ -3,11 +3,11 @@ import { useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useGetPermissionsQuery } from '../../../app/services/authApi';
 import {
-  useAddUserPermissionMutation,
+  useAddUserPermissionCategoryMutation,
   useGetCategoryQuery,
   useGetCategoryUserPermissionsQuery,
-} from '../../../app/services/categoryApi';
-import { useGetSubCategoriesByCategoryQuery } from '../../../app/services/subCategoryApi';
+  useGetSubCategoriesByCategoryQuery,
+} from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
 import UserPermissionModal from '../Components/UserPermissionModal';
@@ -27,7 +27,7 @@ const AdminCategoryManage = () => {
     useGetCategoryUserPermissionsQuery({ id: categoryId });
   const [openAddCategory, setOpenAddCategory] = useState(false);
   const [openAddUserPermission, setOpenAddUserPermission] = useState(false);
-  const [addUserPermission] = useAddUserPermissionMutation();
+  const [addUserPermission] = useAddUserPermissionCategoryMutation();
   const [userPermissionData, setUserPermissionData] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ const AdminCategoryManage = () => {
   const handleOpenEdit = () => {
     setOpenEdit(true);
   };
-  const handleCloseEdit = () =>{
+  const handleCloseEdit = () => {
     setOpenEdit(false);
   };
   const handleSubmitUserPermission = async (email, role) => {
@@ -63,55 +63,61 @@ const AdminCategoryManage = () => {
     data?.categoryPermissions
       ?.find(p => p._id === category?._id)
       ?.userPermissions.find(p => p?.user === user?._id).role === 'Admin';
+  const isCategoryAdmin =
+    data?.categoryPermissions
+      ?.find(p => p._id === category?._id)
+      ?.userPermissions.find(p => p?.user === user?._id).role === 'Admin';
 
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>
       <h1 className='text-3xl font-bold my-5'>Manage {category?.name}</h1>
-      <div className='w-full justify-end mb-5 gap-3'>
-            <Button
-              type='success'
-              onClick={() => {
-                handleOpenEdit();
-              }}
-            >
-              Update Category
-            </Button>
-      </div>
+      {user?.isAdmin || isCategoryAdmin ? (
+        <div className='w-full justify-end mb-5 gap-3'>
+          <Button
+            type='success'
+            onClick={() => {
+              handleOpenEdit();
+            }}
+          >
+            Update Category
+          </Button>
+        </div>
+      ) : null}
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto'>
         <h2 className=' text-black text-xl font-semibold'>{category?.name}</h2>
         <p className='text-black '>{category?.description}</p>
         <div className='border-t-2 border-black mt-10'>
-          <h2 className='text-2xl font-bold mt-2'>Manage Subcategories</h2>
-          <div className='flex items-center w-full justify-end mb-5 gap-3'>
-            <Button
-              type='success'
-              onClick={() => {
-                handleOpenAddSubCategory();
-              }}
-            >
-              Add Subcategory
-            </Button>
-            <Button
-              type='Info'
-              onClick={() => {
-                navigate('all-subcategories');
-              }}
-            >
-              View All
-            </Button>
-          </div>
+          {user?.isAdmin || isCategoryAdmin ? (
+            <>
+              <h2 className='text-2xl font-bold mt-2'>Manage Subcategories</h2>
+              <div className='flex items-center w-full justify-end mb-5 gap-3'>
+                <Button
+                  type='success'
+                  onClick={() => {
+                    handleOpenAddSubCategory();
+                  }}
+                >
+                  Add Subcategory
+                </Button>
+                <Button
+                  type='Info'
+                  onClick={() => {
+                    navigate('all-subcategories');
+                  }}
+                >
+                  View All
+                </Button>
+              </div>
+            </>
+          ) : null}
           <div>
             {subCategories &&
               subCategories.slice(0, 5).map(c => {
                 const show = data?.subCategoryPermissions.find(
                   p => p._id === c._id
                 );
-                const isCategoryAdmin =
-                  data?.categoryPermissions
-                    ?.find(p => p._id === category?._id)
-                    ?.userPermissions.find(p => p?.user === user?._id).role ===
-                  'Admin';
+
                 console.log(isCategoryAdmin);
                 if (user.isAdmin || show || isCategoryAdmin) {
                   return (

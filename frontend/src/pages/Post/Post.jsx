@@ -96,7 +96,7 @@ const Post = () => {
         {user && (
           <div className='mt-5 border-t border-t-gray-300 p-5'>
             <Input
-              type='text'
+              type='textarea'
               label={false}
               placeholder='Comment'
               fullWidth

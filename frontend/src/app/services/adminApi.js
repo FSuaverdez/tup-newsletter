@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const baseUrl = 'http://localhost:5000/';
-export const subCategoryApi = createApi({
-  reducerPath: 'subCategoryApi',
-  tagTypes: ['SubCategories', 'UserPermissions'],
+export const adminApi = createApi({
+  reducerPath: 'adminApi',
+  tagTypes: ['Categories', 'UserPermissions', 'SubCategories'],
   baseQuery: fetchBaseQuery({
     baseUrl,
     prepareHeaders: (headers, { getState }) => {
@@ -15,6 +15,42 @@ export const subCategoryApi = createApi({
     },
   }),
   endpoints: builder => ({
+    getCategories: builder.query({
+      query: () => ({ url: 'category/getAll' }),
+      providesTags: ['Categories', 'SubCategories'],
+    }),
+    getCategory: builder.query({
+      query: ({ id }) => ({ url: `category/${id}` }),
+      providesTags: ['Categories'],
+    }),
+    getCategoryUserPermissions: builder.query({
+      query: ({ id }) => ({ url: `category/${id}/userPermissions` }),
+      providesTags: ['UserPermissions'],
+    }),
+    addCategory: builder.mutation({
+      query: ({ name, description }) => ({
+        url: 'category/add',
+        method: 'POST',
+        body: { name, description },
+      }),
+      invalidatesTags: ['Categories'],
+    }),
+    editCategory: builder.mutation({
+      query: ({ name, description, categoryId }) => ({
+        url: `category/edit/${categoryId}`,
+        method: 'PUT',
+        body: { name, description, categoryId },
+      }),
+      invalidatesTags: ['Categories'],
+    }),
+    addUserPermissionCategory: builder.mutation({
+      query: ({ email, role, categoryId }) => ({
+        url: 'category/addPermission',
+        method: 'POST',
+        body: { email, role, categoryId },
+      }),
+      invalidatesTags: ['UserPermissions'],
+    }),
     getSubCategories: builder.query({
       query: () => ({ url: 'subcategory/getAll' }),
       providesTags: ['SubCategories'],
@@ -47,7 +83,7 @@ export const subCategoryApi = createApi({
       }),
       invalidatesTags: ['SubCategories'],
     }),
-    addUserPermission: builder.mutation({
+    addUserPermissionSubCategory: builder.mutation({
       query: ({ email, role, subCategoryId }) => ({
         url: 'subcategory/addPermission',
         method: 'POST',
@@ -59,11 +95,17 @@ export const subCategoryApi = createApi({
 });
 
 export const {
+  useAddCategoryMutation,
+  useEditCategoryMutation,
+  useGetCategoriesQuery,
+  useGetCategoryQuery,
+  useAddUserPermissionCategoryMutation,
+  useGetCategoryUserPermissionsQuery,
   useGetSubCategoriesQuery,
   useGetSubCategoryQuery,
   useAddSubCategoryMutation,
   useEditSubCategoryMutation,
   useGetSubCategoriesByCategoryQuery,
-  useAddUserPermissionMutation,
+  useAddUserPermissionSubCategoryMutation,
   useGetSubCategoryUserPermissionsQuery,
-} = subCategoryApi;
+} = adminApi;

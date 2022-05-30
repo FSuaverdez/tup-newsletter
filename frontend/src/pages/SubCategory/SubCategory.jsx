@@ -1,20 +1,35 @@
+import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { useGetSubCategoryQuery } from '../../app/services/adminApi';
 import { useGetAllPostsBySubCategoryQuery } from '../../app/services/postApi';
-import { useGetSubCategoryQuery } from '../../app/services/subCategoryApi';
+
+import Button from '../../components/Button/Button';
 
 const SubCategory = () => {
   const { categoryName, subCategoryId } = useParams();
-  const { data: subCategory } = useGetSubCategoryQuery({id: subCategoryId});
+  const { data: subCategory } = useGetSubCategoryQuery({ id: subCategoryId });
   const { data: posts, isLoading } = useGetAllPostsBySubCategoryQuery({
     id: subCategoryId,
   });
+
+  const [openSubscribeModal, setOpenSubscribeModal] = useState(false);
   if (isLoading) {
     return 'Loading...';
   }
+
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
-        <h1 className='text-2xl font-bold mb-10'>{`All Posts from ${subCategory?.name}`}</h1>
+        <h1 className='text-2xl font-bold'>{`All Posts from ${subCategory?.name}`}</h1>
+        <div className='mb-10'>
+          <h3>Receive Email/SMS by Subscribing</h3>
+          <Button
+            className='text-xs px-2 py-2'
+            onClick={() => setOpenSubscribeModal(prev => !prev)}
+          >
+            Subscribe
+          </Button>
+        </div>
         {posts?.map(post => (
           <Link to={`/post/${post._id}`} key={post._id}>
             <div className='shadow-lg my-5 border border-gray-200 rounded p-3'>

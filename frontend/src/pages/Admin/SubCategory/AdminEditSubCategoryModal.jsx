@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useEditSubCategoryMutation } from '../../../app/services/subCategoryApi';
+import { useEditSubCategoryMutation } from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Input from '../../../components/Input/Input';
+import { useSelector } from 'react-redux';
 
 const AdminEditSubCategoryModal = ({
   handleCloseEdit,
@@ -10,20 +11,21 @@ const AdminEditSubCategoryModal = ({
   className: classes,
 }) => {
   const [name, setName] = useState('');
-  const [subCategoryId,setSubCategoryid] = useState('');
+  const [subCategoryId, setSubCategoryid] = useState('');
   const [nameError, setNameError] = useState(false);
   const [description, setDescription] = useState('');
   const [descriptionError, setDescriptionError] = useState(false);
   const [editSubCategory] = useEditSubCategoryMutation();
   const navigate = useNavigate();
-  useEffect(()=>{
-    const setCurrent = () =>{
-        setName(subCategory.name)
-        setDescription(subCategory.description)
-        setSubCategoryid(subCategory._id)
-    }
+  const user = useSelector(state => state.user);
+  useEffect(() => {
+    const setCurrent = () => {
+      setName(subCategory.name);
+      setDescription(subCategory.description);
+      setSubCategoryid(subCategory._id);
+    };
     setCurrent();
-  },[subCategory])
+  }, [subCategory]);
 
   const handleSubmit = async e => {
     e.preventDefault();

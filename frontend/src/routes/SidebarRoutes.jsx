@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import SidebarAdmin from '../components/Sidebar/SidebarAdmin';
 import SidebarCategory from '../components/Sidebar/SidebarCategory';
 import SidebarContent from '../components/Sidebar/SidebarContent';
-import { useGetCategoriesQuery } from '../app/services/categoryApi';
+import { useGetCategoriesQuery } from '../app/services/adminApi';
 
 const SidebarRoutes = ({ handleCloseSidebar }) => {
   const { data: categories, isLoading } = useGetCategoriesQuery();

@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useAddCategoryMutation } from '../../../app/services/categoryApi';
+import { useAddCategoryMutation } from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Input from '../../../components/Input/Input';
 
@@ -11,6 +12,7 @@ const AdminCategoryModal = ({ handleCloseAdd, className: classes }) => {
   const [descriptionError, setDescriptionError] = useState(false);
   const [addCategory] = useAddCategoryMutation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -18,6 +20,7 @@ const AdminCategoryModal = ({ handleCloseAdd, className: classes }) => {
     try {
       if (name && description) {
         await addCategory({ name, description }).unwrap();
+
         navigate('/admin/category');
         setNameError(false);
         handleCloseAdd();

@@ -1,6 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
-import { useGetSubCategoriesQuery } from '../../app/services/subCategoryApi';
+import { useGetSubCategoriesQuery } from '../../app/services/adminApi';
 
 const SelectSubCategory = ({
   categoryId,

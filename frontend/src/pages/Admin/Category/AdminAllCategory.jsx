@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useGetPermissionsQuery } from '../../../app/services/authApi';
-import { useGetCategoryQuery } from '../../../app/services/categoryApi';
-import { useGetSubCategoriesByCategoryQuery } from '../../../app/services/subCategoryApi';
+import {
+  useGetCategoryQuery,
+  useGetSubCategoriesByCategoryQuery,
+} from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
 import AdminSubCategoryModal from '../SubCategory/AdminSubCategoryModal';

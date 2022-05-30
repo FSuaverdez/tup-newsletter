@@ -43,14 +43,14 @@ const Input = ({
           ref={textAreaRef}
           className={`${classes} ${
             fullWidth && 'w-full'
-          } block border-2 border-gray-500 rounded px-2 py-1 max-h-fit`}
+          } block border-2 border-gray-500 rounded px-2 py-1 max-h-fit resize-none`}
           name={name}
           placeholder={placeholder}
           required={isRequired}
           id={name}
           onChange={e => {
             handleChange(e);
-            auto_grow(textAreaRef);
+            auto_grow(textAreaRef.current);
           }}
           value={value}
         />

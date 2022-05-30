@@ -3,6 +3,7 @@ import {
   addCategory,
   addPermission,
   addSubscriber,
+  deleteCategory,
   editCategory,
   getCategories,
   getCategory,
@@ -15,6 +16,7 @@ const router = express.Router();
 
 router.post('/add', requireAuth, addCategory);
 router.put('/edit/:id', requireAuth, editCategory);
+router.put('/delete/:id', requireAuth, deleteCategory);
 router.post('/subscribe', requireAuth, addSubscriber);
 router.put('/unsubscribe', requireAuth, removeSubscriber);
 router.get('/getAll', getCategories);

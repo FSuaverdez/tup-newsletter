@@ -35,7 +35,7 @@ export const addSubCategory = asyncHandler(async (req, res) => {
           { new: true }
         );
 
-        res.status(201).json(updatedCategory);
+        res.status(201).json(subCategory);
       } else {
         res.status(401);
         throw new Error('Category not found');
@@ -200,6 +200,72 @@ export const addPermission = asyncHandler(async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    throw new Error('Invalid Category Data');
+    throw new Error(error.message);
+  }
+});
+
+// @desc    Add A subscriber
+// @router  POST /subcategory/subscribe
+// @access  Private Required Auth
+export const addSubscriber = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { id, type } = req.body;
+  try {
+    if (!id) {
+      res.status(400);
+      throw new Error('Category Id is required');
+    }
+
+    let subCategory = await SubCategory.findById(id);
+
+    if (!subCategory) {
+      res.status(401);
+      throw new Error('Category not found');
+    }
+
+    subCategory.subscribers.push(user._id);
+
+    let updatedSubCategory = await Category.findByIdAndUpdate(id, subCategory, {
+      new: true,
+    });
+
+    res.status(201).json(updatedSubCategory);
+  } catch (error) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+});
+
+// @desc    remove subscriber
+// @router  PUT /subcategory/unsubscribe
+// @access  Private Required Auth
+export const removeSubscriber = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { id, type } = req.body;
+  try {
+    if (!id) {
+      res.status(400);
+      throw new Error('Category Id is required');
+    }
+
+    let subCategory = await SubCategory.findById(id).populate('subscribers');
+
+    if (!subCategory) {
+      res.status(401);
+      throw new Error('Category not found');
+    }
+
+    subCategory.subscribers.filter(
+      u => u._id.toString() !== user._id.toString()
+    );
+
+    let updatedSubCategory = await Category.findByIdAndUpdate(id, subCategory, {
+      new: true,
+    });
+
+    res.status(201).json(updatedSubCategory);
+  } catch (error) {
+    console.log(error);
+    throw new Error(error.message);
   }
 });

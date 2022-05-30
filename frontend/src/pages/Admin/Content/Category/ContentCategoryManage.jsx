@@ -2,9 +2,11 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useGetPermissionsQuery } from '../../../../app/services/authApi';
-import { useGetCategoryQuery } from '../../../../app/services/categoryApi';
+import {
+  useGetCategoryQuery,
+  useGetSubCategoriesByCategoryQuery,
+} from '../../../../app/services/adminApi';
 import { useGetAllPostsQuery } from '../../../../app/services/postApi';
-import { useGetSubCategoriesByCategoryQuery } from '../../../../app/services/subCategoryApi';
 import Button from '../../../../components/Button/Button';
 
 const ContentCategoryManage = () => {

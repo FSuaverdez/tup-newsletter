@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Category from '../models/Category.js';
+import SubCategory from '../models/SubCategory.js';
 import User from '../models/User.js';
 import UserPermission from '../models/UserPermission.js';
 import { havePermissionsCategory } from '../utils/checkPermissions.js';
@@ -53,6 +54,37 @@ export const editCategory = asyncHandler(async (req, res) => {
       );
 
       res.status(201).json(updatedCategory);
+    } else {
+      res.status(401);
+      throw new Error('Not Authorized');
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+});
+
+// @desc    Create a new category
+// @router  PUT /category/delete/:id
+// @access  Admin Role Required
+export const deleteCategory = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { id } = req.params;
+  try {
+    const category = await Category.findById(id).populate({
+      path: 'userPermissions',
+      populate: { path: 'user' },
+    });
+    if (user.isAdmin) {
+      let removedCategory = await Category.findByIdAndDelete(id);
+
+      const subCatToRemove = [];
+      removedCategory.subCategories.forEach(s => {
+        subCatToRemove.push(s.toString());
+      });
+      await SubCategory.deleteMany({ _id: { $in: subCatToRemove } });
+
+      res.status(201).json(removedCategory);
     } else {
       res.status(401);
       throw new Error('Not Authorized');
@@ -169,7 +201,7 @@ export const addPermission = asyncHandler(async (req, res) => {
 // @access  Private Required Auth
 export const addSubscriber = asyncHandler(async (req, res) => {
   const user = req.user;
-  const { categoryId } = req.body;
+  const { categoryId, type } = req.body;
   try {
     if (!categoryId) {
       res.status(400);
@@ -205,7 +237,7 @@ export const addSubscriber = asyncHandler(async (req, res) => {
 // @access  Private Required Auth
 export const removeSubscriber = asyncHandler(async (req, res) => {
   const user = req.user;
-  const { categoryId } = req.body;
+  const { categoryId, type } = req.body;
   try {
     if (!categoryId) {
       res.status(400);

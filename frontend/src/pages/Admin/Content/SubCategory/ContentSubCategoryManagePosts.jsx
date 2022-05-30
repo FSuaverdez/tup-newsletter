@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useGetAllPostsQuery } from '../../../../app/services/postApi';
 
-import { useGetSubCategoryQuery } from '../../../../app/services/subCategoryApi';
+import { useGetSubCategoryQuery } from '../../../../app/services/adminApi';
 import Button from '../../../../components/Button/Button';
 
 const ContentSubCategoryManagePosts = () => {
