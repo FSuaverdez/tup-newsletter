@@ -9,6 +9,7 @@ import {
   editSubCategory,
   addSubscriber,
   removeSubscriber,
+  deleteSubCategory,
 } from '../controllers/subCategoryController.js';
 import { requireAuth } from '../middleware/authMiddleware.js';
 
@@ -18,6 +19,7 @@ router.post('/add', requireAuth, addSubCategory);
 router.post('/subscribe', requireAuth, addSubscriber);
 router.put('/unsubscribe', requireAuth, removeSubscriber);
 router.put('/edit/:id', requireAuth, editSubCategory);
+router.delete('/delete/:id', requireAuth, deleteSubCategory);
 router.post('/addPermission', requireAuth, addPermission);
 router.get('/:id/userPermissions', getSubCategoryUserPermissions);
 router.get('/getAll', getSubCategories);

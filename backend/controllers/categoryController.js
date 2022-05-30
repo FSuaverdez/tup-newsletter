@@ -3,6 +3,7 @@ import Category from '../models/Category.js';
 import SubCategory from '../models/SubCategory.js';
 import User from '../models/User.js';
 import UserPermission from '../models/UserPermission.js';
+import Post from '../models/Post.js';
 import { havePermissionsCategory } from '../utils/checkPermissions.js';
 
 // @desc    Create a new category
@@ -77,13 +78,12 @@ export const deleteCategory = asyncHandler(async (req, res) => {
     });
     if (user.isAdmin) {
       let removedCategory = await Category.findByIdAndDelete(id);
-
+      await Post.deleteMany({category:id})
       const subCatToRemove = [];
       removedCategory.subCategories.forEach(s => {
         subCatToRemove.push(s.toString());
       });
       await SubCategory.deleteMany({ _id: { $in: subCatToRemove } });
-
       res.status(201).json(removedCategory);
     } else {
       res.status(401);

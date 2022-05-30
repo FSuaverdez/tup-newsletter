@@ -13,6 +13,7 @@ import Modal from '../../../components/Modal/Modal';
 import UserPermissionModal from '../Components/UserPermissionModal';
 import AdminSubCategoryModal from '../SubCategory/AdminSubCategoryModal';
 import AdminEditCategoryModal from './AdminEditCategoryModal';
+import AdminCategoryDeleteModal from './AdminCategoryDeleteModal';
 
 const AdminCategoryManage = () => {
   const user = useSelector(state => state.user);
@@ -30,6 +31,7 @@ const AdminCategoryManage = () => {
   const [addUserPermission] = useAddUserPermissionCategoryMutation();
   const [userPermissionData, setUserPermissionData] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
+  const [openDelete,setOpenDelete] = useState(false);
   const navigate = useNavigate();
 
   if (isLoading && isSubCategoriesLoading && isUserPermissionsLoading) {
@@ -55,6 +57,12 @@ const AdminCategoryManage = () => {
   const handleCloseEdit = () => {
     setOpenEdit(false);
   };
+  const handleOpenDelete = ()=> {
+    setOpenDelete(true);
+  }
+  const handleCloseDelete = () =>{
+    setOpenDelete(false);
+  }
   const handleSubmitUserPermission = async (email, role) => {
     await addUserPermission({ email, role, categoryId }).unwrap();
   };
@@ -73,7 +81,7 @@ const AdminCategoryManage = () => {
       <Button onClick={() => navigate(-1)}>Back</Button>
       <h1 className='text-3xl font-bold my-5'>Manage {category?.name}</h1>
       {user?.isAdmin || isCategoryAdmin ? (
-        <div className='w-full justify-end mb-5 gap-3'>
+        <div className='flex item-center w-full justify-end mb-5 gap-3'>
           <Button
             type='success'
             onClick={() => {
@@ -81,6 +89,14 @@ const AdminCategoryManage = () => {
             }}
           >
             Update Category
+          </Button>
+          <Button
+            type='danger'
+            onClick={() => {
+              handleOpenDelete();
+            }}
+          >
+            Delete Category
           </Button>
         </div>
       ) : null}
@@ -209,6 +225,15 @@ const AdminCategoryManage = () => {
         <Modal handleClose={handleCloseEdit}>
           <AdminEditCategoryModal
             handleCloseEdit={handleCloseEdit}
+            category={category}
+            className='p-8'
+          />
+        </Modal>
+      )}
+      {openDelete && (
+        <Modal handleClose={handleCloseDelete}>
+          <AdminCategoryDeleteModal
+            handleCloseDelete={handleCloseDelete}
             category={category}
             className='p-8'
           />

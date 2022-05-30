@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler';
 import Category from '../models/Category.js';
 import SubCategory from '../models/SubCategory.js';
 import User from '../models/User.js';
+import Post from '../models/Post.js';
 import UserPermission from '../models/UserPermission.js';
 import {
   havePermissionsCategory,
@@ -127,6 +128,34 @@ export const getSubCategory = asyncHandler(async (req, res) => {
   } catch (error) {
     res.status(401);
     throw new Error('Something went wrong. Unable to retrieve Category.');
+  }
+});
+
+// @desc    Delete a subcategory
+// @router  DELETE /subcategory/:id
+// @access  Public
+export const deleteSubCategory = asyncHandler(async(req,res) => {
+  const user = req.user;
+  const {id} = req.params;
+
+  try {
+    const subCategory = await SubCategory.findById(id).populate({
+      path: 'userPermissions',
+      populate: { path: 'user' },
+    });
+    if (user.isAdmin){
+      let removedSubCategory = await SubCategory.findByIdAndDelete(id);
+      await Post.deleteMany({subCategory:id})
+      res.status(201).json(removedSubCategory);
+    }
+    else{
+      res.status(401);
+      throw new Error('Not Authorized');
+    }
+  }
+  catch(error){
+    console.log(error);
+    throw new Error(error.message);
   }
 });
 

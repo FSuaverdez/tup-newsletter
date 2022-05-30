@@ -43,6 +43,14 @@ export const adminApi = createApi({
       }),
       invalidatesTags: ['Categories'],
     }),
+    deleteCategory: builder.mutation({
+      query: ({ categoryId }) => ({
+        url: `category/delete/${categoryId}`,
+        method: 'DELETE',
+        body: { categoryId },
+      }),
+      invalidatesTags: ['Categories'],
+    }),
     addUserPermissionCategory: builder.mutation({
       query: ({ email, role, categoryId }) => ({
         url: 'category/addPermission',
@@ -83,6 +91,14 @@ export const adminApi = createApi({
       }),
       invalidatesTags: ['SubCategories'],
     }),
+    deleteSubCategory: builder.mutation({
+      query: ({ subCategoryId }) => ({
+        url: `subcategory/delete/${subCategoryId}`,
+        method: 'DELETE',
+        body: { subCategoryId },
+      }),
+      invalidatesTags: ['SubCategories'],
+    }),
     addUserPermissionSubCategory: builder.mutation({
       query: ({ email, role, subCategoryId }) => ({
         url: 'subcategory/addPermission',
@@ -97,6 +113,7 @@ export const adminApi = createApi({
 export const {
   useAddCategoryMutation,
   useEditCategoryMutation,
+  useDeleteCategoryMutation,
   useGetCategoriesQuery,
   useGetCategoryQuery,
   useAddUserPermissionCategoryMutation,
@@ -105,6 +122,7 @@ export const {
   useGetSubCategoryQuery,
   useAddSubCategoryMutation,
   useEditSubCategoryMutation,
+  useDeleteSubCategoryMutation,
   useGetSubCategoriesByCategoryQuery,
   useAddUserPermissionSubCategoryMutation,
   useGetSubCategoryUserPermissionsQuery,
