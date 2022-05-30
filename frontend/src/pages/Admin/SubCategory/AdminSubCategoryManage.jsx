@@ -11,6 +11,7 @@ import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
 import UserPermissionModal from '../Components/UserPermissionModal';
 import AdminEditSubCategoryModal from './AdminEditSubCategoryModal';
+import AdminDeleteSubCategoryModal from './AdminDeleteSubCategoryModal';
 
 const AdminCategoryManage = () => {
   const user = useSelector(state => state.user);
@@ -25,6 +26,7 @@ const AdminCategoryManage = () => {
   const { data: userPermissions, isLoading: isUserPermissionsLoading } =
     useGetSubCategoryUserPermissionsQuery({ id: subCategoryId });
   const [openEdit, setOpenEdit] = useState(false);
+  const [openDelete,setOpenDelete] = useState(false);
   const [openAddUserPermission, setOpenAddUserPermission] = useState(false);
   const [addUserPermission] = useAddUserPermissionSubCategoryMutation();
   const [userPermissionData, setUserPermissionData] = useState(null);
@@ -41,6 +43,12 @@ const AdminCategoryManage = () => {
   };
   const handleOpenAddUserPermission = () => {
     setOpenAddUserPermission(true);
+  };
+  const handleOpenDeleteSubCategory = () => {
+    setOpenDelete(true);
+  };
+  const handleCloseDeleteSubCategory = () => {
+    setOpenDelete(false);
   };
   const handleCloseAddUserPermission = () => {
     setUserPermissionData(null);
@@ -59,7 +67,7 @@ const AdminCategoryManage = () => {
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>
       <h1 className='text-3xl font-bold my-5'>Manage {subCategory?.name}</h1>
-      <div className='justify-end mb-5'>
+      <div className='flex items-center w-full justify-end mb-5 gap-3'>
         <button
           className='bg-green-500 text-white rounded py-2 px-3 hover:bg-green-600'
           onClick={() => {
@@ -67,6 +75,14 @@ const AdminCategoryManage = () => {
           }}
         >
           Update Sub Category
+        </button>
+        <button
+          className='bg-red-500 text-white rounded py-2 px-3 hover:bg-red-600'
+          onClick={() => {
+            handleOpenDeleteSubCategory();
+          }}
+        >
+          Delete Sub Category
         </button>
       </div>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto'>
@@ -129,6 +145,15 @@ const AdminCategoryManage = () => {
         <Modal handleClose={handleCloseEditSubCategory}>
           <AdminEditSubCategoryModal
             handleCloseEdit={handleCloseEditSubCategory}
+            subCategory={subCategory}
+            className='p-8'
+          />
+        </Modal>
+      )}
+      {openDelete && (
+        <Modal handleClose={handleCloseDeleteSubCategory}>
+          <AdminDeleteSubCategoryModal
+            handleCloseDeleteSubCategory={handleCloseDeleteSubCategory}
             subCategory={subCategory}
             className='p-8'
           />
