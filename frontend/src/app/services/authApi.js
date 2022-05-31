@@ -25,7 +25,7 @@ export const authApi = createApi({
       query: ({ mobileNumber, id }) => ({
         url: 'user/mobile/add/' + id,
         method: 'POST',
-        body: mobileNumber,
+        body: {mobileNumber},
       }),
       invalidatesTags: ['User'],
     }),
@@ -33,7 +33,7 @@ export const authApi = createApi({
       query: ({ mobileNumber, id }) => ({
         url: 'user/mobile/edit/' + id,
         method: 'PUT',
-        body: mobileNumber,
+        body: {mobileNumber},
       }),
       invalidatesTags: ['User'],
     }),
