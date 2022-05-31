@@ -1,6 +1,10 @@
 import { Link, useParams } from 'react-router-dom';
 import { useGetAllPostsByCategoryQuery } from '../../app/services/postApi';
 import { useGetCategoryQuery } from '../../app/services/adminApi';
+import Modal from '../../components/Modal/Modal';
+import SubscribeModal from '../../components/Subscribe/SubscribeModal';
+import Button from '../../components/Button/Button';
+import { useState } from 'react';
 
 const Category = () => {
   const { categoryId } = useParams();
@@ -8,13 +12,32 @@ const Category = () => {
   const { data: posts, isLoading } = useGetAllPostsByCategoryQuery({
     id: categoryId,
   });
+
+  const [openSubscribeModal, setOpenSubscribeModal] = useState(false);
   if (isLoading) {
     return 'Loading...';
   }
+  const handleOpenSubscribeModal = () => {
+    setOpenSubscribeModal(true);
+  };
+
+  const handleCloseSubscribeModal = () => {
+    setOpenSubscribeModal(false);
+  };
+
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
         <h1 className='text-2xl font-bold mb-10'>{`All Posts from ${category?.name}`}</h1>
+        <div className='mb-10'>
+          <h3>Receive Email/SMS by Subscribing</h3>
+          <Button
+            className='text-xs px-2 py-2'
+            onClick={handleOpenSubscribeModal}
+          >
+            Subscribe
+          </Button>
+        </div>
         {posts?.map(post => (
           <Link to={`/post/${post._id}`} key={post._id}>
             <div className='shadow-lg my-5 border border-gray-200 rounded p-3'>
@@ -25,6 +48,15 @@ const Category = () => {
           </Link>
         ))}
       </div>
+      {openSubscribeModal && (
+        <Modal handleClose={handleCloseSubscribeModal}>
+          <SubscribeModal
+            handleClose={handleCloseSubscribeModal}
+            data={category}
+            dataType='Category'
+          />
+        </Modal>
+      )}
     </div>
   );
 };
