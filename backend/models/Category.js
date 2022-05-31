@@ -1,5 +1,13 @@
 import mongoose from 'mongoose';
 
+const subscribeSchema = {
+  subscriptionType: String,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+};
+
 const categorySchema = mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -26,12 +34,7 @@ const categorySchema = mongoose.Schema(
       default: [],
     },
     subscribers: {
-      type: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'User',
-        },
-      ],
+      type: [subscribeSchema],
       default: [],
     },
   },

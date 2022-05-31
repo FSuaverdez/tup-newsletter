@@ -245,21 +245,28 @@ export const addSubscriber = asyncHandler(async (req, res) => {
   try {
     if (!id) {
       res.status(400);
-      throw new Error('Category Id is required');
+      throw new Error('SubCategory Id is required');
     }
 
     let subCategory = await SubCategory.findById(id);
 
     if (!subCategory) {
       res.status(401);
-      throw new Error('Category not found');
+      throw new Error('SubCategory not found');
     }
 
-    subCategory.subscribers.push(user._id);
-
-    let updatedSubCategory = await Category.findByIdAndUpdate(id, subCategory, {
-      new: true,
+    subCategory.subscribers.push({
+      user: user._id,
+      subscriptionType: type,
     });
+
+    let updatedSubCategory = await SubCategory.findByIdAndUpdate(
+      id,
+      subCategory,
+      {
+        new: true,
+      }
+    );
 
     res.status(201).json(updatedSubCategory);
   } catch (error) {
@@ -277,7 +284,7 @@ export const removeSubscriber = asyncHandler(async (req, res) => {
   try {
     if (!id) {
       res.status(400);
-      throw new Error('Category Id is required');
+      throw new Error('SubCategory Id is required');
     }
 
     let subCategory = await SubCategory.findById(id).populate('subscribers');
@@ -286,14 +293,19 @@ export const removeSubscriber = asyncHandler(async (req, res) => {
       res.status(401);
       throw new Error('Category not found');
     }
-
-    subCategory.subscribers.filter(
-      u => u._id.toString() !== user._id.toString()
-    );
-
-    let updatedSubCategory = await Category.findByIdAndUpdate(id, subCategory, {
-      new: true,
+    subCategory.subscribers = subCategory.subscribers.filter(u => {
+      return (
+        u.user.toString() !== user._id.toString() || type !== u.subscriptionType
+      );
     });
+
+    let updatedSubCategory = await SubCategory.findByIdAndUpdate(
+      id,
+      subCategory,
+      {
+        new: true,
+      }
+    );
 
     res.status(201).json(updatedSubCategory);
   } catch (error) {

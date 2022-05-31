@@ -44,3 +44,24 @@ content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyODg5MWQwMWZlMmQzZTZiNDRmZWY4MiIsImlhdCI6MTY1MzgyNjgxNiwiZXhwIjoxNjU0MDg2MDE2fQ.fb0x1ygnBrEFwb_TLaoEcu-jw5w96s6kzoY_oGewTPQ
 
 
+###
+POST http://localhost:5000/user/mobile/add/61decae65a09f55afc984bed
+content-type: application/json
+
+{
+    "mobileNumber": "09273776823"
+}
+
+
+
+###
+PUT http://localhost:5000/user/mobile/edit/61decae65a09f55afc984bed
+content-type: application/json
+
+{
+    "mobileNumber": "09277718892"
+}
+
+
+
+

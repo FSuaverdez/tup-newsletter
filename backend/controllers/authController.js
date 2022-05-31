@@ -31,6 +31,57 @@ export const userAuth = asyncHandler(async (req, res) => {
 // @desc    Get all categories
 // @router  GET /category/getAll
 // @access  Public
+export const addMobile = asyncHandler(async (req, res) => {
+  const { mobileNumber } = req.body;
+  const { id } = req.params;
+  try {
+    let user = await User.findById(id);
+
+    user.mobileNumber = mobileNumber;
+    let updatedUser = await User.findByIdAndUpdate(id, user, { new: true });
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(400);
+    throw new Error('Invalid User Data.');
+  }
+});
+
+// @desc    Get all categories
+// @router  GET /category/getAll
+// @access  Public
+export const editMobile = asyncHandler(async (req, res) => {
+  const { mobileNumber } = req.body;
+  const { id } = req.params;
+  try {
+    let user = await User.findById(id);
+
+    user.mobileNumber = mobileNumber;
+    let updatedUser = await User.findByIdAndUpdate(id, user, { new: true });
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(400);
+    throw new Error('Invalid User Data.');
+  }
+});
+
+// @desc    Get all categories
+// @router  GET /category/getAll
+// @access  Public
+export const getUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    let user = await User.findById(id);
+
+    res.json(user);
+  } catch (error) {
+    res.status(400);
+    throw new Error('Invalid User Data.');
+  }
+});
+
+// @desc    Get all categories
+// @router  GET /category/getAll
+// @access  Public
 export const getUserPermissions = asyncHandler(async (req, res) => {
   const { id } = req.params;
 

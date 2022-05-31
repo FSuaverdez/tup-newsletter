@@ -22,6 +22,7 @@ const App = () => {
 
     if (token) {
       const decodedToken = decode(token);
+      console.log(decodedToken.exp * 1000);
       if (decodedToken.exp * 1000 < new Date().getTime()) {
         logout();
       }

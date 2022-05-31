@@ -59,6 +59,22 @@ export const adminApi = createApi({
       }),
       invalidatesTags: ['UserPermissions'],
     }),
+    addCategorySubscriber: builder.mutation({
+      query: ({ type, id }) => ({
+        url: 'category/subscribe',
+        method: 'POST',
+        body: { type, id },
+      }),
+      invalidatesTags: ['Categories'],
+    }),
+    removeCategorySubscriber: builder.mutation({
+      query: ({ type, id }) => ({
+        url: 'category/unsubscribe',
+        method: 'PUT',
+        body: { type, id },
+      }),
+      invalidatesTags: ['Categories'],
+    }),
     getSubCategories: builder.query({
       query: () => ({ url: 'subcategory/getAll' }),
       providesTags: ['SubCategories'],
@@ -107,6 +123,22 @@ export const adminApi = createApi({
       }),
       invalidatesTags: ['UserPermissions'],
     }),
+    addSubCategorySubscriber: builder.mutation({
+      query: ({ type, id }) => ({
+        url: 'subcategory/subscribe',
+        method: 'POST',
+        body: { type, id },
+      }),
+      invalidatesTags: ['SubCategories'],
+    }),
+    removeSubCategorySubscriber: builder.mutation({
+      query: ({ type, id }) => ({
+        url: 'subcategory/unsubscribe',
+        method: 'PUT',
+        body: { type, id },
+      }),
+      invalidatesTags: ['SubCategories'],
+    }),
   }),
 });
 
@@ -126,4 +158,8 @@ export const {
   useGetSubCategoriesByCategoryQuery,
   useAddUserPermissionSubCategoryMutation,
   useGetSubCategoryUserPermissionsQuery,
+  useAddCategorySubscriberMutation,
+  useAddSubCategorySubscriberMutation,
+  useRemoveCategorySubscriberMutation,
+  useRemoveSubCategorySubscriberMutation,
 } = adminApi;

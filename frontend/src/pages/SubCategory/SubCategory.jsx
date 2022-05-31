@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useGetSubCategoryQuery } from '../../app/services/adminApi';
 import { useGetAllPostsBySubCategoryQuery } from '../../app/services/postApi';
-
+import Modal from '../../components/Modal/Modal';
 import Button from '../../components/Button/Button';
+import SubscribeModal from '../../components/Subscribe/SubscribeModal';
 
 const SubCategory = () => {
-  const { categoryName, subCategoryId } = useParams();
+  const { subCategoryId } = useParams();
   const { data: subCategory } = useGetSubCategoryQuery({ id: subCategoryId });
   const { data: posts, isLoading } = useGetAllPostsBySubCategoryQuery({
     id: subCategoryId,
@@ -17,6 +18,14 @@ const SubCategory = () => {
     return 'Loading...';
   }
 
+  const handleOpenSubscribeModal = () => {
+    setOpenSubscribeModal(true);
+  };
+
+  const handleCloseSubscribeModal = () => {
+    setOpenSubscribeModal(false);
+  };
+
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
@@ -25,7 +34,7 @@ const SubCategory = () => {
           <h3>Receive Email/SMS by Subscribing</h3>
           <Button
             className='text-xs px-2 py-2'
-            onClick={() => setOpenSubscribeModal(prev => !prev)}
+            onClick={handleOpenSubscribeModal}
           >
             Subscribe
           </Button>
@@ -40,6 +49,15 @@ const SubCategory = () => {
           </Link>
         ))}
       </div>
+      {openSubscribeModal && (
+        <Modal handleClose={handleCloseSubscribeModal}>
+          <SubscribeModal
+            handleClose={handleCloseSubscribeModal}
+            data={subCategory}
+            dataType='SubCategory'
+          />
+        </Modal>
+      )}
     </div>
   );
 };

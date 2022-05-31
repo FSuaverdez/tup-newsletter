@@ -212,29 +212,25 @@ export const addPermission = asyncHandler(async (req, res) => {
 // @access  Private Required Auth
 export const addSubscriber = asyncHandler(async (req, res) => {
   const user = req.user;
-  const { categoryId, type } = req.body;
+  const { id, type } = req.body;
   try {
-    if (!categoryId) {
+    if (!id) {
       res.status(400);
       throw new Error('Category Id is required');
     }
 
-    let category = await Category.findById(categoryId);
+    let category = await Category.findById(id);
 
     if (!category) {
       res.status(401);
       throw new Error('Category not found');
     }
 
-    category.subscribers.push(user._id);
+    category.subscribers.push({ user: user._id, subscriptionType: type });
 
-    let updatedCategory = await Category.findByIdAndUpdate(
-      categoryId,
-      category,
-      {
-        new: true,
-      }
-    );
+    let updatedCategory = await Category.findByIdAndUpdate(id, category, {
+      new: true,
+    });
 
     res.status(201).json(updatedCategory);
   } catch (error) {
@@ -248,29 +244,29 @@ export const addSubscriber = asyncHandler(async (req, res) => {
 // @access  Private Required Auth
 export const removeSubscriber = asyncHandler(async (req, res) => {
   const user = req.user;
-  const { categoryId, type } = req.body;
+  const { id, type } = req.body;
   try {
-    if (!categoryId) {
+    if (!id) {
       res.status(400);
       throw new Error('Category Id is required');
     }
 
-    let category = await Category.findById(categoryId).populate('subscribers');
+    let category = await Category.findById(id).populate('subscribers');
 
     if (!category) {
       res.status(401);
       throw new Error('Category not found');
     }
 
-    category.subscribers.filter(u => u._id.toString() !== user._id.toString());
+    category.subscribers = category.subscribers.filter(u => {
+      return (
+        u.user.toString() !== user._id.toString() || type !== u.subscriptionType
+      );
+    });
 
-    let updatedCategory = await Category.findByIdAndUpdate(
-      categoryId,
-      category,
-      {
-        new: true,
-      }
-    );
+    let updatedCategory = await Category.findByIdAndUpdate(id, category, {
+      new: true,
+    });
 
     res.status(201).json(updatedCategory);
   } catch (error) {
