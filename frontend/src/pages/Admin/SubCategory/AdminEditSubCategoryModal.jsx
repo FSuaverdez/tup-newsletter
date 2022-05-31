@@ -50,7 +50,7 @@ const AdminEditSubCategoryModal = ({
       <div className=' mx-auto'>
         <div className='py-3'>
           <label htmlFor='name' className='font-bold text-gray-600'>
-            Category Name:
+           Sub Category Name:
           </label>
           <Input
             fullWidth

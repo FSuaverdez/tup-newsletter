@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   useAddCategorySubscriberMutation,
@@ -12,6 +12,7 @@ import {
   useGetUserQuery,
 } from '../../app/services/authApi';
 import Button from '../Button/Button';
+import Input from '../Input/Input';
 
 const SubscribeModal = ({
   handleClose,
@@ -19,7 +20,6 @@ const SubscribeModal = ({
   data,
   dataType,
 }) => {
-  console.log(data);
   const user = useSelector(state => state.user);
   const { data: userData } = useGetUserQuery(user?._id);
   const [addNumber] = useAddMobileNumberMutation();
@@ -28,10 +28,13 @@ const SubscribeModal = ({
   const [removeSubscribeCategory] = useRemoveCategorySubscriberMutation();
   const [removeSubscribeSubCategory] = useRemoveSubCategorySubscriberMutation();
   const [subscribeSubCategory] = useAddSubCategorySubscriberMutation();
+  const [showField,setShowField] = useState(false);
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [numberError, setNumberError] = useState('');
+  const [id,setId] = useState('');
 
   const subscribers = data?.subscribers;
 
-  console.log(userData);
 
   const isSubscribedEmail = subscribers?.find(
     s => s.user === user?._id && s.subscriptionType === 'Email'
@@ -72,6 +75,55 @@ const SubscribeModal = ({
     }
   };
 
+  const handleShowField = ()=>{
+    setShowField(true);
+  }
+
+  const handleCloseField = ()=>{
+    setShowField(false);
+    setNumberError('');
+  }
+
+  const handleSaveNumber = async () => {
+    try {
+      if (mobileNumber){
+        const letters = /[a-zA-Z]+$/;
+        if(mobileNumber.match(letters)){
+          setNumberError('WL')
+        }
+        else{
+          if(userData?.mobileNumber){
+            await editNumber({mobileNumber,id}).unwrap();
+            handleCloseField();
+          }
+          else{
+            await addNumber({mobileNumber,id}).unwrap();
+            handleCloseField();
+          }
+          setNumberError('')
+        }
+      }
+      else{
+        !mobileNumber&&setNumberError('N')
+      } 
+    }
+    catch(error){
+
+    }
+  };
+
+  useEffect(()=>{
+    const setCurrent = () => {
+      if(userData?.mobileNumber){
+        setMobileNumber(userData?.mobileNumber)
+      }
+      setId(userData?._id);
+      console.log(id)
+    }
+    setCurrent();
+    
+  },[userData]);
+
   return (
     <div
       className={`lg:w-656  sm:w-340 shadow-xl bg-white p-5 rounded ${classes}`}
@@ -84,9 +136,9 @@ const SubscribeModal = ({
           {!userData?.mobileNumber ? (
             <>
               <Button
-                type='danger'
-                onClick={() => {}}
-                className='text-sm py-1 px-1 '
+                type='info'
+                onClick={handleShowField}
+                className='text-sm py-2 px-6 '
               >
                 Add
               </Button>
@@ -94,15 +146,51 @@ const SubscribeModal = ({
           ) : (
             <>
               <Button
-                type='danger'
-                onClick={() => {}}
-                className='text-sm py-1 px-1 '
+                type='info'
+                onClick={handleShowField}
+                className='text-sm py-2 px-6 '
               >
                 Edit
               </Button>
             </>
           )}
         </div>
+        {showField && 
+             <div>
+                  <label htmlFor='name' className='font-bold text-gray-600'>
+                    Enter your mobile number: ex:{'(09287889588)'}
+                  </label>
+                  <div>
+                    <Input
+                      fullWidth
+                      type='text'
+                      name='mobileNumber'
+                      onChange={e => setMobileNumber(e.target.value)}
+                      value={mobileNumber}
+                      required
+                    />
+                  </div>
+                  { numberError==='N' && <p className='text-red-500 text-sm'>Mobile Number is required.</p> }
+                  { numberError==='WL' && <p className='text-red-500 text-sm'>Mobile Number must not contain characters.</p>}
+                  <div className='flex gap-2 justify-end'>
+                    <Button type='success' 
+                      onClick={handleSaveNumber}
+                      className='text-sm py-2 px-6 '
+                    >
+                      Save
+                    </Button>
+                    <Button type='danger' 
+                      onClick={handleCloseField}
+                      className='text-sm py-2 px-6 '
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                  
+              
+              </div>
+    
+          }
         <div className='flex justify-between items-center my-5'>
           {isSubscribedEmail ? (
             <>
@@ -110,7 +198,6 @@ const SubscribeModal = ({
                 Subscribe to Email Notifications
               </p>
               <Button
-                type='danger'
                 onClick={() => {
                   if (dataType === 'Category') {
                     handleRemoveSubscribeCategory({
@@ -124,7 +211,7 @@ const SubscribeModal = ({
                     });
                   }
                 }}
-                className='text-sm py-1 px-1 '
+                className='text-sm py-2 px-4'
               >
                 Unsubscribe
               </Button>
@@ -135,7 +222,7 @@ const SubscribeModal = ({
                 Subscribe to Email Notifications
               </p>
               <Button
-                type='danger'
+                type='success'
                 onClick={() => {
                   if (dataType === 'Category') {
                     handleSubscribeCategory({ type: 'Email', id: data._id });
@@ -143,7 +230,7 @@ const SubscribeModal = ({
                     handleSubscribeSubCategory({ type: 'Email', id: data._id });
                   }
                 }}
-                className='text-sm py-1 px-1 '
+                className='text-sm py-2 px-6 max-w-6'
               >
                 Subscribe
               </Button>
@@ -157,7 +244,6 @@ const SubscribeModal = ({
                 Subscribe to SMS Notifications
               </p>
               <Button
-                type='danger'
                 onClick={() => {
                   if (dataType === 'Category') {
                     handleRemoveSubscribeCategory({
@@ -171,7 +257,7 @@ const SubscribeModal = ({
                     });
                   }
                 }}
-                className='text-sm py-1 px-1 '
+                className='text-sm py-2 px-4'
               >
                 Unsubscribe
               </Button>
@@ -182,7 +268,7 @@ const SubscribeModal = ({
                 Subscribe to SMS Notifications
               </p>
               <Button
-                type='danger'
+                type='success'
                 onClick={() => {
                   if (dataType === 'Category') {
                     handleSubscribeCategory({ type: 'SMS', id: data._id });
@@ -190,7 +276,7 @@ const SubscribeModal = ({
                     handleSubscribeSubCategory({ type: 'SMS', id: data._id });
                   }
                 }}
-                className='text-sm py-1 px-1 '
+                className='text-sm py-2 px-6 max-w-6 '
               >
                 Subscribe
               </Button>
