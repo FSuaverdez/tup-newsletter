@@ -66,7 +66,7 @@ export const editCategory = asyncHandler(async (req, res) => {
 });
 
 // @desc    Create a new category
-// @router  PUT /category/delete/:id
+// @router  DELETE /category/delete/:id
 // @access  Admin Role Required
 export const deleteCategory = asyncHandler(async (req, res) => {
   const user = req.user;
@@ -78,11 +78,22 @@ export const deleteCategory = asyncHandler(async (req, res) => {
     });
     if (user.isAdmin) {
       let removedCategory = await Category.findByIdAndDelete(id);
-      await Post.deleteMany({category:id})
+      await Post.deleteMany({ category: id });
       const subCatToRemove = [];
-      removedCategory.subCategories.forEach(s => {
+      const userPermissionToRemove = [];
+      removedCategory.subCategories.forEach(async s => {
         subCatToRemove.push(s.toString());
+        const subCat = await SubCategory.findById(s);
+        subCat.userPermissions.forEach(u => {
+          userPermissionToRemove.push(u.toString());
+        });
+        await Post.deleteMany({ subCategory: s.toString() });
       });
+      removedCategory.userPermissions.forEach(s => {
+        userPermissionToRemove.push(s.toString());
+      });
+      await Post.deleteMany({ category: category._id.toString() });
+      await UserPermission.deleteMany({ _id: { $in: userPermissionToRemove } });
       await SubCategory.deleteMany({ _id: { $in: subCatToRemove } });
       res.status(201).json(removedCategory);
     } else {

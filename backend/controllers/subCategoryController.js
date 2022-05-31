@@ -134,26 +134,29 @@ export const getSubCategory = asyncHandler(async (req, res) => {
 // @desc    Delete a subcategory
 // @router  DELETE /subcategory/:id
 // @access  Public
-export const deleteSubCategory = asyncHandler(async(req,res) => {
+export const deleteSubCategory = asyncHandler(async (req, res) => {
   const user = req.user;
-  const {id} = req.params;
+  const { id } = req.params;
 
   try {
     const subCategory = await SubCategory.findById(id).populate({
       path: 'userPermissions',
       populate: { path: 'user' },
     });
-    if (user.isAdmin){
+    if (user.isAdmin) {
       let removedSubCategory = await SubCategory.findByIdAndDelete(id);
-      await Post.deleteMany({subCategory:id})
+      await Post.deleteMany({ subCategory: id });
+      const userPermissionToRemove = [];
+      removedSubCategory.userPermissions.forEach(s => {
+        userPermissionToRemove.push(s.toString());
+      });
+      await UserPermission.deleteMany({ _id: { $in: userPermissionToRemove } });
       res.status(201).json(removedSubCategory);
-    }
-    else{
+    } else {
       res.status(401);
       throw new Error('Not Authorized');
     }
-  }
-  catch(error){
+  } catch (error) {
     console.log(error);
     throw new Error(error.message);
   }
