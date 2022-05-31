@@ -49,7 +49,7 @@ export const adminApi = createApi({
         method: 'DELETE',
         body: { categoryId },
       }),
-      invalidatesTags: ['Categories'],
+      invalidatesTags: ['Categories', 'SubCategories'],
     }),
     addUserPermissionCategory: builder.mutation({
       query: ({ email, role, categoryId }) => ({
@@ -97,7 +97,7 @@ export const adminApi = createApi({
         method: 'DELETE',
         body: { subCategoryId },
       }),
-      invalidatesTags: ['SubCategories'],
+      invalidatesTags: ['SubCategories', 'Categories'],
     }),
     addUserPermissionSubCategory: builder.mutation({
       query: ({ email, role, subCategoryId }) => ({

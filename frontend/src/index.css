@@ -23,6 +23,7 @@
 
 .article-container .jodit-container {
   min-height: fit-content !important;
+  z-index: -1 !important;
 }
 
 .article-container .jodit-wysiwyg {
@@ -31,4 +32,12 @@
 
 .article-container .jodit-workplace {
   min-height: fit-content !important;
+}
+
+.jodit-workplace {
+  z-index: 0 !important;
+}
+
+.react-select__menu {
+  background-color: aqua;
 }

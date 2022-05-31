@@ -33,6 +33,7 @@ const SelectSubCategory = ({
         Subcategory:
       </label>
       <Select
+        classNamePrefix='react-select-container'
         options={options}
         value={stateValue}
         onChange={handleChange}

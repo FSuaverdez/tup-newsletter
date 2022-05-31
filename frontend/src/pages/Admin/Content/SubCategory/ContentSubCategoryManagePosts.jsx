@@ -39,7 +39,7 @@ const ContentSubCategoryManagePosts = () => {
             <Button
               type='success'
               onClick={() => {
-                navigate('create');
+                navigate('/content/post/create');
               }}
             >
               Create Post
