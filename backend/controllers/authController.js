@@ -80,6 +80,64 @@ export const getUser = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get all categories
+// @router  GET /user/getAll
+// @access  Public
+export const getAllUsers = asyncHandler(async (req, res) => {
+  try {
+    let users = await User.find({});
+
+    res.json(users);
+  } catch (error) {
+    res.status(400);
+    throw new Error('Invalid User Data.');
+  }
+});
+
+// @desc    Get all categories
+// @router  PUT /user/update/:id
+// @access  Private
+export const updateUserRole = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { isAdmin } = req.body;
+  const admin = req.user;
+  try {
+    if (!admin.isAdmin) {
+      res.status(401);
+      throw new Error('Unauthorized');
+    }
+    console.log(isAdmin);
+    let user = await User.findById(id);
+    user.isAdmin = isAdmin;
+
+    let updatedUser = await User.findByIdAndUpdate(id, user, { new: true });
+
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(400);
+    throw new Error('Invalid User Data.');
+  }
+});
+
+// @desc    Get all categories
+// @router  DELETE /user/delete/:id
+// @access  Public
+export const deleteUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = req.user;
+    if (!user.isAdmin) {
+      throw new Error('Not Authorized');
+    }
+    let removedUser = await User.findByIdAndDelete(id);
+
+    res.json(removedUser);
+  } catch (error) {
+    res.status(400);
+    throw new Error('Invalid User Data.');
+  }
+});
+
+// @desc    Get all categories
 // @router  GET /category/getAll
 // @access  Public
 export const getUserPermissions = asyncHandler(async (req, res) => {

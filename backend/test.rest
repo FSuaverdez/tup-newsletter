@@ -65,3 +65,7 @@ content-type: application/json
 
 
 
+
+###
+GET http://localhost:5000/user/getAll
+content-type: application/json

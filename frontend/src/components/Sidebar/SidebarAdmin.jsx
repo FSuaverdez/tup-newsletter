@@ -36,6 +36,16 @@ const SidebarAdmin = ({ handleCloseSidebar }) => {
           Subcategories
         </NavLink>
       ) : null}
+      {user?.isAdmin && (
+        <NavLink
+          to='/admin/users'
+          className={({ isActive }) =>
+            `${isActive ? isActiveStyle : isNotActiveStyle} ml-5`
+          }
+        >
+          Users
+        </NavLink>
+      )}
     </div>
   );
 };

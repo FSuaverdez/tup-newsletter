@@ -24,6 +24,7 @@ import ContentAllSubCategory from '../pages/Admin/Content/SubCategory/ContentAll
 import Post from '../pages/Post/Post';
 import { useSelector } from 'react-redux';
 import { useGetPermissionsQuery } from '../app/services/authApi';
+import UserManage from '../pages/Admin/Content/User/UserManage';
 
 const HomeRoutes = () => {
   const user = useSelector(state => state.user);
@@ -40,6 +41,7 @@ const HomeRoutes = () => {
         path='/category/:categoryId/:subCategoryId'
         element={<SubCategory />}
       />
+      <Route path='/admin/users' element={<UserManage />} />
       <Route path='/admin/category' element={<AdminCategory />} />
       <Route path='/admin/subcategory' element={<AdminSubCategory />} />
       <Route

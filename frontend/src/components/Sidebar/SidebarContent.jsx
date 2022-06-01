@@ -1,11 +1,12 @@
 import { NavLink } from 'react-router-dom';
-
+import { useSelector } from 'react-redux';
 const isNotActiveStyle =
   'flex items-center px-5 gap-3 text-gray-500 hover:text-red-400 transition-all duration-200 ease-in-out capitalize py-2';
 const isActiveStyle =
   'flex items-center px-5 gap-3 font-bold text-red-600 border-r-2 border-red-500  transition-all duration-200 ease-in-out capitalize py-2';
 
 const SidebarContent = ({ handleCloseSidebar }) => {
+  const user = useSelector(state => state.user);
   return (
     <div className='flex flex-col gap-'>
       <NavLink
