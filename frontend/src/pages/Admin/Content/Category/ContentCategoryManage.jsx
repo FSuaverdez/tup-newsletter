@@ -79,17 +79,19 @@ const ContentCategoryManage = () => {
         <div className='border-t-2 border-black mt-10'>
           <h2 className='text-2xl font-bold mt-2'>Manage Posts</h2>
           <div className='flex items-center w-full justify-end mb-5 gap-3'>
-            <Button
-              type='Info'
-              onClick={() => {
-                navigate('all-posts');
-              }}
-            >
-              View All
-            </Button>
           </div>
           <div>
-            <p className='text-xl font-bold my-5 text-green-500'>Approved Posts</p>
+            <p className='text-xl font-bold mt-10 mb-5 text-green-500'>Approved Posts</p>
+            <div className='flex items-center w-full justify-end mb-5 gap-3'>
+              <Button
+                type='success'
+                onClick={() => {
+                  navigate('all-posts/approved');
+                }}
+              >
+                View All Approved Posts
+              </Button>
+            </div>
             {filteredPost &&
               filteredPost.slice(0, 5).map(c => {
                 const show = data?.categoryPermissions?.find(p => {
@@ -101,7 +103,6 @@ const ContentCategoryManage = () => {
                     (role === 'Admin' || role === 'Editor')
                   );
                 });
-                c.approved&&console.log(c)
                 if ((user.isAdmin || show) && c.approved ) {
                   return (
                     <div key={c._id}>
@@ -124,7 +125,17 @@ const ContentCategoryManage = () => {
               })}
           </div>
           <div>
-          <p className='text-xl font-bold my-5 text-rose-600'>Pending for Approval</p>
+          <p className='text-xl font-bold mt-10 mb-5 text-rose-600'>Pending Posts</p>
+          <div className='flex items-center w-full justify-end mb-5 gap-3'>
+              <Button
+                type='danger'
+                onClick={() => {
+                  navigate('all-posts/pending');
+                }}
+              >
+                View All Pending Posts
+              </Button>
+            </div>
             {filteredPost && 
               filteredPost.slice(0, 5).map(e => {
                 const show = data?.categoryPermissions?.find(u => {
