@@ -89,6 +89,7 @@ const ContentCategoryManage = () => {
             </Button>
           </div>
           <div>
+            <p className='text-xl font-bold my-5 text-green-500'>Approved Posts</p>
             {filteredPost &&
               filteredPost.slice(0, 5).map(c => {
                 const show = data?.categoryPermissions?.find(p => {
@@ -100,21 +101,57 @@ const ContentCategoryManage = () => {
                     (role === 'Admin' || role === 'Editor')
                   );
                 });
-
-                if (user.isAdmin || show) {
+                c.approved&&console.log(c)
+                if ((user.isAdmin || show) && c.approved ) {
                   return (
-                    <div
-                      className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
-                      key={c._id}
-                    >
-                      {console.log(c)}
-                      <p className='text-xl font-bold'>{c.title}</p>
-                      <Link
-                        to={`/content/post/${c._id}`}
-                        className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
+                    <div key={c._id}>
+                      <p className='text-m'>{c.subCategory.name ? c.subCategory.name : c.category.name}</p>
+                      <div
+                        className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
                       >
-                        View
-                      </Link>
+                        <p className='text-xl font-bold'>{c.title}</p>
+                        <Link
+                          to={`/content/post/${c._id}`}
+                          className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
+                        >
+                          View
+                        </Link>
+                     </div>
+                    </div>
+                  );
+                }
+                return null;
+              })}
+          </div>
+          <div>
+          <p className='text-xl font-bold my-5 text-rose-600'>Pending for Approval</p>
+            {filteredPost && 
+              filteredPost.slice(0, 5).map(e => {
+                const show = data?.categoryPermissions?.find(u => {
+                  const role = u.userPermissions.find(
+                    u => user._id === u.user
+                  ).role;
+                  return (
+                    u._id === e.category._id &&
+                    (role === 'Admin' || role === 'Editor')
+                  );
+                });
+
+                if ((user.isAdmin || show) && !e.approved) {
+                  return (
+                    <div key={e._id}>
+                      <p className='text-m'>{e.subCategory.name ? e.subCategory.name : e.category.name}</p>
+                      <div
+                        className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
+                      >
+                        <p className='text-xl font-bold'>{e.title}</p>
+                        <Link
+                          to={`/content/post/${e._id}`}
+                          className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
+                        >
+                          View
+                        </Link>
+                      </div>
                     </div>
                   );
                 }

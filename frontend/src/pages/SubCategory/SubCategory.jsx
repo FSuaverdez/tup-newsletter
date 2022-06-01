@@ -39,7 +39,7 @@ const SubCategory = () => {
             Subscribe
           </Button>
         </div>
-        {posts?.map(post => (
+        {posts?.approved&&posts?.map(post => (
           <Link to={`/post/${post._id}`} key={post._id}>
             <div className='shadow-lg my-5 border border-gray-200 rounded p-3'>
               <h2 className='text-xl font-bold'>{post.title}</h2>

@@ -83,6 +83,16 @@ export const postApi = createApi({
       }),
       invalidatesTags: ['Post'],
     }),
+    approvePost: builder.mutation({
+      query: ({id,approved }) => ({
+        url: 'post/approve/' + id,
+        method: 'PUT',
+        body: {
+          approved,
+        },
+      }),
+      invalidatesTags: ['Post'],
+    }),
   }),
 });
 
@@ -91,6 +101,7 @@ export const {
   useGetAllPostsQuery,
   useAddCommentMutation,
   useEditPostMutation,
+  useApprovePostMutation,
   useGetCommentsQuery,
   useGetPostQuery,
   useGetAllPostsByCategoryQuery,

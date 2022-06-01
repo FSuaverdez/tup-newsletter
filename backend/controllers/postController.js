@@ -147,6 +147,31 @@ export const editPost = asyncHandler(async (req, res) => {
     throw new Error(error.message);
   }
 });
+// @desc    create a new post
+// @router  PUT /put/approve/:id
+// @access  User Required
+export const approvePost = asyncHandler(async (req,res) => {
+  const { id } = req.params;
+  const { approved } = req.body;
+  const user = req.user;
+  try{
+    const approvedPost = await Post.findByIdAndUpdate(
+      id,
+      {
+        approved,
+        approvedBy:user._id,
+      },
+      { new: true }
+    );
+
+    res.status(200);
+    res.json(approvedPost);
+  }
+  catch(error){
+    res.status(400);
+    throw new Error(error.message);
+  }
+});
 
 // @desc    create a new post
 // @router  POST /post/comment/:id
