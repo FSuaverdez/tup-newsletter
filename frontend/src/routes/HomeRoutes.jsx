@@ -18,6 +18,7 @@ import ContentSubCategoryManagePosts from '../pages/Admin/Content/SubCategory/Co
 
 import CreatePost from '../pages/Admin/Content/Post/CreatePost';
 import PostManage from '../pages/Admin/Content/Post/PostManage';
+import AllPost from '../pages/Admin/Content/Post/AllPost';
 import PostAllCategory from '../pages/Admin/Content/Post/PostAllCategory';
 import ContentSubCategory from '../pages/Admin/Content/SubCategory/ContentSubCategory';
 import ContentAllSubCategory from '../pages/Admin/Content/SubCategory/ContentAllSubCategory';
@@ -88,6 +89,7 @@ const HomeRoutes = () => {
         path='content/category/:categoryId/all-subcategories'
         element={<ContentAllSubCategory />}
       />
+      <Route path='/content/post/all' element={<AllPost/>} />
       <Route path='/content/post/:postId' element={<ContentPost />} />
       <Route path='/post/:postId' element={<Post />} />
       <Route path='/content/post' element={<PostManage />} />
