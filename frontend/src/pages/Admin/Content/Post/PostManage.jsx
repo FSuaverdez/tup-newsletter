@@ -26,19 +26,21 @@ const PostManage = () => {
             >
               Create Post
             </Button>
-            <Button
-              type='Info'
-              onClick={() => {
-                navigate('all');
-              }}
-            >
-              View All
-            </Button>
           </div>
           <div>
-            <p className='text-xl text-green-500 font-bold'>Approved Post</p>
+            <p className='text-xl text-green-500 font-bold'>Approved Posts</p>
+            <div className='flex items-center w-full justify-end mb-5 gap-3'>
+              <Button
+                type='success'
+                onClick={() => {
+                  navigate('all/approved');
+                }}
+              >
+                View All Approved Posts
+              </Button>
+            </div>
             {posts &&
-              posts.map(c => {
+              posts.slice(0,5).map(c => {
                 if (c.approved){
                   return (
                   <div key={c._id}>
@@ -59,9 +61,19 @@ const PostManage = () => {
               }})}
           </div>
           <div>
-            <p className='text-xl text-rose-600 font-bold'>Pending Post</p>
+            <p className='text-xl text-rose-600 font-bold mt-10'>Pending Posts</p>
+            <div className='flex items-center w-full justify-end mb-5 gap-3'>
+              <Button
+                type='danger'
+                onClick={() => {
+                  navigate('all/pending');
+                }}
+              >
+                View All Pending Posts
+              </Button>
+            </div>
             {posts &&
-              posts.map(c => {
+              posts.slice(0 , 5).map(c => {
                 if (!c.approved){
                   return (
                   <div key={c._id}>

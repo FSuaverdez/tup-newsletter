@@ -82,14 +82,20 @@ const HomeRoutes = () => {
         element={<CreatePost />}
       />
       <Route
-        path='/content/category/:categoryId/all-posts'
-        element={<PostAllCategory />}
+        path='/content/category/:categoryId/all-posts/approved'
+        element={<PostAllCategory type = {'A'}/>}
+      />
+       <Route
+        path='/content/category/:categoryId/all-posts/pending'
+        element={<PostAllCategory type = {'P'}/>}
       />
       <Route
         path='content/category/:categoryId/all-subcategories'
         element={<ContentAllSubCategory />}
       />
-      <Route path='/content/post/all' element={<AllPost/>} />
+
+      <Route path='/content/post/all/approved' element={<AllPost type = {'A'}/>} />
+      <Route path='/content/post/all/pending' element={<AllPost type = {'P'}/>} />
       <Route path='/content/post/:postId' element={<ContentPost />} />
       <Route path='/post/:postId' element={<Post />} />
       <Route path='/content/post' element={<PostManage />} />
