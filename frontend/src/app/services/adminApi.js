@@ -139,6 +139,29 @@ export const adminApi = createApi({
       }),
       invalidatesTags: ['SubCategories'],
     }),
+    addFilteredWord: builder.mutation({
+      query: ({ word }) => ({
+        url: 'filteredword/add',
+        method: 'POST',
+        body: { word },
+      }),
+      invalidatesTags: ['Filter'],
+    }),
+    getFilteredWords: builder.query({
+      query: () => ({
+        url: 'filteredword/getAll',
+        method: 'GET',
+      }),
+      providesTags: ['Filter'],
+    }),
+    removeFilteredWord: builder.mutation({
+      query: ({ word, id }) => ({
+        url: 'filteredword/remove/' + id,
+        method: 'DELETE',
+        body: { word },
+      }),
+      invalidatesTags: ['Filter'],
+    }),
   }),
 });
 
@@ -162,4 +185,7 @@ export const {
   useAddSubCategorySubscriberMutation,
   useRemoveCategorySubscriberMutation,
   useRemoveSubCategorySubscriberMutation,
+  useAddFilteredWordMutation,
+  useGetFilteredWordsQuery,
+  useRemoveFilteredWordMutation,
 } = adminApi;

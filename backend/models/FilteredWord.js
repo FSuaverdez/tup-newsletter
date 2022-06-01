@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const filteredWordSchema = mongoose.Schema({
-  word: String,
+  word: { type: String, unique: true, required: true },
 });
 
 const FilteredWord = mongoose.model('FilteredWord', filteredWordSchema);

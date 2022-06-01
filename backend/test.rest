@@ -69,3 +69,18 @@ content-type: application/json
 ###
 GET http://localhost:5000/user/getAll
 content-type: application/json
+
+###
+POST http://localhost:5000/filteredword/add
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZGVjYWU2NWEwOWY1NWFmYzk4NGJlZCIsImlhdCI6MTY1NDA4MzYyMSwiZXhwIjoxNjU0MDkwODIxfQ.LFia-8zqw6zlNmo61d3noTE43-6uLtXEyH84rbDWUUg
+
+
+{
+    "word":"test1111"
+}
+
+
+###
+GET http://localhost:5000/filteredword/getAll
+content-type: application/json

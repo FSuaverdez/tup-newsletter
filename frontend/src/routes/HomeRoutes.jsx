@@ -25,6 +25,7 @@ import Post from '../pages/Post/Post';
 import { useSelector } from 'react-redux';
 import { useGetPermissionsQuery } from '../app/services/authApi';
 import UserManage from '../pages/Admin/Content/User/UserManage';
+import FilterManage from '../pages/Admin/Filter/FilterManage';
 
 const HomeRoutes = () => {
   const user = useSelector(state => state.user);
@@ -91,6 +92,7 @@ const HomeRoutes = () => {
       <Route path='/post/:postId' element={<Post />} />
       <Route path='/content/post' element={<PostManage />} />
       <Route path='/content/post/create' element={<CreatePost />} />
+      <Route path='/admin/filter' element={<FilterManage />} />
       <Route
         path='/admin'
         element={

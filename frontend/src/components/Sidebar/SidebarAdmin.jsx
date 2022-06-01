@@ -46,6 +46,16 @@ const SidebarAdmin = ({ handleCloseSidebar }) => {
           Users
         </NavLink>
       )}
+      {user?.isAdmin && (
+        <NavLink
+          to='/admin/filter'
+          className={({ isActive }) =>
+            `${isActive ? isActiveStyle : isNotActiveStyle} ml-5`
+          }
+        >
+          Filtered Words
+        </NavLink>
+      )}
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import Post from '../models/Post.js';
 import asyncHandler from 'express-async-handler';
-
+import FilteredWord from '../models/FilteredWord.js';
+import Filter from 'bad-words';
 // @desc    get all  post
 // @router  GET /post/getAll
 // @access  Public
@@ -150,24 +151,23 @@ export const editPost = asyncHandler(async (req, res) => {
 // @desc    create a new post
 // @router  PUT /put/approve/:id
 // @access  User Required
-export const approvePost = asyncHandler(async (req,res) => {
+export const approvePost = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { approved } = req.body;
   const user = req.user;
-  try{
+  try {
     const approvedPost = await Post.findByIdAndUpdate(
       id,
       {
         approved,
-        approvedBy:user._id,
+        approvedBy: user._id,
       },
       { new: true }
     );
 
     res.status(200);
     res.json(approvedPost);
-  }
-  catch(error){
+  } catch (error) {
     res.status(400);
     throw new Error(error.message);
   }
@@ -184,8 +184,13 @@ export const addComment = asyncHandler(async (req, res) => {
   try {
     // Check for permission
     const post = await Post.findById(id);
+    let filteredWords = await FilteredWord.find();
+    filteredWords = filteredWords.map(filteredWord => filteredWord.word);
+    const filter = new Filter();
+    filter.addWords(...filteredWords);
+    const filteredText = filter.clean(text);
 
-    post.comments.push({ text, postedBy: user._id });
+    post.comments.push({ text: filteredText, postedBy: user._id });
 
     const updatedPost = await Post.findByIdAndUpdate(id, post, { new: true });
 
