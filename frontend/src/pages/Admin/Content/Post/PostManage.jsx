@@ -36,21 +36,50 @@ const PostManage = () => {
             </Button>
           </div>
           <div>
+            <p className='text-xl text-green-500 font-bold'>Approved Post</p>
             {posts &&
-              posts.map(c => (
-                <div
-                  className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
-                  key={c._id}
-                >
-                  <p className='text-xl font-bold'>{c.title}</p>
-                  <Link
-                    to={`/content/post/${c._id}`}
-                    className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
-                  >
-                    View
-                  </Link>
-                </div>
-              ))}
+              posts.map(c => {
+                if (c.approved){
+                  return (
+                  <div key={c._id}>
+                    <p className='text-m'>{c.subCategory.name ? c.subCategory.name : c.category.name}</p>
+                    <div
+                      className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
+                    >
+                      <p className='text-xl font-bold'>{c.title}</p>
+                      <Link
+                        to={`/content/post/${c._id}`}
+                        className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
+                      >
+                        View
+                      </Link>
+                    </div>
+                  </div>
+                )
+              }})}
+          </div>
+          <div>
+            <p className='text-xl text-rose-600 font-bold'>Pending Post</p>
+            {posts &&
+              posts.map(c => {
+                if (!c.approved){
+                  return (
+                  <div key={c._id}>
+                    <p className='text-m'>{c.subCategory.name ? c.subCategory.name : c.category.name}</p>
+                    <div
+                      className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
+                    >
+                      <p className='text-xl font-bold'>{c.title}</p>
+                      <Link
+                        to={`/content/post/${c._id}`}
+                        className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
+                      >
+                        View
+                      </Link>
+                    </div>
+                  </div>
+                )
+              }})}
           </div>
         </div>
       </div>
