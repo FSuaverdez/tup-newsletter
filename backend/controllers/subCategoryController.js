@@ -57,16 +57,18 @@ export const addSubCategory = asyncHandler(async (req, res) => {
 export const editSubCategory = asyncHandler(async (req, res) => {
   const user = req.user;
   const { id } = req.params;
-  const { name, description } = req.body;
+  const { name, description, categoryId } = req.body;
   try {
     const subCategory = await SubCategory.findById(id).populate({
       path: 'userPermissions',
       populate: { path: 'user' },
     });
-    const category = await Category.findById(subCategory.category).populate({
-      path: 'userPermissions',
-      populate: { path: 'user' },
-    });
+    const category = await Category.findById(subCategory.category)
+      .populate({
+        path: 'userPermissions',
+        populate: { path: 'user' },
+      })
+      .populate('subCategories');
 
     if (
       havePermissionsCategory(user, category) ||
@@ -75,8 +77,19 @@ export const editSubCategory = asyncHandler(async (req, res) => {
       let updatedSubCategory = await SubCategory.findByIdAndUpdate(id, {
         name,
         description,
-        // category:categoryId,
+        category: categoryId,
       });
+
+      if (categoryId !== category._id.toString()) {
+        category.subCategories.pull(id);
+        await Category.findByIdAndUpdate(category._id, category, { new: true });
+        const newCategory = await Category.findById(categoryId);
+        console.log(newCategory);
+        newCategory.subCategories.push(id);
+        await Category.findByIdAndUpdate(newCategory._id, newCategory, {
+          new: true,
+        });
+      }
 
       res.status(201).json(updatedSubCategory);
     } else {

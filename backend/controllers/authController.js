@@ -105,7 +105,6 @@ export const updateUserRole = asyncHandler(async (req, res) => {
       res.status(401);
       throw new Error('Unauthorized');
     }
-    console.log(isAdmin);
     let user = await User.findById(id);
     user.isAdmin = isAdmin;
 

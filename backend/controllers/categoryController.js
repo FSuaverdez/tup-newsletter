@@ -81,13 +81,15 @@ export const deleteCategory = asyncHandler(async (req, res) => {
       await Post.deleteMany({ category: id });
       const subCatToRemove = [];
       const userPermissionToRemove = [];
-      removedCategory.subCategories.forEach(async s => {
+      removedCategory?.subCategories.forEach(async s => {
         subCatToRemove.push(s.toString());
         const subCat = await SubCategory.findById(s);
-        subCat.userPermissions.forEach(u => {
-          userPermissionToRemove.push(u.toString());
-        });
-        await Post.deleteMany({ subCategory: s.toString() });
+        if (subCat) {
+          subCat.userPermissions.forEach(u => {
+            userPermissionToRemove.push(u.toString());
+          });
+          await Post.deleteMany({ subCategory: s.toString() });
+        }
       });
       removedCategory.userPermissions.forEach(s => {
         userPermissionToRemove.push(s.toString());

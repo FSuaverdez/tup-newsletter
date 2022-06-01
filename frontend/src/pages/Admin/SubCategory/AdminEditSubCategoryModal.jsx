@@ -4,6 +4,7 @@ import { useEditSubCategoryMutation } from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Input from '../../../components/Input/Input';
 import { useSelector } from 'react-redux';
+import SelectCategory from '../../../components/SelectCategory/SelectCategory';
 
 const AdminEditSubCategoryModal = ({
   handleCloseEdit,
@@ -20,18 +21,31 @@ const AdminEditSubCategoryModal = ({
   const user = useSelector(state => state.user);
   useEffect(() => {
     const setCurrent = () => {
+      console.log(subCategory);
       setName(subCategory.name);
       setDescription(subCategory.description);
       setSubCategoryid(subCategory._id);
     };
     setCurrent();
   }, [subCategory]);
+  const [category, setCategory] = useState({
+    value: subCategory.category._id,
+    label: subCategory.category.name,
+  });
+  const handleCategoryChange = e => {
+    setCategory(e);
+  };
 
   const handleSubmit = async e => {
     e.preventDefault();
 
     if (name && description) {
-      await editSubCategory({ name, description, subCategoryId }).unwrap();
+      await editSubCategory({
+        name,
+        description,
+        subCategoryId,
+        categoryId: category.value,
+      }).unwrap();
       navigate('/admin/subcategory/edit/' + subCategoryId);
       setNameError(false);
       handleCloseEdit();
@@ -49,8 +63,9 @@ const AdminEditSubCategoryModal = ({
       <h1 className='text-2xl font-bold my-5'>Update Sub Category</h1>
       <div className=' mx-auto'>
         <div className='py-3'>
+          <SelectCategory value={category} onChange={handleCategoryChange} />
           <label htmlFor='name' className='font-bold text-gray-600'>
-           Sub Category Name:
+            Sub Category Name:
           </label>
           <Input
             fullWidth
