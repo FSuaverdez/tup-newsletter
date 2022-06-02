@@ -33,15 +33,15 @@ const postSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-//schema pre save hook
-postSchema.pre('save', async function (next) {
-  let filteredWords = await FilteredWord.find();
-  filteredWords = filteredWords.map(filteredWord => filteredWord.word);
-  const filter = new Filter();
-  filter.addWords(...filteredWords);
-  this.content = filter.clean(this.content);
-  next();
-});
+// //schema pre save hook
+// postSchema.pre('save', async function (next) {
+//   let filteredWords = await FilteredWord.find();
+//   filteredWords = filteredWords.map(filteredWord => filteredWord.word);
+//   const filter = new Filter();
+//   filter.addWords(...filteredWords);
+//   this.content = filter.clean(this.content);
+//   next();
+// });
 
 const Post = mongoose.model('Post', postSchema);
 export default Post;
