@@ -62,7 +62,7 @@ export const postApi = createApi({
     }),
     editPost: builder.mutation({
       query: ({
-        id,
+        postId,
         title,
         type,
         liveUrl,
@@ -70,7 +70,7 @@ export const postApi = createApi({
         category,
         subCategory,
       }) => ({
-        url: 'post/edit/' + id,
+        url: 'post/edit/' + postId,
         method: 'PUT',
         body: {
           title,
@@ -80,6 +80,16 @@ export const postApi = createApi({
           category,
           subCategory,
         },
+      }),
+      invalidatesTags: ['Post'],
+    }),
+    deletePost: builder.mutation({
+      query: ({
+        postId,
+      }) => ({
+        url: 'post/delete/' + postId,
+        method: 'DELETE',
+        body: {},
       }),
       invalidatesTags: ['Post'],
     }),
@@ -101,6 +111,7 @@ export const {
   useGetAllPostsQuery,
   useAddCommentMutation,
   useEditPostMutation,
+  useDeletePostMutation,
   useApprovePostMutation,
   useGetCommentsQuery,
   useGetPostQuery,

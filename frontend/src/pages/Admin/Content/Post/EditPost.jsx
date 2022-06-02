@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState,useEffect } from 'react';
 
 import SelectCategory from '../../../../components/SelectCategory/SelectCategory';
 import SelectPostType from '../../../../components/SelectPostType/SelectPostType';
@@ -8,12 +8,11 @@ import Button from '../../../../components/Button/Button';
 import Modal from '../../../../components/Modal/Modal';
 import CreatePostConfirmationModal from './CreatePostConfirmationModal';
 import JoditEditor from 'jodit-react';
-import { useAddPostMutation } from '../../../../app/services/postApi';
-import { useGetCategoryQuery,useGetSubCategoryQuery } from '../../../../app/services/adminApi';
-import { useNavigate,useParams } from 'react-router-dom';
+import { useEditPostMutation, useGetPostQuery } from '../../../../app/services/postApi';
+import { useNavigate, useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 
-const CreatePost = () => {
+const EditPost = () => {
   const [category, setCategory] = useState('');
   const [categoryError, setCategoryError] = useState(false);
   const [subCategory, setSubCategory] = useState('');
@@ -28,27 +27,11 @@ const CreatePost = () => {
   const editor = useRef(null);
   const navigate = useNavigate();
   const [openSave, setOpenSave] = useState(false);
-  const [addPost] = useAddPostMutation();
-  const {id} = useParams();
-  const { data: passedCategory } = useGetCategoryQuery({
-    id: id,
+  const [editPost] = useEditPostMutation();
+  const { postId } = useParams();
+  const { data: post, isLoading } = useGetPostQuery({
+    id: postId,
   });
-  const { data: passedSubCategory} = useGetSubCategoryQuery({
-    id: id,
-  });
-  useEffect(()=>{
-    const setPassed = () => {
-      if (passedCategory){
-        setCategory({value:passedCategory._id, label:passedCategory.name})
-      }
-      if (passedSubCategory){
-        setCategory({value:passedSubCategory.category._id, label:passedSubCategory.category.name})
-        setSubCategory({value:passedSubCategory._id, label:passedSubCategory.name})
-      }
-    }
-    setPassed();
-  },[passedCategory,passedSubCategory])
- 
   const config = useMemo(
     () => ({
       uploader: {
@@ -103,7 +86,8 @@ const CreatePost = () => {
         setTitleError(false);
         setContentError(false);
         setCategoryError(false);
-        await addPost({
+        await editPost({
+          postId,
           title,
           type: postType.value,
           liveUrl: live || null,
@@ -118,11 +102,28 @@ const CreatePost = () => {
     }
   };
 
+    useEffect(()=>{
+        const setCurrent =  ()=> {
+            if(post){
+                const slice = post.type.slice(1);
+                const character = post.type.charAt(0).toUpperCase();
+                setTitle(post.title);
+                setPostType({value:post.type.toLowerCase(),label:character+slice});
+                setCategory({value:post.category._id, label:post.category.name});
+                setSubCategory({value:post.subCategory._id, label:post.subCategory.name});
+                setContent(post.content);
+            }
+        }
+        setCurrent();
+    },[post])
+
+ 
+
   return (
     <div className='p-5 max-w-5xl mx-auto'>
-     <div className='mb-5'><Button onClick={() => navigate(-1)}>Back</Button></div>
+      <div className='mb-5'><Button onClick={() => navigate(-1)}>Back</Button></div>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto'>
-        <h1 className='text-2xl font-bold my-5'>Create Post</h1>
+        <h1 className='text-2xl font-bold my-5'>Edit Post</h1>
         <SelectPostType
           value={postType}
           onChange={handlePostTypeChange}
@@ -215,4 +216,4 @@ const CreatePost = () => {
   );
 };
 
-export default CreatePost;
+export default EditPost;

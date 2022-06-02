@@ -19,7 +19,7 @@ const ContentCategoryManage = () => {
   const { data: subCategories, isLoading: isSubCategoriesLoading } =
     useGetSubCategoriesByCategoryQuery(categoryId);
   const { data: posts, isLoading: isPostsLoading } = useGetAllPostsQuery();
-
+  const checker = categoryId;
   const navigate = useNavigate();
 
   if (isLoading && isSubCategoriesLoading && isPostsLoading) {
@@ -30,7 +30,17 @@ const ContentCategoryManage = () => {
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>
       <h1 className='text-3xl font-bold my-5'>Manage {category?.name}</h1>
-      <div className='bg-white p-5 rounded-lg shadow-lg mx-auto'>
+      <div className='flex items-center w-full justify-end mb-5 gap-3'>
+            <Button
+              type='success'
+              onClick={() => {
+                navigate('/content/post/create/'+checker);
+              }}
+            >
+              Create Post
+            </Button>
+          </div>
+        <div className='bg-white p-5 rounded-lg shadow-lg mx-auto'>
         <h2 className=' text-black text-xl font-semibold'>{category?.name}</h2>
         <p className='text-black '>{category?.description}</p>
         <div className='border-t-2 border-black mt-10'>
@@ -106,7 +116,7 @@ const ContentCategoryManage = () => {
                 if ((user.isAdmin || show) && c.approved ) {
                   return (
                     <div key={c._id}>
-                      <p className='text-m'>{c.subCategory.name ? c.subCategory.name : c.category.name}</p>
+                      <p className='text-m'>{c.subCategory ? c.subCategory.name : c.category.name}</p>
                       <div
                         className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
                       >
@@ -151,7 +161,7 @@ const ContentCategoryManage = () => {
                 if ((user.isAdmin || show) && !e.approved) {
                   return (
                     <div key={e._id}>
-                      <p className='text-m'>{e.subCategory.name ? e.subCategory.name : e.category.name}</p>
+                      <p className='text-m'>{e.subCategory? e.subCategory.name : e.category.name}</p>
                       <div
                         className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
                       >
