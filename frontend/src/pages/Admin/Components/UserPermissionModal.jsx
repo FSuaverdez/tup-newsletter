@@ -11,17 +11,27 @@ const UserPermissionModal = ({
 }) => {
   const [email, setEmail] = useState(userPermissionData?.user?.email || '');
   const [emailError, setEmailError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [role, setRole] = useState(userPermissionData?.role || 'Admin');
   const [roleError, setRoleError] = useState(false);
+
+  const handleError = message => {
+    console.log(message);
+    setErrorMessage(message);
+  };
+
+  const handleSuccess = () => {
+    handleCloseAdd();
+  };
 
   const handleSubmit = e => {
     e.preventDefault();
     try {
       if (email && role) {
-        handleAdd(email, role);
         setEmailError(false);
         setRoleError(false);
-        handleCloseAdd();
+        setErrorMessage('');
+        handleAdd(email, role, handleError, handleSuccess);
       } else {
         !email && setEmailError(true);
         !role && setRoleError(true);
@@ -50,6 +60,9 @@ const UserPermissionModal = ({
           />
           {emailError && (
             <p className='text-red-500 text-sm'>Email is required.</p>
+          )}
+          {errorMessage && (
+            <p className='text-red-500 text-sm'>{errorMessage}</p>
           )}
           <SelectRole
             fullWidth

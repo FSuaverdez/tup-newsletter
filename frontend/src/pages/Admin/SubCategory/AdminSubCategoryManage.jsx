@@ -26,7 +26,7 @@ const AdminCategoryManage = () => {
   const { data: userPermissions, isLoading: isUserPermissionsLoading } =
     useGetSubCategoryUserPermissionsQuery({ id: subCategoryId });
   const [openEdit, setOpenEdit] = useState(false);
-  const [openDelete,setOpenDelete] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [openAddUserPermission, setOpenAddUserPermission] = useState(false);
   const [addUserPermission] = useAddUserPermissionSubCategoryMutation();
   const [userPermissionData, setUserPermissionData] = useState(null);
@@ -54,8 +54,18 @@ const AdminCategoryManage = () => {
     setUserPermissionData(null);
     setOpenAddUserPermission(false);
   };
-  const handleSubmitUserPermission = async (email, role) => {
-    await addUserPermission({ email, role, subCategoryId }).unwrap();
+  const handleSubmitUserPermission = async (
+    email,
+    role,
+    handleError,
+    handleSuccess
+  ) => {
+    try {
+      await addUserPermission({ email, role, subCategoryId }).unwrap();
+      handleSuccess();
+    } catch (error) {
+      handleError(error.data.message);
+    }
   };
 
   const showAddPermission =

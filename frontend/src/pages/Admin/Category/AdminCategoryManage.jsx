@@ -31,7 +31,7 @@ const AdminCategoryManage = () => {
   const [addUserPermission] = useAddUserPermissionCategoryMutation();
   const [userPermissionData, setUserPermissionData] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
-  const [openDelete,setOpenDelete] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const navigate = useNavigate();
 
   if (isLoading && isSubCategoriesLoading && isUserPermissionsLoading) {
@@ -57,14 +57,28 @@ const AdminCategoryManage = () => {
   const handleCloseEdit = () => {
     setOpenEdit(false);
   };
-  const handleOpenDelete = ()=> {
+  const handleOpenDelete = () => {
     setOpenDelete(true);
-  }
-  const handleCloseDelete = () =>{
+  };
+  const handleCloseDelete = () => {
     setOpenDelete(false);
-  }
-  const handleSubmitUserPermission = async (email, role) => {
-    await addUserPermission({ email, role, categoryId }).unwrap();
+  };
+  const handleSubmitUserPermission = async (
+    email,
+    role,
+    handleError,
+    handleSuccess
+  ) => {
+    try {
+      await addUserPermission({
+        email,
+        role,
+        categoryId,
+      }).unwrap();
+      handleSuccess();
+    } catch (error) {
+      handleError(error.data.message);
+    }
   };
 
   const showAddPermission =
