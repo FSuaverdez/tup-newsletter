@@ -12,7 +12,7 @@ const ContentSubCategoryManagePosts = () => {
   });
 
   const { data: posts, isLoading: isPostsLoading } = useGetAllPostsQuery();
-
+  const checker = subCategoryId;
   const navigate = useNavigate();
 
   if (isLoading && isPostsLoading) {
@@ -39,7 +39,7 @@ const ContentSubCategoryManagePosts = () => {
             <Button
               type='success'
               onClick={() => {
-                navigate('/content/post/create');
+                navigate('/content/post/create/'+checker);
               }}
             >
               Create Post
@@ -50,10 +50,9 @@ const ContentSubCategoryManagePosts = () => {
             {filteredPost && filteredPost.map(c => {
               if(c.approved){
                 return (
-                <div>
+                <div key={c._id}>
                     <div
                       className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
-                      key={c._id}
                     >
                       <p className='text-xl font-bold'>{c.title}</p>
                       <Link
@@ -87,7 +86,8 @@ const ContentSubCategoryManagePosts = () => {
                     </div>
                   </div>
                 )
-              }})}
+              }
+            })}
           </div>
         </div>
       </div>

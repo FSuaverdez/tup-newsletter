@@ -36,7 +36,7 @@ const PostAllCategory = (type) => {
                   if (c?.approved){
                     return (
                       <div key={c._id}>
-                        <p className='text-m'>{c.subCategory.name ? c.subCategory.name : c.category.name}</p>
+                        <p className='text-m'>{c.subCategory ? c.subCategory.name : c.category.name}</p>
                         <div
                           className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
                         >
@@ -58,10 +58,11 @@ const PostAllCategory = (type) => {
             <div>
               {filteredPost &&
                 filteredPost.map(c => {
+                  console.log(c)
                   if (!c.approved) {
                     return(
                         <div  key={c._id}>
-                          <p className='text-m'>{c.subCategory.name ? c.subCategory.name :c.category.name}</p>
+                          <p className='text-m'>{!c.subCategory ? c.category.name:c.subCategory.name }</p>
                           <div
                             className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
                           >

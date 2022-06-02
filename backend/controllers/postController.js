@@ -134,9 +134,9 @@ export const editPost = asyncHandler(async (req, res) => {
         type,
         liveUrl,
         content,
-        updatedBy: user._id,
         category,
         subCategory,
+        updatedBy: user._id,
       },
       { new: true }
     );
@@ -172,6 +172,24 @@ export const approvePost = asyncHandler(async (req, res) => {
     throw new Error(error.message);
   }
 });
+
+export const deletePost = asyncHandler(async (req,res) => {
+  const {id} = req.params;
+  const user = req.user;
+  try{
+    if (user.isAdmin){
+      const deletedPost = await Post.findByIdAndDelete(id);
+      res.status(200);
+      res.json(deletedPost);
+    }
+  
+  }
+  catch(error){
+    res.status(400);
+    throw new Error(error.message);
+  }
+});
+  
 
 // @desc    create a new post
 // @router  POST /post/comment/:id

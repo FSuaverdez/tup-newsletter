@@ -17,6 +17,7 @@ import ContentCategoryManage from '../pages/Admin/Content/Category/ContentCatego
 import ContentSubCategoryManagePosts from '../pages/Admin/Content/SubCategory/ContentSubCategoryManagePosts';
 
 import CreatePost from '../pages/Admin/Content/Post/CreatePost';
+import EditPost from '../pages/Admin/Content/Post/EditPost';
 import PostManage from '../pages/Admin/Content/Post/PostManage';
 import AllPost from '../pages/Admin/Content/Post/AllPost';
 import PostAllCategory from '../pages/Admin/Content/Post/PostAllCategory';
@@ -99,7 +100,8 @@ const HomeRoutes = () => {
       <Route path='/content/post/:postId' element={<ContentPost />} />
       <Route path='/post/:postId' element={<Post />} />
       <Route path='/content/post' element={<PostManage />} />
-      <Route path='/content/post/create' element={<CreatePost />} />
+      <Route path='/content/post/create/:id' element={<CreatePost />} />
+      <Route path='/content/post/:postId/edit' element={<EditPost />} />
       <Route path='/admin/filter' element={<FilterManage />} />
       <Route
         path='/admin'
