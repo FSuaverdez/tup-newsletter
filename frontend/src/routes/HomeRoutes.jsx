@@ -100,6 +100,7 @@ const HomeRoutes = () => {
       <Route path='/content/post/:postId' element={<ContentPost />} />
       <Route path='/post/:postId' element={<Post />} />
       <Route path='/content/post' element={<PostManage />} />
+      <Route path='/content/post/create' element={<CreatePost />} />
       <Route path='/content/post/create/:id' element={<CreatePost />} />
       <Route path='/content/post/:postId/edit' element={<EditPost />} />
       <Route path='/admin/filter' element={<FilterManage />} />

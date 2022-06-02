@@ -131,8 +131,10 @@ export const getCategory = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error('Category Id is required');
     }
-    const category = await Category.findById(id);
-    res.status(200).json(category);
+    if(id!=='0'){
+      const category = await Category.findById(id);
+      res.status(200).json(category);
+    }
   } catch (error) {
     console.log(error);
     throw new Error(error.message);

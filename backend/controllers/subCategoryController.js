@@ -136,8 +136,10 @@ export const getSubCategoriesByCategory = asyncHandler(async (req, res) => {
 export const getSubCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
-    const subCategory = await SubCategory.findById(id).populate('category');
-    res.status(200).json(subCategory);
+    if(id!='0'){
+      const subCategory = await SubCategory.findById(id).populate('category');
+      res.status(200).json(subCategory);
+    }
   } catch (error) {
     res.status(401);
     throw new Error('Something went wrong. Unable to retrieve Category.');
