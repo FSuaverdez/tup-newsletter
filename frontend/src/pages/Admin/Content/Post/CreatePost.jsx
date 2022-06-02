@@ -31,10 +31,10 @@ const CreatePost = () => {
   const [addPost] = useAddPostMutation();
   const {id} = useParams();
   const { data: passedCategory } = useGetCategoryQuery({
-    id: id,
+    id: id || '0',
   });
   const { data: passedSubCategory} = useGetSubCategoryQuery({
-    id: id,
+    id: id || '0',
   });
   useEffect(()=>{
     const setPassed = () => {
