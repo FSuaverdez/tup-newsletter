@@ -4,7 +4,7 @@ import { useGetCategoryQuery } from '../../../../app/services/adminApi';
 import { useGetAllPostsQuery } from '../../../../app/services/postApi';
 
 import Button from '../../../../components/Button/Button';
-const PostAllCategory = () => {
+const PostAllCategory = (type) => {
   const { categoryId } = useParams();
   const { data: category, isLoading } = useGetCategoryQuery({ id: categoryId });
   const { data: posts, isLoading: isPostsLoading } = useGetAllPostsQuery();
@@ -27,52 +27,58 @@ const PostAllCategory = () => {
         <div className='border-t-2 border-black mt-10'></div>
         <div>
           <h1 className='text-xl font-bold mt-5'>
-            Manage All {category?.name} Posts
+           { type.type==='A'? `Manage All ${category?.name} Approved Posts` : `Manage All ${category?.name} Pending Posts` }
           </h1>
-          <div>
-          <p className='text-xl font-bold my-5 text-green-500'>Approved Posts</p>
-            {filteredPost && 
-              filteredPost.map(c => {
-                if (c?.approved){
-                  return (
-                    <div key={c._id}>
-                      <p className='text-m'>{c.subCategory.name ? c.subCategory.name : c.category.name}</p>
-                      <div
-                        className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
-                      >
-                        <p className='text-xl font-bold'>{c.title}</p>
-                        <Link
-                          to={`/content/post/${c._id}`}
-                          className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
+          {type.type==='A' && 
+            <div>
+              {filteredPost && 
+                filteredPost.map(c => {
+                  if (c?.approved){
+                    return (
+                      <div key={c._id}>
+                        <p className='text-m'>{c.subCategory.name ? c.subCategory.name : c.category.name}</p>
+                        <div
+                          className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
                         >
-                          View
-                        </Link>
+                          <p className='text-xl font-bold'>{c.title}</p>
+                          <Link
+                            to={`/content/post/${c._id}`}
+                            className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
+                          >
+                            View
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-              )}})}
-          </div>
-          <div>
-          <p className='text-xl font-bold my-5 text-rose-600'>Pending Posts</p>
-            {filteredPost &&
-              filteredPost.map(c => {
-                if (!c.approved) {
-                  return(
-                  <div  key={c._id}>
-                    <p className='text-m'>{c.subCategory.name ? c.subCategory.name :c.category.name}</p>
-                    <div
-                      className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
-                    >
-                      <p className='text-xl font-bold'>{c.title}</p>
-                      <Link
-                        to={`/content/post/${c._id}`}
-                        className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
-                      >
-                        View
-                      </Link>
-                    </div>
-                  </div>
-              )}})}
-          </div>
+                    )
+                }
+                })}
+              </div>
+            }
+          {type.type==='P' &&
+            <div>
+              {filteredPost &&
+                filteredPost.map(c => {
+                  if (!c.approved) {
+                    return(
+                        <div  key={c._id}>
+                          <p className='text-m'>{c.subCategory.name ? c.subCategory.name :c.category.name}</p>
+                          <div
+                            className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
+                          >
+                            <p className='text-xl font-bold'>{c.title}</p>
+                            <Link
+                              to={`/content/post/${c._id}`}
+                              className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
+                            >
+                              View
+                            </Link>
+                          </div>
+                        </div>
+                      )
+                  }
+                })}
+            </div>
+          }
         </div>
       </div>
     </div>
