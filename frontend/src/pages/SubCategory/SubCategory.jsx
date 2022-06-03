@@ -5,8 +5,10 @@ import { useGetAllPostsBySubCategoryQuery } from '../../app/services/postApi';
 import Modal from '../../components/Modal/Modal';
 import Button from '../../components/Button/Button';
 import SubscribeModal from '../../components/Subscribe/SubscribeModal';
+import { useSelector } from 'react-redux';
 
 const SubCategory = () => {
+  const user = useSelector(state => state.user);
   const { subCategoryId } = useParams();
   const { data: subCategory } = useGetSubCategoryQuery({ id: subCategoryId });
   const { data: posts, isLoading } = useGetAllPostsBySubCategoryQuery({
@@ -31,12 +33,23 @@ const SubCategory = () => {
         <h1 className='text-2xl font-bold'>{`All Posts from ${subCategory?.name}`}</h1>
         <div className='mb-10'>
           <h3>Receive Email/SMS by Subscribing</h3>
-          <Button
-            className='text-xs px-2 py-2'
-            onClick={handleOpenSubscribeModal}
-          >
-            Subscribe
-          </Button>
+          {user ? 
+            <Button
+              className='text-xs px-2 py-2'
+              onClick={handleOpenSubscribeModal}
+            >
+              Subscribe
+            </Button> :
+            <Link
+              to={`/login`}
+            >
+              <Button
+              className='text-xs px-2 py-2'
+              >
+                Subscribe
+              </Button>
+            </Link>
+          }
         </div>
         {posts&&posts?.map(post => {
           if (post.approved){
@@ -45,7 +58,7 @@ const SubCategory = () => {
                 <div className='shadow-lg my-5 border border-gray-200 rounded p-3'>
                   <h2 className='text-xl font-bold'>{post.title}</h2>
                   <h2 className='font-normal'>{post.category.name}</h2>
-                  <h2 className='text-xl'>{post?.subcategory?.name}</h2>
+                  <h2 className='text-xl'>{post?.subCategory?.name}</h2>
                 </div>
               </Link>
             )
