@@ -40,8 +40,7 @@ const PostManage = () => {
               </Button>
             </div>
             {posts &&
-              posts.slice(0,5).map(c => {
-                if (c.approved){
+              posts.filter(c=> c.approved).map(c => {
                   return (
                   <div key={c._id}>
                     <p className='text-m'>{c.subCategory?.name ? c.subCategory?.name : c.category?.name}</p>
@@ -58,7 +57,7 @@ const PostManage = () => {
                     </div>
                   </div>
                 )
-              }})}
+              }).slice(0,5)}
           </div>
           <div>
             <p className='text-xl text-rose-600 font-bold mt-10'>Pending Posts</p>
@@ -73,8 +72,7 @@ const PostManage = () => {
               </Button>
             </div>
             {posts &&
-              posts.slice(0 , 5).map(c => {
-                if (!c.approved){
+              posts.filter(c => !c.approved).map(c => {
                   return (
                   <div key={c._id}>
                     <p className='text-m'>{c.subCategory?.name ? c.subCategory?.name : c.category?.name}</p>
@@ -91,7 +89,7 @@ const PostManage = () => {
                     </div>
                   </div>
                 )
-              }})}
+              }).slice(0,5)}
           </div>
         </div>
       </div>

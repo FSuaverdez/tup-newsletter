@@ -103,36 +103,39 @@ const ContentCategoryManage = () => {
               </Button>
             </div>
             {filteredPost &&
-              filteredPost.slice(0, 5).map(c => {
-                const show = data?.categoryPermissions?.find(p => {
-                  const role = p.userPermissions.find(
-                    p => user._id === p.user
-                  ).role;
+              filteredPost
+                .filter(e => {
+                  const show = data?.categoryPermissions?.find(u => {
+                    const role = u.userPermissions.find(
+                      u => user._id === u.user
+                    ).role;
+                    return (
+                      u._id === e.category._id &&
+                      (role === 'Admin' || role === 'Editor')
+                    );
+                  });
+
+                  return (user.isAdmin || show) && e.approved;
+                })
+                .map(e => {
                   return (
-                    p._id === c.category._id &&
-                    (role === 'Admin' || role === 'Editor')
-                  );
-                });
-                if ((user.isAdmin || show) && c.approved ) {
-                  return (
-                    <div key={c._id}>
-                      <p className='text-m'>{c.subCategory ? c.subCategory.name : c.category.name}</p>
-                      <div
-                        className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
-                      >
-                        <p className='text-xl font-bold'>{c.title}</p>
+                    <div key={e._id}>
+                      <p className='text-m'>
+                        {e.subCategory ? e.subCategory.name : e.category.name}
+                      </p>
+                      <div className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'>
+                        <p className='text-xl font-bold'>{e.title}</p>
                         <Link
-                          to={`/content/post/${c._id}`}
+                          to={`/content/post/${e._id}`}
                           className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
                         >
                           View
                         </Link>
-                     </div>
+                      </div>
                     </div>
                   );
-                }
-                return null;
-              })}
+                })
+                .slice(0, 5)}
           </div>
           <div>
           <p className='text-xl font-bold mt-10 mb-5 text-rose-600'>Pending Posts</p>
@@ -146,25 +149,28 @@ const ContentCategoryManage = () => {
                 View All Pending Posts
               </Button>
             </div>
-            {filteredPost && 
-              filteredPost.slice(0, 5).map(e => {
-                const show = data?.categoryPermissions?.find(u => {
-                  const role = u.userPermissions.find(
-                    u => user._id === u.user
-                  ).role;
-                  return (
-                    u._id === e.category._id &&
-                    (role === 'Admin' || role === 'Editor')
-                  );
-                });
+            {filteredPost &&
+              filteredPost
+                .filter(e => {
+                  const show = data?.categoryPermissions?.find(u => {
+                    const role = u.userPermissions.find(
+                      u => user._id === u.user
+                    ).role;
+                    return (
+                      u._id === e.category._id &&
+                      (role === 'Admin' || role === 'Editor')
+                    );
+                  });
 
-                if ((user.isAdmin || show) && !e.approved) {
+                  return (user.isAdmin || show) && !e.approved;
+                })
+                .map(e => {
                   return (
                     <div key={e._id}>
-                      <p className='text-m'>{e.subCategory? e.subCategory.name : e.category.name}</p>
-                      <div
-                        className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
-                      >
+                      <p className='text-m'>
+                        {e.subCategory ? e.subCategory.name : e.category.name}
+                      </p>
+                      <div className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'>
                         <p className='text-xl font-bold'>{e.title}</p>
                         <Link
                           to={`/content/post/${e._id}`}
@@ -175,9 +181,8 @@ const ContentCategoryManage = () => {
                       </div>
                     </div>
                   );
-                }
-                return null;
-              })}
+                })
+                .slice(0, 5)}
           </div>
         </div>
       </div>
