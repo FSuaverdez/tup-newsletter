@@ -11,7 +11,6 @@ export const getAllPosts = asyncHandler(async (req, res) => {
   try {
     // Check for permission
     const posts = await Post.find()
-      .sort({ approvedAt: 'desc' })
       .populate('category')
       .populate('subCategory')
       .populate('postedBy')
