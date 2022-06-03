@@ -84,3 +84,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZGVjYWU2N
 ###
 GET http://localhost:5000/filteredword/getAll
 content-type: application/json
+
+
+###
+GET http://localhost:5000/post/email
+content-type: application/json
+
+###
+GET http://localhost:5000/post/sms
+content-type: application/json

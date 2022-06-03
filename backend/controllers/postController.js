@@ -2,13 +2,16 @@ import Post from '../models/Post.js';
 import asyncHandler from 'express-async-handler';
 import FilteredWord from '../models/FilteredWord.js';
 import Filter from 'bad-words';
+import nodemailer from 'nodemailer';
+import fetch from 'node-fetch';
 // @desc    get all  post
 // @router  GET /post/getAll
 // @access  Public
 export const getAllPosts = asyncHandler(async (req, res) => {
   try {
     // Check for permission
-    const posts = await Post.find().sort({approvedAt:'desc'})
+    const posts = await Post.find()
+      .sort({ approvedAt: 'desc' })
       .populate('category')
       .populate('subCategory')
       .populate('postedBy')
@@ -174,23 +177,20 @@ export const approvePost = asyncHandler(async (req, res) => {
   }
 });
 
-export const deletePost = asyncHandler(async (req,res) => {
-  const {id} = req.params;
+export const deletePost = asyncHandler(async (req, res) => {
+  const { id } = req.params;
   const user = req.user;
-  try{
-    if (user.isAdmin){
+  try {
+    if (user.isAdmin) {
       const deletedPost = await Post.findByIdAndDelete(id);
       res.status(200);
       res.json(deletedPost);
     }
-  
-  }
-  catch(error){
+  } catch (error) {
     res.status(400);
     throw new Error(error.message);
   }
 });
-  
 
 // @desc    create a new post
 // @router  POST /post/comment/:id
@@ -218,5 +218,61 @@ export const addComment = asyncHandler(async (req, res) => {
   } catch (error) {
     res.status(400);
     throw new Error(error.message);
+  }
+});
+
+export const testMail = asyncHandler(async (req, res) => {
+  var transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'tupnewsletter@gmail.com',
+      pass: 'biiywzzdkxalnygr',
+    },
+  });
+
+  var mailOptions = {
+    from: 'tupnewsletter@gmail.com',
+    to: 'sfrannz@gmail.com',
+    subject: 'Sending Email using Node.js',
+    text: 'That was easy!',
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+});
+
+export const testSMS = asyncHandler(async (req, res) => {
+  try {
+    const resp = await fetch('https://rest.clicksend.com/v3/sms/send', {
+      method: 'POST',
+      body: JSON.stringify({
+        messages: [
+          {
+            body: 'Naps Nub',
+            to: '09273776823',
+          },
+          {
+            body: 'Naps Nub',
+            to: '09683443990',
+          },
+        ],
+      }),
+      headers: {
+        'Content-type': 'application/json',
+        Authorization:
+          'Basic dHVwbmV3c2xldHRlckBnbWFpbC5jb206RlN1YXZlcmRlejEyMyE=',
+      },
+    });
+    const data = await resp.json();
+    console.log(data);
+  } catch (error) {
+    console.log(error);
   }
 });
