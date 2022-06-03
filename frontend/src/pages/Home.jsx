@@ -18,7 +18,7 @@ const Home = () => {
               <div className='shadow-lg my-5 border border-gray-200 rounded p-3'>
                 <h2 className='text-xl font-bold'>{post.title}</h2>
                 <h2 className='font-normal'>{post.category.name}</h2>
-                <h2 className='text-xl'>{post?.subcategory?.name}</h2>
+                <h2 className='text-xl'>{post?.subCategory?.name}</h2>
               </div>
             </Link>
         )}})}

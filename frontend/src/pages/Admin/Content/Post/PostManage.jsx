@@ -44,7 +44,7 @@ const PostManage = () => {
                 if (c.approved){
                   return (
                   <div key={c._id}>
-                    <p className='text-m'>{c.subCategory.name ? c.subCategory.name : c.category.name}</p>
+                    <p className='text-m'>{c.subCategory?.name ? c.subCategory?.name : c.category?.name}</p>
                     <div
                       className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
                     >
@@ -77,7 +77,7 @@ const PostManage = () => {
                 if (!c.approved){
                   return (
                   <div key={c._id}>
-                    <p className='text-m'>{c.subCategory.name ? c.subCategory.name : c.category.name}</p>
+                    <p className='text-m'>{c.subCategory?.name ? c.subCategory?.name : c.category?.name}</p>
                     <div
                       className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
                     >

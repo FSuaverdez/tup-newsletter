@@ -8,7 +8,7 @@ import Filter from 'bad-words';
 export const getAllPosts = asyncHandler(async (req, res) => {
   try {
     // Check for permission
-    const posts = await Post.find()
+    const posts = await Post.find().sort({approvedAt:'desc'})
       .populate('category')
       .populate('subCategory')
       .populate('postedBy')
@@ -160,6 +160,7 @@ export const approvePost = asyncHandler(async (req, res) => {
       id,
       {
         approved,
+        approvedAt: new Date(),
         approvedBy: user._id,
       },
       { new: true }
