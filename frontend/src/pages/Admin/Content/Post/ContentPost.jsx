@@ -20,7 +20,6 @@ const ContentPost = () => {
   const [openModal,setOpenModal] = useState(false);
   const [approvePost] = useApprovePostMutation();
   const user = useSelector(state => state.user);
-  console.log(user.isAdmin);
   const config = useMemo(
     () => ({
       uploader: {

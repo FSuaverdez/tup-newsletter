@@ -147,8 +147,6 @@ const AdminCategoryManage = () => {
                 const show = data?.subCategoryPermissions.find(
                   p => p._id === c._id
                 );
-
-                console.log(isCategoryAdmin);
                 if (user.isAdmin || show || isCategoryAdmin) {
                   return (
                     <div
