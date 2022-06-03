@@ -6,6 +6,8 @@ import SelectSubCategory from '../../../../components/SelectSubCategory/SelectSu
 import Input from '../../../../components/Input/Input';
 import Button from '../../../../components/Button/Button';
 import Modal from '../../../../components/Modal/Modal';
+import PostLoadingModal from '../../../../components/PostLoading/PostLoadingModal';
+import PostCompleteModal from '../../../../components/PostLoading/PostCompleteModal';
 import CreatePostConfirmationModal from './CreatePostConfirmationModal';
 import JoditEditor from 'jodit-react';
 import { useAddPostMutation } from '../../../../app/services/postApi';
@@ -25,6 +27,8 @@ const CreatePost = () => {
   const [preview, setPreview] = useState(false);
   const [canPlay, setCanPlay] = useState(false);
   const [postType, setPostType] = useState({ value: 'post', label: 'Post' });
+  const [isLoading, setIsLoading] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
   const editor = useRef(null);
   const navigate = useNavigate();
   const [openSave, setOpenSave] = useState(false);
@@ -78,6 +82,10 @@ const CreatePost = () => {
   const handleCloseConfirmation = () => {
     setOpenSave(false);
   };
+  const handleCloseCompleted = () =>{
+    setIsCompleted(false);
+    navigate('/content/category');
+  };
 
   const handleSave = async () => {
     setOpenSave(false);
@@ -103,7 +111,8 @@ const CreatePost = () => {
         setTitleError(false);
         setContentError(false);
         setCategoryError(false);
-        await addPost({
+        setIsLoading(true);
+        const data = await addPost({
           title,
           type: postType.value,
           liveUrl: live || null,
@@ -111,7 +120,9 @@ const CreatePost = () => {
           category: category.value,
           subCategory: subCategory.value || null,
         }).unwrap();
-        navigate('/content/category');
+        data&&setIsLoading(false);
+        setIsCompleted(true);
+        
       }
     } catch (error) {
       console.error(error);
@@ -209,6 +220,21 @@ const CreatePost = () => {
               post={{ postType, title, live, content, category, subCategory }}
             />
           </Modal>
+        )}
+        {isLoading && (
+           <Modal handleClose={handleCloseConfirmation}>
+           <PostLoadingModal
+             className='p-8'
+           />
+         </Modal>
+        )}
+        {isCompleted && (
+           <Modal handleClose={handleCloseCompleted}>
+           <PostCompleteModal
+             className='p-8'
+             handleCloseCompleted = {handleCloseCompleted}
+           />
+         </Modal>
         )}
       </div>
     </div>
