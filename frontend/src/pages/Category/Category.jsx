@@ -2,18 +2,26 @@ import { Link, useParams } from 'react-router-dom';
 import { useGetAllPostsByCategoryQuery } from '../../app/services/postApi';
 import { useGetCategoryQuery } from '../../app/services/adminApi';
 import Modal from '../../components/Modal/Modal';
+import ReactPaginate from 'react-paginate';
 import SubscribeModal from '../../components/Subscribe/SubscribeModal';
 import Button from '../../components/Button/Button';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import Input from '../../components/Input/Input';
 
 const Category = () => {
+  const [page,setPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchOption, setSearchOption] = useState({});
   const user = useSelector(state => state.user);
   const { categoryId } = useParams();
   const { data: category } = useGetCategoryQuery({ id: categoryId });
-  const { data: posts, isLoading } = useGetAllPostsByCategoryQuery({
+  const { data: paginated, isLoading, refetch } = useGetAllPostsByCategoryQuery({
     id: categoryId,
+    page,
+    searchOption
   });
+  const posts = paginated?.posts;
   const [openSubscribeModal, setOpenSubscribeModal] = useState(false);
   if (isLoading) {
     return 'Loading...';
@@ -24,6 +32,19 @@ const Category = () => {
 
   const handleCloseSubscribeModal = () => {
     setOpenSubscribeModal(false);
+  };
+  const handlePageChange = (e) => {
+    let selected = parseInt((e.selected+1));
+    setPage(selected);
+  };
+  const handleSearch = () => {
+    let option = {};
+
+    if (searchQuery) {
+      option = { ...option, searchQuery};
+    }
+    setSearchOption(option);
+    refetch();
   };
 
   return (
@@ -49,6 +70,18 @@ const Category = () => {
             </Link>
           }
         </div>
+        <div className='flex items-center justify-center mb-4'>
+          <Input
+            onChange={e => setSearchQuery(e.target.value)}
+            value={searchQuery}
+            fullWidth
+            className='py-0 px-0 mb-0 w-full'
+            placeholder='Search'
+          />
+          <Button className='ml-4' onClick={handleSearch}>
+            Search
+          </Button>
+        </div>
         {posts && posts?.map(post => {
           if (post.approved){
             return (
@@ -62,6 +95,19 @@ const Category = () => {
             )
           }
           })}
+      </div>
+      <div className='mt-5'>
+        <ReactPaginate
+          previousLabel={'previous'}
+          nextLabel={'next'}
+          pageCount={parseInt(paginated?.numberOfPages)}
+          pageLinkClassName={'px-5 mx-2 hover:text-red-400'}
+          previousLinkClassName={'uppercase text-xs mx-4 hover:text-red-400 '}
+          nextLinkClassName={'uppercase text-xs mx-4 hover:text-red-400 '}
+          activeClassName={'font-bold text-xl'}
+          className={'flex justify-center items-center text-red-600 '}
+          onPageChange={handlePageChange}
+        />
       </div>
       {openSubscribeModal && (
         <Modal handleClose={handleCloseSubscribeModal}>

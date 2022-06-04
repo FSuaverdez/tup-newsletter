@@ -73,19 +73,34 @@ export const getPostBySearch = asyncHandler(async (req, res) => {
 // @router  GET /post/getAll/category/:id
 // @access  Public
 export const getAllPostsByCategory = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { id, page } = req.params;
+  const  {searchQuery}  = req.query;
   try {
     // Check for permission
-    const posts = await Post.find({ category: id })
-      .select('-content')
+    const query = new RegExp(searchQuery, 'i');
+    const limit = 5;
+    const startIndex = Number(page) - 1;
+    let total = await Post.countDocuments({category:id});
+    let findOption = {};
+    if (searchQuery) {
+      findOption = { $or: [{ title: query }] };
+    }
+    findOption = { ...findOption, category:id }
+    const posts = await Post.find(findOption)
+      .sort({approvedAt:'desc'})
+      .limit(limit)
+      .skip(startIndex * limit)
       .populate('category')
       .populate('subCategory')
       .populate('postedBy')
       .populate('updatedBy')
       .populate('comments.postedBy');
-
+    if (searchQuery) {
+      total = posts.length;
+    }
+    const numberOfPages = Math.ceil(total/limit);
     res.status(200);
-    res.json(posts);
+    res.json({posts,numberOfPages});
   } catch (error) {
     res.status(400);
     throw new Error(error.message);
@@ -96,19 +111,34 @@ export const getAllPostsByCategory = asyncHandler(async (req, res) => {
 // @router  GET /post/getAll/subcategory/:id
 // @access  Public
 export const getAllPostsBySubCategory = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { id , page } = req.params;
+  const  {searchQuery}  = req.query;
   try {
     // Check for permission
-    const posts = await Post.find({ subCategory: id })
-      .select('-content')
+    const query = new RegExp(searchQuery, 'i');
+    const limit = 5;
+    const startIndex = Number(page) - 1;
+    let total = await Post.countDocuments({subCategory:id});
+    let findOption = {};
+    if (searchQuery) {
+      findOption = { $or: [{ title: query }] };
+    }
+    findOption = { ...findOption, subCategory:id }
+    const posts = await Post.find(findOption)
+      .sort({approvedAt:'desc'})
+      .limit(limit)
+      .skip(startIndex*limit)
       .populate('category')
       .populate('subCategory')
       .populate('postedBy')
       .populate('updatedBy')
       .populate('comments.postedBy');
-
+    if (searchQuery) {
+      total = posts.length;
+    }
+    const numberOfPages = Math.ceil(total/limit);
     res.status(200);
-    res.json(posts);
+    res.json({posts,numberOfPages});
   } catch (error) {
     res.status(400);
     throw new Error(error.message);
@@ -138,8 +168,6 @@ export const getAllHomePosts = asyncHandler(async (req, res) => {
     if (subCategory) {
       findOption = { ...findOption, subCategory };
     }
-    console.log(searchQuery, category, subCategory);
-
     const limit = 5;
     const startIndex = Number(page) - 1;
     let total = await Post.countDocuments({});
@@ -154,9 +182,7 @@ export const getAllHomePosts = asyncHandler(async (req, res) => {
       .populate('comments.postedBy');
     if (searchQuery || category || subCategory) {
       total = homePosts.length;
-      console.log('first');
     }
-    console.log(homePosts);
     const numberOfPages = Math.ceil(total / limit);
     res.status(200);
     res.json({ homePosts, numberOfPages });

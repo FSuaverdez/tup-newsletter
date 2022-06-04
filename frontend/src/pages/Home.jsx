@@ -2,16 +2,18 @@ import { Link } from 'react-router-dom';
 import { useGetAllPostsQuery } from '../app/services/postApi';
 import { useGetAllHomePostsQuery } from '../app/services/postApi';
 import ReactPaginate from 'react-paginate';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Input from '../components/Input/Input';
 import SelectCategory from '../components/SelectCategory/SelectCategory';
 import SelectSubCategory from '../components/SelectSubCategory/SelectSubCategory';
 import Button from '../components/Button/Button';
-
+import Modal from '../components/Modal/Modal';
+import PostLoadingModal from '../components/PostLoading/PostLoadingModal';
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [category, setCategory] = useState('');
   const [page, setPage] = useState(1);
+  const [isLoading,setIsLoading] = useState(true);
   const [subCategory, setSubCategory] = useState('');
   const [searchOption, setSearchOption] = useState({});
   const { data: paginated, refetch } = useGetAllHomePostsQuery({
@@ -51,6 +53,12 @@ const Home = () => {
     setSearchOption(option);
     refetch();
   };
+  useEffect(()=>{
+    const setCurrent = () => {
+      paginated&&setIsLoading(false);
+    }
+    setCurrent();
+  },[paginated])
 
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
@@ -107,7 +115,7 @@ const Home = () => {
         <ReactPaginate
           previousLabel={'previous'}
           nextLabel={'next'}
-          pageCount={paginated?.numberOfPages}
+          pageCount={parseInt(paginated?.numberOfPages)}
           pageLinkClassName={'px-5 mx-2 hover:text-red-400'}
           previousLinkClassName={'uppercase text-xs mx-4 hover:text-red-400 '}
           nextLinkClassName={'uppercase text-xs mx-4 hover:text-red-400 '}
@@ -116,6 +124,13 @@ const Home = () => {
           onPageChange={handlePageChange}
         />
       </div>
+      {isLoading && (
+           <Modal>
+           <PostLoadingModal
+             className='p-8'
+           />
+         </Modal>
+      )}
     </div>
   );
 };
