@@ -97,11 +97,11 @@ content-type: application/json
 
 
 ###
-GET http://localhost:5000/post/search
+GET http://localhost:5000/post/getAll/home/1
 content-type: application/json
 
 {
     "searchQuery":"",
-    "category":"",
-    "subcategory":"62964275623364d8a2294f08"
+    "category":"62963f74623364d8a2294e79",
+    "subcategory":"62963f74623364d8a2294e79"
 }

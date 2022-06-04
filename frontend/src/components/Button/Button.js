@@ -10,15 +10,17 @@ const Button = ({
   let buttonClass = getButtonClass(type);
 
   return (
-    <button
-      className={`${buttonClass} ${classes} ${
-        disabled && 'hover:cursor-not-allowed'
-      } `}
-      onClick={handleClick}
-      disabled={disabled}
-    >
-      {children}
-    </button>
+    <div className={`${classes}`}>
+      <button
+        className={`${buttonClass} } ${
+          disabled && 'hover:cursor-not-allowed'
+        } `}
+        onClick={handleClick}
+        disabled={disabled}
+      >
+        {children}
+      </button>
+    </div>
   );
 };
 

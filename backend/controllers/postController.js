@@ -119,39 +119,59 @@ export const getAllPostsBySubCategory = asyncHandler(async (req, res) => {
 // @router  GET /post/getAll/:page
 // @access  Public
 export const getAllHomePosts = asyncHandler(async (req, res) => {
-  const {page} = req.params;
-  try{
-    const limit = 5;
-    const startIndex = (Number(page)-1);
-    const total = await Post.countDocuments({});
-    const homePosts = await Post.find()
-    .sort({ approvedAt:'desc' })
-    .limit(limit)
-    .skip((startIndex*limit))
-    .populate('category')
-    .populate('subCategory')
-    .populate('postedBy')
-    .populate('updatedBy')
-    .populate('comments.postedBy');
-    const numberOfPages = Math.ceil(total/limit)
-    res.status(200)
-    res.json({homePosts,numberOfPages});
-    console.log(total);
+  const { page } = req.params;
+  const { searchQuery, category, subCategory } = req.query;
 
-  }
-  catch(error){
+  try {
+    const query = new RegExp(searchQuery, 'i');
+
+    let findOption = {};
+
+    if (searchQuery) {
+      findOption = { $or: [{ title: query }] };
+    }
+
+    if (category) {
+      findOption = { ...findOption, category };
+    }
+
+    if (subCategory) {
+      findOption = { ...findOption, subCategory };
+    }
+    console.log(searchQuery, category, subCategory);
+
+    const limit = 5;
+    const startIndex = Number(page) - 1;
+    let total = await Post.countDocuments({});
+    const homePosts = await Post.find(findOption)
+      .sort({ approvedAt: 'desc' })
+      .limit(limit)
+      .skip(startIndex * limit)
+      .populate('category')
+      .populate('subCategory')
+      .populate('postedBy')
+      .populate('updatedBy')
+      .populate('comments.postedBy');
+    if (searchQuery || category || subCategory) {
+      total = homePosts.length;
+      console.log('first');
+    }
+    console.log(homePosts);
+    const numberOfPages = Math.ceil(total / limit);
+    res.status(200);
+    res.json({ homePosts, numberOfPages });
+  } catch (error) {
     res.status(400);
     throw new Error(error.message);
   }
-
 });
-
 
 // @desc    get all  post
 // @router  GET /post/get/:id
 // @access  Public
 export const getPost = asyncHandler(async (req, res) => {
   const { id } = req.params;
+
   try {
     // Check for permission
     const post = await Post.findById(id)

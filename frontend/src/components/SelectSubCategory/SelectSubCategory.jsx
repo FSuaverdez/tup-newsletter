@@ -8,6 +8,7 @@ const SelectSubCategory = ({
   onChange: handleChange,
   disabled,
   className: classes,
+  hideLabel,
 }) => {
   const { data: subCategories, isLoading } = useGetSubCategoriesQuery();
   let options = [{ value: '', label: 'None' }];
@@ -28,10 +29,12 @@ const SelectSubCategory = ({
   }
 
   return (
-    <div className={`${classes} my-4`}>
-      <label htmlFor='name' className='font-bold text-gray-600'>
-        Subcategory:
-      </label>
+    <div className={`my-4 ${classes}`}>
+      {!hideLabel && (
+        <label htmlFor='name' className='font-bold text-gray-600'>
+          Subcategory:
+        </label>
+      )}
       <Select
         classNamePrefix='react-select-container'
         options={options}

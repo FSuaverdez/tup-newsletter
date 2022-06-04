@@ -20,7 +20,16 @@ export const postApi = createApi({
       providesTags: ['Post'],
     }),
     getAllHomePosts: builder.query({
-      query: ({page}) => ({ url: 'post/getAll/home/' + page }),
+      query: ({
+        page,
+        searchOption: { searchQuery, category, subCategory },
+      }) => ({
+        url: `post/getAll/home/${page}?${
+          searchQuery ? `searchQuery=${searchQuery}` : ''
+        }${category ? `&category=${category}` : ''}${
+          subCategory ? `&subCategory=${subCategory}` : ''
+        }`,
+      }),
       providesTags: ['Post'],
     }),
     getAllPostsByCategory: builder.query({
@@ -88,9 +97,7 @@ export const postApi = createApi({
       invalidatesTags: ['Post'],
     }),
     deletePost: builder.mutation({
-      query: ({
-        postId,
-      }) => ({
+      query: ({ postId }) => ({
         url: 'post/delete/' + postId,
         method: 'DELETE',
         body: {},
@@ -98,7 +105,7 @@ export const postApi = createApi({
       invalidatesTags: ['Post'],
     }),
     approvePost: builder.mutation({
-      query: ({id,approved }) => ({
+      query: ({ id, approved }) => ({
         url: 'post/approve/' + id,
         method: 'PUT',
         body: {
