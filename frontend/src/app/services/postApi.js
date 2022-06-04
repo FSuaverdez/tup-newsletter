@@ -33,11 +33,18 @@ export const postApi = createApi({
       providesTags: ['Post'],
     }),
     getAllPostsByCategory: builder.query({
-      query: ({ id }) => ({ url: 'post/getAll/category/' + id }),
+      query: ({ id,
+         page,
+         searchOption:{searchQuery}
+         }) => ({ url: `post/getAll/category/${id}/${page}?${searchQuery?`searchQuery=${searchQuery}`:''}`}),
       providesTags: ['Post'],
     }),
     getAllPostsBySubCategory: builder.query({
-      query: ({ id }) => ({ url: 'post/getAll/subcategory/' + id }),
+      query: ({
+         id,
+         page,
+         searchOption:{searchQuery}
+         }) => ({ url: `post/getAll/subcategory/${id}/${page}?${searchQuery?`searchQuery=${searchQuery}`:''}`}),
       providesTags: ['Post'],
     }),
     getPost: builder.query({
