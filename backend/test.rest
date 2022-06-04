@@ -93,3 +93,15 @@ content-type: application/json
 ###
 GET http://localhost:5000/post/sms
 content-type: application/json
+
+
+
+###
+GET http://localhost:5000/post/search
+content-type: application/json
+
+{
+    "searchQuery":"",
+    "category":"",
+    "subcategory":"62964275623364d8a2294f08"
+}

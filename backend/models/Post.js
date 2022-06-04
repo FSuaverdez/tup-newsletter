@@ -25,7 +25,7 @@ const postSchema = mongoose.Schema(
     subCategory: { type: mongoose.Schema.Types.ObjectId, ref: 'SubCategory' },
     approved: { type: Boolean, default: false },
     approvedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    approvedAt:{type:Date},
+    approvedAt: { type: Date },
     comments: {
       type: [commentSchema],
       default: [],

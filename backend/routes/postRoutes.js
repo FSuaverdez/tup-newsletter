@@ -11,6 +11,7 @@ import {
   deletePost,
   testMail,
   testSMS,
+  getPostBySearch,
 } from '../controllers/postController.js';
 
 import { requireAuth } from '../middleware/authMiddleware.js';
@@ -28,5 +29,6 @@ router.get('/getAll/subcategory/:id', getAllPostsBySubCategory);
 router.get('/get/:id', getPost);
 router.get('/email', testMail);
 router.get('/sms', testSMS);
+router.get('/search', getPostBySearch);
 
 export default router;

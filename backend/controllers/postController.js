@@ -27,6 +27,47 @@ export const getAllPosts = asyncHandler(async (req, res) => {
     throw new Error(error.message);
   }
 });
+// @desc    get all  post
+// @router  GET /post/getAll
+// @access  Public
+export const getPostBySearch = asyncHandler(async (req, res) => {
+  const { searchQuery, category, subCategory } = req.body;
+  try {
+    // Check for permission
+
+    const query = new RegExp(searchQuery, 'i');
+    let posts = await Post.find({
+      $or: [{ title: query }],
+    })
+      .select('-content')
+      .populate('category')
+      .populate('subCategory')
+      .populate('postedBy')
+      .populate('updatedBy')
+      .populate('comments.postedBy');
+    let filteredPosts = [...posts];
+    if (category) {
+      filteredPosts = posts.filter(
+        post =>
+          post?.category?._id?.toString() === category ||
+          post?.subCategory?._id?.toString() === subCategory
+      );
+    }
+
+    if (subCategory) {
+      filteredPosts = posts.filter(
+        post =>
+          post?.category?._id?.toString() === category ||
+          post?.subCategory?._id?.toString() === subCategory
+      );
+    }
+    res.status(200);
+    res.json(posts);
+  } catch (filteredPosts) {
+    res.status(400);
+    throw new Error(error.message);
+  }
+});
 
 // @desc    get all  post by category
 // @router  GET /post/getAll/category/:id
