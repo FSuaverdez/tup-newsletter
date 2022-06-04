@@ -42,7 +42,7 @@ const FilterManage = () => {
                 handleOpen();
               }}
             >
-              Create Post
+              Add
             </Button>
           </div>
           <div>

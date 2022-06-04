@@ -13,6 +13,7 @@ export const getAllPosts = asyncHandler(async (req, res) => {
   try {
     // Check for permission
     const posts = await Post.find()
+      .select('-content')
       .populate('category')
       .populate('subCategory')
       .populate('postedBy')
@@ -35,6 +36,7 @@ export const getAllPostsByCategory = asyncHandler(async (req, res) => {
   try {
     // Check for permission
     const posts = await Post.find({ category: id })
+      .select('-content')
       .populate('category')
       .populate('subCategory')
       .populate('postedBy')
@@ -57,6 +59,7 @@ export const getAllPostsBySubCategory = asyncHandler(async (req, res) => {
   try {
     // Check for permission
     const posts = await Post.find({ subCategory: id })
+      .select('-content')
       .populate('category')
       .populate('subCategory')
       .populate('postedBy')

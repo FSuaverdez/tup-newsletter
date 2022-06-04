@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useGetAllPostsQuery } from '../app/services/postApi';
+import ReactPaginate from "react-paginate";
 
 const Home = () => {
   const { data: posts, isLoading } = useGetAllPostsQuery();
@@ -23,6 +24,23 @@ const Home = () => {
             </Link>
         )}})}
       </div>
+      <ReactPaginate
+                previousLabel={'previous'}
+                nextLabel={'next'}
+                pageCount={8}
+                containerClassName={''}
+                breakClassName={'page-item'}
+                pageClassName={'page-item'}
+                pageLinkClassName={'page-link'}
+                previousClassName={'page-item'}
+                previousLinkClassName={'page-link'}
+                nextClassName={'page-item'}
+                nextLinkClassName={'page-link'}
+                activeClassName={'active'}
+                breakLinkClassName={'page-link'}
+                className = {'flex items-center text-rose-600 border-4 border-orange-600'}
+                // onPageChange={handlePageChange}
+          />
     </div>
   );
 };
