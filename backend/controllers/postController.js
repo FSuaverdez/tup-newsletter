@@ -115,6 +115,38 @@ export const getAllPostsBySubCategory = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    get all  post for home
+// @router  GET /post/getAll/:page
+// @access  Public
+export const getAllHomePosts = asyncHandler(async (req, res) => {
+  const {page} = req.params;
+  try{
+    const limit = 5;
+    const startIndex = (Number(page)-1);
+    const total = await Post.countDocuments({});
+    const homePosts = await Post.find()
+    .sort({ approvedAt:'desc' })
+    .limit(limit)
+    .skip((startIndex*limit))
+    .populate('category')
+    .populate('subCategory')
+    .populate('postedBy')
+    .populate('updatedBy')
+    .populate('comments.postedBy');
+    const numberOfPages = Math.ceil(total/limit)
+    res.status(200)
+    res.json({homePosts,numberOfPages});
+    console.log(total);
+
+  }
+  catch(error){
+    res.status(400);
+    throw new Error(error.message);
+  }
+
+});
+
+
 // @desc    get all  post
 // @router  GET /post/get/:id
 // @access  Public
@@ -251,6 +283,9 @@ export const approvePost = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    delete a post
+// @router  DELETE /post/delete/:id
+// @access  User Required
 export const deletePost = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const user = req.user;

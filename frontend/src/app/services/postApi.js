@@ -19,6 +19,10 @@ export const postApi = createApi({
       query: () => ({ url: 'post/getAll' }),
       providesTags: ['Post'],
     }),
+    getAllHomePosts: builder.query({
+      query: ({page}) => ({ url: 'post/getAll/home/' + page }),
+      providesTags: ['Post'],
+    }),
     getAllPostsByCategory: builder.query({
       query: ({ id }) => ({ url: 'post/getAll/category/' + id }),
       providesTags: ['Post'],
@@ -109,6 +113,7 @@ export const postApi = createApi({
 export const {
   useAddPostMutation,
   useGetAllPostsQuery,
+  useGetAllHomePostsQuery,
   useAddCommentMutation,
   useEditPostMutation,
   useDeletePostMutation,
