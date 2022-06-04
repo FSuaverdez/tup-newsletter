@@ -1,12 +1,17 @@
 import { Link } from 'react-router-dom';
 import { useGetAllPostsQuery } from '../app/services/postApi';
+import { useGetAllHomePostsQuery } from '../app/services/postApi';
 import ReactPaginate from 'react-paginate';
+import { useState } from 'react';
 
 const Home = () => {
-  const { data: posts, isLoading } = useGetAllPostsQuery();
+  const [page,setPage] = useState(1);
+  const {data : paginated} = useGetAllHomePostsQuery({page});
+  const posts = paginated?.homePosts;
 
-  if (isLoading) {
-    return 'Loading...';
+  const handlePageChange = (e) => {
+    let selected = parseInt((e.selected+1))
+    setPage(selected)
   }
 
   return (
@@ -31,13 +36,13 @@ const Home = () => {
         <ReactPaginate
           previousLabel={'previous'}
           nextLabel={'next'}
-          pageCount={8}
+          pageCount={paginated?.numberOfPages}
           pageLinkClassName={'px-5 mx-2 hover:text-red-400'}
           previousLinkClassName={'uppercase text-xs mx-4 hover:text-red-400 '}
           nextLinkClassName={'uppercase text-xs mx-4 hover:text-red-400 '}
-          activeClassName={'font-bold'}
+          activeClassName={'font-bold text-xl'}
           className={'flex justify-center items-center text-red-600 '}
-          // onPageChange={handlePageChange}
+          onPageChange={handlePageChange}
         />
       </div>
     </div>
