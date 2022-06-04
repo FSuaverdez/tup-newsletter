@@ -17,7 +17,8 @@ const ContentPost = () => {
   const { data: post, isLoading } = useGetPostQuery({
     id: postId,
   });
-  const [openModal,setOpenModal] = useState(false);
+  const [approved, setApproved] = useState(post?.approved);
+  const [openModal, setOpenModal] = useState(false);
   const [approvePost] = useApprovePostMutation();
   const user = useSelector(state => state.user);
   const config = useMemo(
@@ -36,6 +37,7 @@ const ContentPost = () => {
   const handlePublish = async () => {
     try {
       await approvePost({ id, approved: true });
+      setApproved(true);
     } catch (error) {
       console.log(error);
     }
@@ -43,16 +45,17 @@ const ContentPost = () => {
   const handleUnpublish = async () => {
     try {
       await approvePost({ id, approved: false });
+      setApproved(false);
     } catch (error) {
       console.log(error);
     }
   };
   const handleConfirmDelete = () => {
     setOpenModal(true);
-  }
+  };
   const handleCloseModal = () => {
     setOpenModal(false);
-  }
+  };
   useEffect(() => {
     setId(post?._id);
   }, [post]);
@@ -72,35 +75,38 @@ const ContentPost = () => {
         <h4 className='text-lg font-normal'>{post?.subCategory?.name}</h4>
         {post?.live && <ReactPlayer url={post?.live} controls={true} />}
         <JoditEditor value={post?.content} config={config} />
-        {user?.isAdmin?
+        {user?.isAdmin ? (
           <div className='flex mt-10 justify-end'>
-          {!post?.approved && (
-            <Button type='success' onClick={handlePublish}>
-              Publish
-            </Button>
-          )}
-          {post?.approved && (
-            <Button type='danger' onClick={handleUnpublish}>
-              Unpublish
-            </Button>
-          )}
+            {!approved && (
+              <Button type='success' onClick={handlePublish}>
+                Publish
+              </Button>
+            )}
+            {approved && (
+              <Button type='danger' onClick={handleUnpublish}>
+                Unpublish
+              </Button>
+            )}
             <div className='mx-5'>
               <Button type='danger' onClick={handleConfirmDelete}>
                 Delete
               </Button>
             </div>
           </div>
-          :
+        ) : (
           <div className='flex mt-10 justify-end'>
-            {!post?.approved && <Button type='success'
-               onClick={() => {
-                navigate('edit');
-              }}
-            >
-              Edit Post
-            </Button>}
+            {!post?.approved && (
+              <Button
+                type='success'
+                onClick={() => {
+                  navigate('edit');
+                }}
+              >
+                Edit Post
+              </Button>
+            )}
           </div>
-        }
+        )}
       </div>
       {openModal && (
         <Modal handleClose={handleCloseModal}>
@@ -108,7 +114,7 @@ const ContentPost = () => {
             handleCloseModal={handleCloseModal}
             postId={postId}
             className='p-8'
-            post = {post}
+            post={post}
           />
         </Modal>
       )}

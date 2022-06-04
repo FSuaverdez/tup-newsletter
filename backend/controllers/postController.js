@@ -1,9 +1,11 @@
 import Post from '../models/Post.js';
+import Category from '../models/Category.js';
 import asyncHandler from 'express-async-handler';
 import FilteredWord from '../models/FilteredWord.js';
 import Filter from 'bad-words';
 import nodemailer from 'nodemailer';
 import fetch from 'node-fetch';
+import SubCategory from '../models/SubCategory.js';
 // @desc    get all  post
 // @router  GET /post/getAll
 // @access  Public
@@ -166,10 +168,39 @@ export const approvePost = asyncHandler(async (req, res) => {
         approvedBy: user._id,
       },
       { new: true }
-    );
-
+    ).select('-content');
     res.status(200);
     res.json(approvedPost);
+
+    if (approved) {
+      const category = await Category.findById(
+        approvedPost.category.toString()
+      ).populate('subscribers.user');
+      const subCategory = await SubCategory.findById(
+        approvedPost.subCategory.toString()
+      ).populate('subscribers.user');
+      const categorySubscribers = category.subscribers.map(sub => sub);
+      const subCategorySubscribers = subCategory.subscribers.map(sub => sub);
+      const subscribers = [...categorySubscribers, ...subCategorySubscribers];
+      const emailSubscribers = Array.from(
+        new Set(
+          subscribers
+            .filter(sub => sub.subscriptionType === 'Email')
+            .map(sub => sub.user.email)
+        )
+      );
+      const smsSubscribers = Array.from(
+        new Set(
+          subscribers
+            .filter(
+              sub => sub.user.mobileNumber && sub.subscriptionType === 'SMS'
+            )
+            .map(sub => sub.user.mobileNumber)
+        )
+      );
+      sendEmailNotif(approvedPost, emailSubscribers);
+      // sendSMSNotif(approvedPost, smsSubscribers);
+    }
   } catch (error) {
     res.status(400);
     throw new Error(error.message);
@@ -220,7 +251,7 @@ export const addComment = asyncHandler(async (req, res) => {
   }
 });
 
-export const testMail = asyncHandler(async (req, res) => {
+const sendEmailNotif = (post, emails) => {
   var transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
@@ -233,10 +264,52 @@ export const testMail = asyncHandler(async (req, res) => {
 
   var mailOptions = {
     from: 'tupnewsletter@gmail.com',
-    to: 'sfrannz@gmail.com',
-    subject: 'Sending Email using Node.js',
-    text: 'That was easy!',
+    to: emails,
+    subject: post.title,
+    text: post.title,
   };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+};
+
+const sendSMSNotif = asyncHandler(async (post, numbers) => {
+  const SMSMessages = numbers.map(number => ({ body: post.title, to: number }));
+  console.log(SMSMessages);
+  try {
+    const resp = await fetch('https://rest.clicksend.com/v3/sms/send', {
+      method: 'POST',
+      body: JSON.stringify({
+        messages: SMSMessages,
+      }),
+      headers: {
+        'Content-type': 'application/json',
+        Authorization:
+          'Basic dHVwbmV3c2xldHRlckBnbWFpbC5jb206RlN1YXZlcmRlejEyMyE=',
+      },
+    });
+    const data = await resp.json();
+    console.log('SMS ' + data.response_code);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+export const testMail = asyncHandler(async (req, res) => {
+  var transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'tupnewsletter@gmail.com',
+      pass: 'biiywzzdkxalnygr',
+    },
+  });
 
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
