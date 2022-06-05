@@ -24,7 +24,14 @@ const ContentSubCategory = () => {
               const show = data?.subCategoryPermissions.find(
                 p => p._id === c._id
               );
-              if (user.isAdmin || show) {
+              const show2 = data?.categoryPermissions?.find(p => {
+                const role = p.userPermissions.find(
+                  p => user._id === p.user
+                ).role;
+
+                return p._id === c.category && role === 'Admin';
+              });
+              if (user.isAdmin || show || show2) {
                 return (
                   <div
                     className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
