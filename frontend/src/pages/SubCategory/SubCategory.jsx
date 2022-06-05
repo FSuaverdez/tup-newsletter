@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useGetSubCategoryQuery } from '../../app/services/adminApi';
 import { useGetAllPostsBySubCategoryQuery } from '../../app/services/postApi';
@@ -8,6 +8,8 @@ import Button from '../../components/Button/Button';
 import SubscribeModal from '../../components/Subscribe/SubscribeModal';
 import { useSelector } from 'react-redux';
 import Input from '../../components/Input/Input';
+import { MetroSpinner } from "react-spinners-kit";
+import JoditEditor from 'jodit-react';
 
 const SubCategory = () => {
   const user = useSelector(state => state.user);
@@ -17,11 +19,11 @@ const SubCategory = () => {
   const { subCategoryId } = useParams();
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
+  const [isLoading,setIsLoading] = useState(true);
 
   const { data: subCategory } = useGetSubCategoryQuery({ id: subCategoryId });
   const {
     data: paginated,
-    isLoading,
     refetch,
   } = useGetAllPostsBySubCategoryQuery({
     id: subCategoryId,
@@ -32,16 +34,6 @@ const SubCategory = () => {
 
   const [openSubscribeModal, setOpenSubscribeModal] = useState(false);
   let selected;
-  useEffect(() => {
-    const setCurrent = () => {
-      setPage(1);
-      selected = 1;
-    };
-    setCurrent();
-  }, [subCategoryId]);
-  if (isLoading) {
-    return 'Loading...';
-  }
 
   const handleOpenSubscribeModal = () => {
     setOpenSubscribeModal(true);
@@ -53,6 +45,7 @@ const SubCategory = () => {
   const handlePageChange = e => {
     selected = parseInt(e.selected + 1);
     setPage(selected);
+    setIsLoading(true);
   };
   const handleSearch = () => {
     let option = {};
@@ -70,7 +63,38 @@ const SubCategory = () => {
     }
     setSearchOption(option);
     refetch();
+    setIsLoading(true)
   };
+  const config = useMemo(
+    () => ({
+      uploader: {
+        insertImageAsBase64URI: true,
+      },
+      showCharsCounter: false,
+      showXPathInStatusbar: false,
+      showWordsCounter: false,
+      toolbar: false,
+      readonly: true, // all options from https://xdsoft.net/jodit/doc/,
+    }),
+    []
+  );
+
+  useEffect(() => {
+    const setCurrent = () => {
+      setPage(1);
+      selected = 1;
+      setIsLoading(true);
+    };
+    setCurrent();
+  }, [subCategoryId]);
+
+  useEffect(() => {
+    const setCurrent = () => {
+      paginated && posts && setIsLoading(false);
+    };
+    setCurrent();
+  }, [paginated,posts]);
+
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
@@ -122,20 +146,36 @@ const SubCategory = () => {
             Search
           </Button>
         </div>
-        {posts &&
-          posts?.map(post => {
-            if (post.approved) {
-              return (
-                <Link to={`/post/${post._id}`} key={post._id}>
-                  <div className='shadow-lg my-5 border border-gray-200 rounded p-3'>
-                    <h2 className='text-xl font-bold'>{post.title}</h2>
-                    <h2 className='font-normal'>{post.category.name}</h2>
-                    <h2 className='text-xl'>{post?.subCategory?.name}</h2>
-                  </div>
-                </Link>
-              );
-            }
-          })}
+        {isLoading ? 
+          <div className='my-20'>
+            <div className='flex justify-center mt-1 mb-1'>
+                  <MetroSpinner  size={40} color="#FF2400" />
+              </div>
+
+              <div className='flex justify-center ml-5 mt-2.5'>
+                  <p className='text-xl font-bold'>Loading, Kindly wait for a moment.</p>
+              </div>   
+          </div>    
+            :
+            posts &&
+              posts?.map(post => {
+                if (post.approved) {
+                  return (
+                    <Link to={`/post/${post._id}`} key={post._id}>
+                      <div className='shadow-lg my-5 border border-gray-200 rounded p-3'>
+                        <h2 className='text-xl font-bold'>{post.title}</h2>
+                        <h2 className='font-normal'>{post.category.name}</h2>
+                        <h2 className='text-xl'>{post?.subCategory?.name}</h2>
+                        <JoditEditor 
+                          value={post?.content} 
+                          config={config} 
+                        />
+                      </div>
+                    </Link>
+                  );
+                }
+              })
+          }
       </div>
       <div className='mt-5' key={subCategoryId}>
         <ReactPaginate

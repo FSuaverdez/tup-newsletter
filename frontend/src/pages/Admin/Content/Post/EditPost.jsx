@@ -6,6 +6,7 @@ import SelectSubCategory from '../../../../components/SelectSubCategory/SelectSu
 import Input from '../../../../components/Input/Input';
 import Button from '../../../../components/Button/Button';
 import Modal from '../../../../components/Modal/Modal';
+import PostLoadingModal from '../../../../components/PostLoading/PostLoadingModal';
 import CreatePostConfirmationModal from './CreatePostConfirmationModal';
 import JoditEditor from 'jodit-react';
 import { useEditPostMutation, useGetPostQuery } from '../../../../app/services/postApi';
@@ -27,9 +28,10 @@ const EditPost = () => {
   const editor = useRef(null);
   const navigate = useNavigate();
   const [openSave, setOpenSave] = useState(false);
+  const [isLoading,setIsLoading] = useState(false);
   const [editPost] = useEditPostMutation();
   const { postId } = useParams();
-  const { data: post, isLoading } = useGetPostQuery({
+  const { data: post } = useGetPostQuery({
     id: postId,
   });
   const config = useMemo(
@@ -64,6 +66,7 @@ const EditPost = () => {
 
   const handleSave = async () => {
     setOpenSave(false);
+    setIsLoading(true);
     if (!title) {
       setTitleError(true);
     } else {
@@ -86,7 +89,7 @@ const EditPost = () => {
         setTitleError(false);
         setContentError(false);
         setCategoryError(false);
-        await editPost({
+        const data = await editPost({
           postId,
           title,
           type: postType.value,
@@ -95,7 +98,8 @@ const EditPost = () => {
           category: category.value,
           subCategory: subCategory.value || null,
         }).unwrap();
-        navigate('/content/category');
+        data && setIsLoading(false);
+        !isLoading && navigate('/content/category');
       }
     } catch (error) {
       console.error(error);
@@ -210,6 +214,13 @@ const EditPost = () => {
               post={{ postType, title, live, content, category, subCategory }}
             />
           </Modal>
+        )}
+        {isLoading && (
+           <Modal handleClose={handleCloseConfirmation}>
+           <PostLoadingModal
+             className='p-8'
+           />
+         </Modal>
         )}
       </div>
     </div>

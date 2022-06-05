@@ -1,5 +1,5 @@
 import JoditEditor from 'jodit-react';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -9,15 +9,17 @@ import {
 } from '../../app/services/postApi';
 import Button from '../../components/Button/Button';
 import Input from '../../components/Input/Input';
+import { MetroSpinner } from "react-spinners-kit";
 
 const Post = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
-  const { data: post, isLoading } = useGetPostQuery({
+  const { data: post } = useGetPostQuery({
     id: postId,
   });
   const [comment, setComment] = useState('');
   const [isSubmiting, setIsSubmiting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [addComment] = useAddCommentMutation();
   const user = useSelector(state => state.user);
   const config = useMemo(
@@ -33,10 +35,6 @@ const Post = () => {
     }),
     []
   );
-
-  if (isLoading) {
-    return 'Loading...';
-  }
 
   const handleCommentChange = e => {
     setComment(e.target.value);
@@ -54,65 +52,81 @@ const Post = () => {
       setIsSubmiting(false);
     }
   };
-
-  console.log(post);
+  useEffect(()=>{
+    const setCurrent = () => {
+      post&&setIsLoading(false);
+    }
+    setCurrent();
+  },[post])
 
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
       <Button className='mb-3' onClick={() => navigate(-1)}>
         Back
       </Button>
-      <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
-        <h1 className='text-5xl font-bold'>{post?.title}</h1>
-        <h3 className='text-lg font-normal'>{post?.category?.name}</h3>
-        <h4 className='text-lg font-normal'>{post?.subCategory?.name}</h4>
-        {post?.liveUrl && (
-          <div className='flex justify-center items-center mb-5'>
-            <ReactPlayer url={post?.liveUrl} controls={true} muted={true} />
-          </div>
-        )}
-        <JoditEditor value={post?.content} config={config} />
-
-        <div className='p-5'>
-          <h2 className='text-lg font-bold mb-4'>Comments</h2>
-          {post?.comments?.map(comment => (
-            <div
-              className='border border-gray-300 p-2 rounded my-2'
-              key={comment._id}
-            >
-              <div className='flex   gap-2  items-center'>
-                <img
-                  src={comment.postedBy.imageUrl}
-                  alt='user-profile'
-                  className='w-10 h-10 rounded-full'
-                />
-                <p className='text-sm font-bold'>{comment.postedBy.name}</p>
-              </div>
-              <p className='text-sm mt-2'>{comment?.text}</p>
+      {isLoading ? 
+        <div className='my-20'>
+          <div className='flex justify-center mt-1 mb-1'>
+                <MetroSpinner  size={40} color="#FF2400" />
             </div>
-          ))}
-          {post?.comments?.length === 0 && <p>No Comments Found.</p>}
-        </div>
-        {user && (
-          <div className='mt-5 border-t border-t-gray-300 p-5'>
-            <Input
-              type='textarea'
-              label={false}
-              placeholder='Comment'
-              fullWidth
-              onChange={handleCommentChange}
-              value={comment}
-            />
-            <Button
-              type='success'
-              onClick={handleCommentSubmit}
-              disabled={isSubmiting}
-            >
-              {isSubmiting ? 'Submiting...' : 'Submit'}
-            </Button>
+
+            <div className='flex justify-center ml-5 mt-2.5'>
+                <p className='text-xl font-bold'>Loading, Kindly wait for a moment.</p>
+            </div>   
+         </div> 
+        :
+          <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
+            <h1 className='text-5xl font-bold'>{post?.title}</h1>
+            <h3 className='text-lg font-normal'>{post?.category?.name}</h3>
+            <h4 className='text-lg font-normal'>{post?.subCategory?.name}</h4>
+            {post?.liveUrl && (
+              <div className='flex justify-center items-center mb-5'>
+                <ReactPlayer url={post?.liveUrl} controls={true} muted={true} />
+              </div>
+            )}
+            <JoditEditor value={post?.content} config={config} />
+
+            <div className='p-5'>
+              <h2 className='text-lg font-bold mb-4'>Comments</h2>
+              {post?.comments?.map(comment => (
+                <div
+                  className='border border-gray-300 p-2 rounded my-2'
+                  key={comment._id}
+                >
+                  <div className='flex   gap-2  items-center'>
+                    <img
+                      src={comment.postedBy.imageUrl}
+                      alt='user-profile'
+                      className='w-10 h-10 rounded-full'
+                    />
+                    <p className='text-sm font-bold'>{comment.postedBy.name}</p>
+                  </div>
+                  <p className='text-sm mt-2'>{comment?.text}</p>
+                </div>
+              ))}
+              {post?.comments?.length === 0 && <p>No Comments Found.</p>}
+            </div>
+            {user && (
+              <div className='mt-5 border-t border-t-gray-300 p-5'>
+                <Input
+                  type='textarea'
+                  label={false}
+                  placeholder='Comment'
+                  fullWidth
+                  onChange={handleCommentChange}
+                  value={comment}
+                />
+                <Button
+                  type='success'
+                  onClick={handleCommentSubmit}
+                  disabled={isSubmiting}
+                >
+                  {isSubmiting ? 'Submiting...' : 'Submit'}
+                </Button>
+              </div>
+            )}
           </div>
-        )}
-      </div>
+      }
     </div>
   );
 };
