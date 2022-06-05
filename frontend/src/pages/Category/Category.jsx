@@ -5,12 +5,12 @@ import Modal from '../../components/Modal/Modal';
 import ReactPaginate from 'react-paginate';
 import SubscribeModal from '../../components/Subscribe/SubscribeModal';
 import Button from '../../components/Button/Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Input from '../../components/Input/Input';
 
 const Category = () => {
-  const [page,setPage] = useState(1);
+  const [page,setPage] = useState();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchOption, setSearchOption] = useState({});
   const user = useSelector(state => state.user);
@@ -23,6 +23,14 @@ const Category = () => {
   });
   const posts = paginated?.posts;
   const [openSubscribeModal, setOpenSubscribeModal] = useState(false);
+  let selected;
+  useEffect(()=>{
+    const setCurrent = () => {
+        setPage(1);
+        selected = 1;
+    }
+    setCurrent();
+  },[categoryId])
   if (isLoading) {
     return 'Loading...';
   }
@@ -34,7 +42,7 @@ const Category = () => {
     setOpenSubscribeModal(false);
   };
   const handlePageChange = (e) => {
-    let selected = parseInt((e.selected+1));
+    selected = parseInt((e.selected+1));
     setPage(selected);
   };
   const handleSearch = () => {
@@ -46,7 +54,6 @@ const Category = () => {
     setSearchOption(option);
     refetch();
   };
-
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
@@ -96,7 +103,7 @@ const Category = () => {
           }
           })}
       </div>
-      <div className='mt-5'>
+      <div className='mt-5' key = {categoryId}>
         <ReactPaginate
           previousLabel={'previous'}
           nextLabel={'next'}

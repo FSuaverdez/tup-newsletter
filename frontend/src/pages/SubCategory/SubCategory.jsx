@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useGetSubCategoryQuery } from '../../app/services/adminApi';
 import { useGetAllPostsBySubCategoryQuery } from '../../app/services/postApi';
@@ -24,6 +24,14 @@ const SubCategory = () => {
   const posts = paginated?.posts;
 
   const [openSubscribeModal, setOpenSubscribeModal] = useState(false);
+  let selected;
+  useEffect(()=>{
+    const setCurrent = () => {
+        setPage(1);
+        selected = 1;
+    }
+    setCurrent();
+  },[subCategoryId])
   if (isLoading) {
     return 'Loading...';
   }
@@ -36,7 +44,7 @@ const SubCategory = () => {
     setOpenSubscribeModal(false);
   };
   const handlePageChange = (e) => {
-    let selected = parseInt((e.selected+1));
+    selected = parseInt((e.selected+1));
     setPage(selected);
   };
   const handleSearch = () => {
@@ -98,7 +106,7 @@ const SubCategory = () => {
           }
         })}
       </div>
-      <div className='mt-5'>
+      <div className='mt-5' key={subCategoryId}>
         <ReactPaginate
           previousLabel={'previous'}
           nextLabel={'next'}
