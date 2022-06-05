@@ -22,29 +22,44 @@ export const postApi = createApi({
     getAllHomePosts: builder.query({
       query: ({
         page,
-        searchOption: { searchQuery, category, subCategory },
+        searchOption: { searchQuery, category, subCategory, fromDate, toDate },
       }) => ({
         url: `post/getAll/home/${page}?${
           searchQuery ? `searchQuery=${searchQuery}` : ''
         }${category ? `&category=${category}` : ''}${
           subCategory ? `&subCategory=${subCategory}` : ''
+        }${fromDate ? `&fromDate=${fromDate}` : ''}${
+          toDate ? `&toDate=${toDate}` : ''
         }`,
       }),
       providesTags: ['Post'],
     }),
     getAllPostsByCategory: builder.query({
-      query: ({ id,
-         page,
-         searchOption:{searchQuery}
-         }) => ({ url: `post/getAll/category/${id}/${page}?${searchQuery?`searchQuery=${searchQuery}`:''}`}),
+      query: ({
+        id,
+        page,
+        searchOption: { searchQuery, fromDate, toDate },
+      }) => ({
+        url: `post/getAll/category/${id}/${page}?${
+          searchQuery ? `searchQuery=${searchQuery}` : ''
+        }${fromDate ? `&fromDate=${fromDate}` : ''}${
+          toDate ? `&toDate=${toDate}` : ''
+        }`,
+      }),
       providesTags: ['Post'],
     }),
     getAllPostsBySubCategory: builder.query({
       query: ({
-         id,
-         page,
-         searchOption:{searchQuery}
-         }) => ({ url: `post/getAll/subcategory/${id}/${page}?${searchQuery?`searchQuery=${searchQuery}`:''}`}),
+        id,
+        page,
+        searchOption: { searchQuery, fromDate, toDate },
+      }) => ({
+        url: `post/getAll/subcategory/${id}/${page}?${
+          searchQuery ? `searchQuery=${searchQuery}` : ''
+        }${fromDate ? `&fromDate=${fromDate}` : ''}${
+          toDate ? `&toDate=${toDate}` : ''
+        }`,
+      }),
       providesTags: ['Post'],
     }),
     getPost: builder.query({

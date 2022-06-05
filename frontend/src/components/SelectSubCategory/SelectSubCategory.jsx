@@ -29,7 +29,7 @@ const SelectSubCategory = ({
   }
 
   return (
-    <div className={`my-4 ${classes}`}>
+    <div className={`${classes}`}>
       {!hideLabel && (
         <label htmlFor='name' className='font-bold text-gray-600'>
           Subcategory:

@@ -18,7 +18,7 @@ const Input = ({
     element.style.height = element.scrollHeight + 'px';
   };
   return (
-    <div className={`${classes} mb-2`}>
+    <div className={`${classes} `}>
       {label && (
         <label htmlFor='name' className='font-bold text-gray-600'>
           {label}:

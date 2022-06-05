@@ -97,11 +97,12 @@ content-type: application/json
 
 
 ###
-GET http://localhost:5000/post/getAll/home/1
+GET http://localhost:5000/post/getAll/home/1?searchQuery=opm&fromDate=2022-04-04
 content-type: application/json
 
 {
-    "searchQuery":"",
-    "category":"62963f74623364d8a2294e79",
-    "subcategory":"62963f74623364d8a2294e79"
+    "searchQuery":"opm",
+    "category":"",
+    "subcategory":"",
+    "fromDate":"2022-08-07"
 }

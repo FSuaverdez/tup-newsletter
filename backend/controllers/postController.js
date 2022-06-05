@@ -74,20 +74,32 @@ export const getPostBySearch = asyncHandler(async (req, res) => {
 // @access  Public
 export const getAllPostsByCategory = asyncHandler(async (req, res) => {
   const { id, page } = req.params;
-  const  {searchQuery}  = req.query;
+  const { searchQuery, fromDate, toDate } = req.query;
   try {
     // Check for permission
     const query = new RegExp(searchQuery, 'i');
     const limit = 5;
     const startIndex = Number(page) - 1;
-    let total = await Post.countDocuments({category:id});
+    let total = await Post.countDocuments({ category: id });
     let findOption = {};
     if (searchQuery) {
       findOption = { $or: [{ title: query }] };
     }
-    findOption = { ...findOption, category:id }
+    if (fromDate && toDate) {
+      findOption = {
+        ...findOption,
+        approvedAt: { $gte: new Date(fromDate), $lte: new Date(toDate) },
+      };
+    } else if (fromDate && !toDate) {
+      findOption = {
+        ...findOption,
+        approvedAt: { $gte: new Date(fromDate) },
+      };
+    }
+
+    findOption = { ...findOption, category: id };
     const posts = await Post.find(findOption)
-      .sort({approvedAt:'desc'})
+      .sort({ approvedAt: 'desc' })
       .limit(limit)
       .skip(startIndex * limit)
       .populate('category')
@@ -98,9 +110,9 @@ export const getAllPostsByCategory = asyncHandler(async (req, res) => {
     if (searchQuery) {
       total = posts.length;
     }
-    const numberOfPages = Math.ceil(total/limit);
+    const numberOfPages = Math.ceil(total / limit);
     res.status(200);
-    res.json({posts,numberOfPages});
+    res.json({ posts, numberOfPages });
   } catch (error) {
     res.status(400);
     throw new Error(error.message);
@@ -111,23 +123,35 @@ export const getAllPostsByCategory = asyncHandler(async (req, res) => {
 // @router  GET /post/getAll/subcategory/:id
 // @access  Public
 export const getAllPostsBySubCategory = asyncHandler(async (req, res) => {
-  const { id , page } = req.params;
-  const  {searchQuery}  = req.query;
+  const { id, page } = req.params;
+  const { searchQuery, fromDate, toDate } = req.query;
   try {
     // Check for permission
     const query = new RegExp(searchQuery, 'i');
     const limit = 5;
     const startIndex = Number(page) - 1;
-    let total = await Post.countDocuments({subCategory:id});
+    let total = await Post.countDocuments({ subCategory: id });
     let findOption = {};
     if (searchQuery) {
       findOption = { $or: [{ title: query }] };
     }
-    findOption = { ...findOption, subCategory:id }
+    if (fromDate && toDate) {
+      findOption = {
+        ...findOption,
+        approvedAt: { $gte: new Date(fromDate), $lte: new Date(toDate) },
+      };
+    } else if (fromDate && !toDate) {
+      findOption = {
+        ...findOption,
+        approvedAt: { $gte: new Date(fromDate) },
+      };
+    }
+
+    findOption = { ...findOption, subCategory: id };
     const posts = await Post.find(findOption)
-      .sort({approvedAt:'desc'})
+      .sort({ approvedAt: 'desc' })
       .limit(limit)
-      .skip(startIndex*limit)
+      .skip(startIndex * limit)
       .populate('category')
       .populate('subCategory')
       .populate('postedBy')
@@ -136,9 +160,9 @@ export const getAllPostsBySubCategory = asyncHandler(async (req, res) => {
     if (searchQuery) {
       total = posts.length;
     }
-    const numberOfPages = Math.ceil(total/limit);
+    const numberOfPages = Math.ceil(total / limit);
     res.status(200);
-    res.json({posts,numberOfPages});
+    res.json({ posts, numberOfPages });
   } catch (error) {
     res.status(400);
     throw new Error(error.message);
@@ -150,7 +174,7 @@ export const getAllPostsBySubCategory = asyncHandler(async (req, res) => {
 // @access  Public
 export const getAllHomePosts = asyncHandler(async (req, res) => {
   const { page } = req.params;
-  const { searchQuery, category, subCategory } = req.query;
+  const { searchQuery, category, subCategory, fromDate, toDate } = req.query;
 
   try {
     const query = new RegExp(searchQuery, 'i');
@@ -168,6 +192,19 @@ export const getAllHomePosts = asyncHandler(async (req, res) => {
     if (subCategory) {
       findOption = { ...findOption, subCategory };
     }
+
+    if (fromDate && toDate) {
+      findOption = {
+        ...findOption,
+        approvedAt: { $gte: new Date(fromDate), $lte: new Date(toDate) },
+      };
+    } else if (fromDate && !toDate) {
+      findOption = {
+        ...findOption,
+        approvedAt: { $gte: new Date(fromDate) },
+      };
+    }
+
     const limit = 5;
     const startIndex = Number(page) - 1;
     let total = await Post.countDocuments({});

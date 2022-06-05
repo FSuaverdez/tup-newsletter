@@ -13,8 +13,11 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [category, setCategory] = useState('');
   const [page, setPage] = useState(1);
-  const [isLoading,setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [subCategory, setSubCategory] = useState('');
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
+
   const [searchOption, setSearchOption] = useState({});
   const { data: paginated, refetch } = useGetAllHomePostsQuery({
     page,
@@ -49,22 +52,30 @@ const Home = () => {
     if (subCategory) {
       option = { ...option, subCategory: subCategory.value };
     }
+
+    if (fromDate) {
+      option = { ...option, fromDate: fromDate };
+    }
+
+    if (toDate) {
+      option = { ...option, toDate: toDate };
+    }
     console.log(option);
     setSearchOption(option);
     refetch();
   };
-  useEffect(()=>{
+  useEffect(() => {
     const setCurrent = () => {
-      paginated&&setIsLoading(false);
-    }
+      paginated && setIsLoading(false);
+    };
     setCurrent();
-  },[paginated])
+  }, [paginated]);
 
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
         <h1 className='text-2xl font-bold mb-10'>All Posts</h1>
-        <div className='flex items-center justify-center mb-4'>
+        <div className='flex items-end justify-center mb-4'>
           <Input
             onChange={e => setSearchQuery(e.target.value)}
             value={searchQuery}
@@ -72,6 +83,26 @@ const Home = () => {
             className='py-0 px-0 mb-0 w-full'
             placeholder='Search'
           />
+          <div className='ml-4'>
+            <label htmlFor='fromDate'>From Date:</label>
+            <input
+              type='date'
+              name='fromDate'
+              id='fromDate'
+              onChange={e => setFromDate(e.target.value)}
+              className='px-2 py-1  border border-gray-500'
+            />
+          </div>
+          <div className='ml-4'>
+            <label htmlFor='toDate'>To Date:</label>
+            <input
+              type='date'
+              name='toDate'
+              id='toDate'
+              onChange={e => setToDate(e.target.value)}
+              className='px-2 py-1  border border-gray-500'
+            />
+          </div>
           <Button className='ml-4' onClick={handleSearch}>
             Search
           </Button>
@@ -125,11 +156,9 @@ const Home = () => {
         />
       </div>
       {isLoading && (
-           <Modal>
-           <PostLoadingModal
-             className='p-8'
-           />
-         </Modal>
+        <Modal>
+          <PostLoadingModal className='p-8' />
+        </Modal>
       )}
     </div>
   );

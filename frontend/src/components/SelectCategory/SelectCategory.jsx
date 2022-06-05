@@ -21,7 +21,7 @@ const SelectCategory = ({
   }
 
   return (
-    <div className={`mb-3 ${classes}`}>
+    <div className={`${classes}`}>
       {!hideLabel && (
         <label htmlFor='name' className='font-bold text-gray-600'>
           Category:
