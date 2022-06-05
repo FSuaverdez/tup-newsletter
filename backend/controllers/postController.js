@@ -98,6 +98,7 @@ export const getAllPostsByCategory = asyncHandler(async (req, res) => {
     }
 
     findOption = { ...findOption, category: id };
+    findOption = { ...findOption, approved: true };
     const posts = await Post.find(findOption)
       .sort({ approvedAt: 'desc' })
       .limit(limit)
@@ -148,6 +149,7 @@ export const getAllPostsBySubCategory = asyncHandler(async (req, res) => {
     }
 
     findOption = { ...findOption, subCategory: id };
+    findOption = { ...findOption, approved: true };
     const posts = await Post.find(findOption)
       .sort({ approvedAt: 'desc' })
       .limit(limit)
@@ -204,7 +206,7 @@ export const getAllHomePosts = asyncHandler(async (req, res) => {
         approvedAt: { $gte: new Date(fromDate) },
       };
     }
-
+    findOption = { ...findOption, approved: true };
     const limit = 5;
     const startIndex = Number(page) - 1;
     let total = await Post.countDocuments({});
