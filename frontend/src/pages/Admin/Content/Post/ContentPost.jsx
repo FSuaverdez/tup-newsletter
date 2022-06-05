@@ -10,11 +10,13 @@ import {
 } from '../../../../app/services/postApi';
 import Button from '../../../../components/Button/Button';
 import DeletePostModal from './DeletePostModal';
+import { MetroSpinner } from "react-spinners-kit";
 const ContentPost = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
   const [id, setId] = useState('');
-  const { data: post, isLoading } = useGetPostQuery({
+  const [isLoading,setIsLoading] = useState(true);
+  const { data: post } = useGetPostQuery({
     id: postId,
   });
   const [approved, setApproved] = useState(post?.approved);
@@ -58,56 +60,65 @@ const ContentPost = () => {
   };
   useEffect(() => {
     setId(post?._id);
+    post&&setIsLoading(false);
   }, [post]);
-
-  if (isLoading) {
-    return 'Loading...';
-  }
-  console.log(post);
+  
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
       <div className='my-5'>
         <Button onClick={() => navigate(-1)}>Back</Button>
       </div>
-      <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
-        <h1 className='text-5xl font-bold'>{post?.title}</h1>
-        <h3 className='text-lg font-normal'>{post?.category?.name}</h3>
-        <h4 className='text-lg font-normal'>{post?.subCategory?.name}</h4>
-        {post?.live && <ReactPlayer url={post?.live} controls={true} />}
-        <JoditEditor value={post?.content} config={config} />
-        {user?.isAdmin ? (
-          <div className='flex mt-10 justify-end'>
-            {!approved && (
-              <Button type='success' onClick={handlePublish}>
-                Publish
-              </Button>
-            )}
-            {approved && (
-              <Button type='danger' onClick={handleUnpublish}>
-                Unpublish
-              </Button>
-            )}
-            <div className='mx-5'>
-              <Button type='danger' onClick={handleConfirmDelete}>
-                Delete
-              </Button>
+      {isLoading ? 
+        <div className='my-20'>
+          <div className='flex justify-center mt-1 mb-1'>
+                <MetroSpinner  size={40} color="#FF2400" />
             </div>
-          </div>
-        ) : (
-          <div className='flex mt-10 justify-end'>
-            {!post?.approved && (
-              <Button
-                type='success'
-                onClick={() => {
-                  navigate('edit');
-                }}
-              >
-                Edit Post
-              </Button>
-            )}
-          </div>
-        )}
-      </div>
+
+            <div className='flex justify-center ml-5 mt-2.5'>
+                <p className='text-xl font-bold'>Loading, Kindly wait for a moment.</p>
+            </div>   
+        </div>    
+        :
+        <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
+          <h1 className='text-5xl font-bold'>{post?.title}</h1>
+          <h3 className='text-lg font-normal'>{post?.category?.name}</h3>
+          <h4 className='text-lg font-normal'>{post?.subCategory?.name}</h4>
+          {post?.live && <ReactPlayer url={post?.live} controls={true} />}
+          <JoditEditor value={post?.content} config={config} />
+          {user?.isAdmin ? (
+            <div className='flex mt-10 justify-end'>
+              {!approved && (
+                <Button type='success' onClick={handlePublish}>
+                  Publish
+                </Button>
+              )}
+              {approved && (
+                <Button type='danger' onClick={handleUnpublish}>
+                  Unpublish
+                </Button>
+              )}
+              <div className='mx-5'>
+                <Button type='danger' onClick={handleConfirmDelete}>
+                  Delete
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className='flex mt-10 justify-end'>
+              {!post?.approved && (
+                <Button
+                  type='success'
+                  onClick={() => {
+                    navigate('edit');
+                  }}
+                >
+                  Edit Post
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
+      }
       {openModal && (
         <Modal handleClose={handleCloseModal}>
           <DeletePostModal

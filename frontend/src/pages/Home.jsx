@@ -1,14 +1,13 @@
 import { Link } from 'react-router-dom';
-import { useGetAllPostsQuery } from '../app/services/postApi';
 import { useGetAllHomePostsQuery } from '../app/services/postApi';
 import ReactPaginate from 'react-paginate';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Input from '../components/Input/Input';
 import SelectCategory from '../components/SelectCategory/SelectCategory';
 import SelectSubCategory from '../components/SelectSubCategory/SelectSubCategory';
 import Button from '../components/Button/Button';
-import Modal from '../components/Modal/Modal';
-import PostLoadingModal from '../components/PostLoading/PostLoadingModal';
+import { MetroSpinner } from "react-spinners-kit";
+import JoditEditor from 'jodit-react';
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [category, setCategory] = useState('');
@@ -24,6 +23,7 @@ const Home = () => {
     searchOption,
   });
   const posts = paginated?.homePosts;
+ 
 
   const handleCategoryChange = e => {
     setCategory(e);
@@ -36,6 +36,7 @@ const Home = () => {
   const handlePageChange = e => {
     let selected = parseInt(e.selected + 1);
     setPage(selected);
+    setIsLoading(true)
   };
 
   const handleSearch = () => {
@@ -63,14 +64,27 @@ const Home = () => {
     console.log(option);
     setSearchOption(option);
     refetch();
+    setIsLoading(true)
   };
+  const config = useMemo(
+    () => ({
+      uploader: {
+        insertImageAsBase64URI: true,
+      },
+      showCharsCounter: false,
+      showXPathInStatusbar: false,
+      showWordsCounter: false,
+      toolbar: false,
+      readonly: true, // all options from https://xdsoft.net/jodit/doc/,
+    }),
+    []
+  );
   useEffect(() => {
     const setCurrent = () => {
-      paginated && setIsLoading(false);
+      paginated && posts && setIsLoading(false);
     };
     setCurrent();
-  }, [paginated]);
-
+  }, [paginated,posts]);
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
@@ -128,19 +142,36 @@ const Home = () => {
             />
           </div>
         </div>
-        {posts?.map(post => {
-          if (post.approved) {
-            return (
-              <Link to={`/post/${post._id}`} key={post._id}>
-                <div className='shadow-lg my-5 border border-gray-200 rounded p-3'>
-                  <h2 className='text-xl font-bold'>{post.title}</h2>
-                  <h2 className='font-normal'>{post.category.name}</h2>
-                  <h2 className='text-xl'>{post?.subCategory?.name}</h2>
-                </div>
-              </Link>
-            );
+        {isLoading?
+          <div className='my-20'>
+            <div className='flex justify-center mt-1 mb-1'>
+                  <MetroSpinner  size={40} color="#FF2400" />
+              </div>
+
+              <div className='flex justify-center ml-5 mt-2.5'>
+                  <p className='text-xl font-bold'>Loading, Kindly wait for a moment.</p>
+              </div>   
+            </div>    
+          :
+            posts?.map(post => {
+              if (post.approved) {
+                return (
+                  <Link to={`/post/${post._id}`} key={post._id}>
+                    <div className='shadow-lg my-5 border border-gray-200 rounded p-3'>
+                      <h2 className='text-xl font-bold'>{post.title}</h2>
+                      <h2 className='font-normal'>{post.category.name}</h2>
+                      <h2 className='font-normal'>{post.approvedAt}</h2>
+                      <h2 className='text-xl'>{post?.subCategory?.name}</h2>
+                      <JoditEditor 
+                        value={post?.content} 
+                        config={config} 
+                      />
+                    </div>
+                  </Link>
+                );
+              }
+            })
           }
-        })}
       </div>
       <div className='mt-5'>
         <ReactPaginate
@@ -155,11 +186,7 @@ const Home = () => {
           onPageChange={handlePageChange}
         />
       </div>
-      {isLoading && (
-        <Modal>
-          <PostLoadingModal className='p-8' />
-        </Modal>
-      )}
+      
     </div>
   );
 };
