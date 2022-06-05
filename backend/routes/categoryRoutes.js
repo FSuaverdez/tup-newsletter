@@ -8,6 +8,7 @@ import {
   getCategories,
   getCategory,
   getCategoryUserPermissions,
+  removePermission,
   removeSubscriber,
 } from '../controllers/categoryController.js';
 import { requireAuth } from '../middleware/authMiddleware.js';
@@ -23,5 +24,6 @@ router.get('/getAll', getCategories);
 router.get('/:id', getCategory);
 router.get('/:id/userPermissions', getCategoryUserPermissions);
 router.post('/addPermission', requireAuth, addPermission);
+router.delete('/removePermission', requireAuth, removePermission);
 
 export default router;

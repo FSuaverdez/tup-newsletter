@@ -1,20 +1,24 @@
 import { useState } from 'react';
 import Button from '../../../components/Button/Button';
 import Input from '../../../components/Input/Input';
+import Modal from '../../../components/Modal/Modal';
 import SelectRole from '../../../components/SelectRole/SelectRole';
+import ConfirmDeleteUserPermission from './ConfirmDeleteUserPermission';
 
 const UserPermissionModal = ({
   handleCloseAdd,
   className: classes,
   handleSubmit: handleAdd,
   userPermissionData,
+  handleDelete,
 }) => {
   const [email, setEmail] = useState(userPermissionData?.user?.email || '');
   const [emailError, setEmailError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [role, setRole] = useState(userPermissionData?.role || 'Admin');
   const [roleError, setRoleError] = useState(false);
-
+  const [openDelete, setOpenDelete] = useState(false);
+  console.log(userPermissionData);
   const handleError = message => {
     console.log(message);
     setErrorMessage(message);
@@ -39,6 +43,18 @@ const UserPermissionModal = ({
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const openDeleteModal = async e => {
+    setOpenDelete(true);
+  };
+  const closeDeleteModal = async e => {
+    setOpenDelete(false);
+  };
+
+  const handleDeleteUserPermission = id => {
+    handleDelete(id);
+    closeDeleteModal();
   };
 
   return (
@@ -74,6 +90,11 @@ const UserPermissionModal = ({
           {roleError && (
             <p className='text-red-500 text-sm'>Role is required.</p>
           )}
+          {userPermissionData?._id && (
+            <Button type='danger' onClick={() => openDeleteModal()}>
+              Delete
+            </Button>
+          )}
         </div>
 
         <div className='flex gap-2 justify-end'>
@@ -85,6 +106,15 @@ const UserPermissionModal = ({
           </Button>
         </div>
       </div>
+      {openDelete && (
+        <Modal handleClose={closeDeleteModal}>
+          <ConfirmDeleteUserPermission
+            handleCloseEdit={closeDeleteModal}
+            handleConfirm={handleDeleteUserPermission}
+            userPermission={userPermissionData}
+          />
+        </Modal>
+      )}
     </div>
   );
 };

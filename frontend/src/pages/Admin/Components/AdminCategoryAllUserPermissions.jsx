@@ -4,6 +4,7 @@ import {
   useAddUserPermissionCategoryMutation,
   useGetCategoryQuery,
   useGetCategoryUserPermissionsQuery,
+  useRemoveUserPermissionCategoryMutation,
 } from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
@@ -15,6 +16,8 @@ const AdminCategoryAllUserPermissions = () => {
     useGetCategoryUserPermissionsQuery({ id: categoryId });
   const [openAdd, setOpenAdd] = useState(false);
   const [addUserPermission] = useAddUserPermissionCategoryMutation();
+  const [removeUserPermission] = useRemoveUserPermissionCategoryMutation();
+
   const [userPermissionData, setUserPermissionData] = useState(null);
   const navigate = useNavigate();
 
@@ -33,6 +36,14 @@ const AdminCategoryAllUserPermissions = () => {
     await addUserPermission({ email, role, categoryId }).unwrap();
   };
 
+  const handleDeleteUserPermission = async id => {
+    try {
+      await removeUserPermission({ id, categoryId });
+      setOpenAdd(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>
@@ -84,6 +95,7 @@ const AdminCategoryAllUserPermissions = () => {
             className='p-8'
             handleSubmit={handleSubmitUserPermission}
             userPermissionData={userPermissionData}
+            handleDelete={handleDeleteUserPermission}
           />
         </Modal>
       )}

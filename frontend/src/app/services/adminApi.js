@@ -59,6 +59,14 @@ export const adminApi = createApi({
       }),
       invalidatesTags: ['UserPermissions'],
     }),
+    removeUserPermissionCategory: builder.mutation({
+      query: ({ id, categoryId }) => ({
+        url: 'category/removePermission',
+        method: 'DELETE',
+        body: { id, categoryId },
+      }),
+      invalidatesTags: ['UserPermissions', 'Categories'],
+    }),
     addCategorySubscriber: builder.mutation({
       query: ({ type, id }) => ({
         url: 'category/subscribe',
@@ -122,6 +130,14 @@ export const adminApi = createApi({
         body: { email, role, subCategoryId },
       }),
       invalidatesTags: ['UserPermissions'],
+    }),
+    removeUserPermissionSubCategory: builder.mutation({
+      query: ({ id, subCategoryId }) => ({
+        url: 'subcategory/removePermission',
+        method: 'DELETE',
+        body: { id, subCategoryId },
+      }),
+      invalidatesTags: ['UserPermissions', 'SubCategories'],
     }),
     addSubCategorySubscriber: builder.mutation({
       query: ({ type, id }) => ({
@@ -188,4 +204,6 @@ export const {
   useAddFilteredWordMutation,
   useGetFilteredWordsQuery,
   useRemoveFilteredWordMutation,
+  useRemoveUserPermissionCategoryMutation,
+  useRemoveUserPermissionSubCategoryMutation,
 } = adminApi;

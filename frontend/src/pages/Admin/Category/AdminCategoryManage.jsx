@@ -7,6 +7,7 @@ import {
   useGetCategoryQuery,
   useGetCategoryUserPermissionsQuery,
   useGetSubCategoriesByCategoryQuery,
+  useRemoveUserPermissionCategoryMutation,
 } from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
@@ -32,6 +33,8 @@ const AdminCategoryManage = () => {
   const [userPermissionData, setUserPermissionData] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const [removeUserPermission] = useRemoveUserPermissionCategoryMutation();
+
   const navigate = useNavigate();
 
   if (isLoading && isSubCategoriesLoading && isUserPermissionsLoading) {
@@ -78,6 +81,15 @@ const AdminCategoryManage = () => {
       handleSuccess();
     } catch (error) {
       handleError(error.data.message);
+    }
+  };
+
+  const handleDeleteUserPermission = async id => {
+    try {
+      await removeUserPermission({ id, categoryId });
+      setOpenAddUserPermission(false);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -230,6 +242,7 @@ const AdminCategoryManage = () => {
             className='p-8'
             handleSubmit={handleSubmitUserPermission}
             userPermissionData={userPermissionData}
+            handleDelete={handleDeleteUserPermission}
           />
         </Modal>
       )}

@@ -131,7 +131,7 @@ export const getCategory = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error('Category Id is required');
     }
-    if(id!=='0'){
+    if (id !== '0') {
       const category = await Category.findById(id);
       res.status(200).json(category);
     }
@@ -201,6 +201,46 @@ export const addPermission = asyncHandler(async (req, res) => {
       ).populate('userPermissions');
 
       res.status(201).json(updatedSubCategory);
+    } else {
+      res.status(401);
+      throw new Error('Not Authorized');
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+});
+
+// @desc    Add A user Permission
+// @router  GET /category/addPermission
+// @access  Private Required Auth
+export const removePermission = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { id, categoryId } = req.body;
+  try {
+    if (!categoryId) {
+      res.status(400);
+      throw new Error('Category Id is required');
+    }
+
+    let category = await Category.findById(categoryId);
+    if (havePermissionsCategory(user, category)) {
+      if (!category) {
+        res.status(401);
+        throw new Error('Category not found');
+      }
+
+      let deletedUserPermissions = await UserPermission.findByIdAndDelete(id);
+
+      category.userPermissions.push(id);
+
+      const updatedSubCategory = await Category.findByIdAndUpdate(
+        categoryId,
+        category,
+        { new: true }
+      ).populate('userPermissions');
+
+      res.status(201).json({ updatedSubCategory, deletedUserPermissions });
     } else {
       res.status(401);
       throw new Error('Not Authorized');
