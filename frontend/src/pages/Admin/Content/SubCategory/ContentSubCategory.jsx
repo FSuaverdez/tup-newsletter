@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useGetPermissionsQuery } from '../../../../app/services/authApi';
 import { useGetSubCategoriesQuery } from '../../../../app/services/adminApi';
+import Loading from '../../../../components/Loading/Loading';
 
 const ContentSubCategory = () => {
   const user = useSelector(state => state.user);
@@ -11,7 +12,7 @@ const ContentSubCategory = () => {
   const { data: subCategories, isLoading: isSubCategoriesLoading } =
     useGetSubCategoriesQuery();
   if (isSubCategoriesLoading) {
-    return 'Loading...';
+    return <Loading/>;
   }
 
   return (

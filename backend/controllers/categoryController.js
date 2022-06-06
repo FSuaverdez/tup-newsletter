@@ -174,7 +174,7 @@ export const addPermission = asyncHandler(async (req, res) => {
       throw new Error('Category Id is required');
     }
 
-    let category = await Category.findById(categoryId);
+    let category = await Category.findById(categoryId).populate('userPermissions');
     if (havePermissionsCategory(user, category)) {
       if (!category) {
         res.status(401);
@@ -223,7 +223,7 @@ export const editPermission = asyncHandler(async (req, res) => {
       throw new Error('Category Id is required');
     }
 
-    let category = await Category.findById(categoryId);
+    let category = await Category.findById(categoryId).populate('userPermissions');
     if (havePermissionsCategory(user, category)) {
       if (!category) {
         res.status(401);
@@ -235,9 +235,9 @@ export const editPermission = asyncHandler(async (req, res) => {
         res.status(401);
         throw new Error(`Cannot find User with email ${email}.`);
       }
-
+      
       let permission = await UserPermission.findById(id);
-      permission.user = user._id;
+      permission.user = userToUpdate._id;
       permission.role = role;
       let updatedPermission = await UserPermission.findByIdAndUpdate(
         id,
@@ -268,7 +268,7 @@ export const removePermission = asyncHandler(async (req, res) => {
       throw new Error('Category Id is required');
     }
 
-    let category = await Category.findById(categoryId);
+    let category = await Category.findById(categoryId).populate('userPermissions');
     if (havePermissionsCategory(user, category)) {
       if (!category) {
         res.status(401);

@@ -67,6 +67,7 @@ const AdminCategoryManage = () => {
       console.log(error);
     }
   };
+  console.log(subCategoryId)
   const handleSubmitUserPermission = async (
     email,
     role,
@@ -81,13 +82,14 @@ const AdminCategoryManage = () => {
           email,
           role,
           subCategory,
+          subCategoryId,
         }).unwrap();
       } else {
         await editUserPermission({
           id,
           email,
           role,
-          subCategoryId,
+          subCategoryId:subCategoryId,
         });
       }
 
@@ -96,12 +98,11 @@ const AdminCategoryManage = () => {
       handleError(error.data.message);
     }
   };
-
-  const showAddPermission =
-    data?.subCategoryPermissions
-      ?.find(p => p._id === subCategory?._id)
-      ?.userPermissions.find(p => p?.user === user?._id).role === 'Admin';
-
+  const showAddPermission = data?.subCategoryPermissions
+    ?.find(p => p._id === subCategory?._id)
+    ?.userPermissions.find(p => p?.user === user?._id).role === 'Admin' ||
+    data?.categoryPermissions
+      ?.find(p => p.userPermissions.find(e => e.user === user._id))
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>
@@ -146,7 +147,7 @@ const AdminCategoryManage = () => {
             </Button>
           </div>
           <div>
-            {user.isAdmin || showAddPermission
+            { user?.isAdmin || showAddPermission
               ? userPermissions?.slice(0, 5).map(c => (
                   <div
                     className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'

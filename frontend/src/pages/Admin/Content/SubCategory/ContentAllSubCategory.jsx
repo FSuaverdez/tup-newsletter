@@ -7,6 +7,7 @@ import {
   useGetSubCategoriesByCategoryQuery,
 } from '../../../../app/services/adminApi';
 import Button from '../../../../components/Button/Button';
+import Loading from '../../../../components/Loading/Loading';
 const ContentAllSubCategory = () => {
   const user = useSelector(state => state.user);
   const { data } = useGetPermissionsQuery(user?._id, {
@@ -19,7 +20,7 @@ const ContentAllSubCategory = () => {
   const navigate = useNavigate();
 
   if (isLoading && isSubCategoriesLoading) {
-    return 'Loading...';
+    return <Loading/>;
   }
 
   return (

@@ -4,6 +4,7 @@ import { useGetAllPostsQuery } from '../../../../app/services/postApi';
 
 import { useGetSubCategoryQuery } from '../../../../app/services/adminApi';
 import Button from '../../../../components/Button/Button';
+import Loading from '../../../../components/Loading/Loading';
 
 const ContentSubCategoryManagePosts = () => {
   const { subCategoryId } = useParams();
@@ -16,7 +17,7 @@ const ContentSubCategoryManagePosts = () => {
   const navigate = useNavigate();
 
   if (isLoading && isPostsLoading) {
-    return 'Loading...';
+    return <Loading/>;
   }
   const filteredPost = posts?.filter(
     post => post?.subCategory?._id === subCategoryId

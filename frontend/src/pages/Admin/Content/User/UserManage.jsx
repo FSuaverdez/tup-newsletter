@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useGetAllUsersQuery } from '../../../../app/services/authApi';
 import Button from '../../../../components/Button/Button';
 import Modal from '../../../../components/Modal/Modal';
+import Loading from '../../../../components/Loading/Loading';
 import EditUserModal from './EditUserModal';
 
 const UserManage = () => {
@@ -10,7 +11,7 @@ const UserManage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [userData, setUserData] = useState(null);
   if (isLoading) {
-    return 'Loading...';
+    return <Loading/>;
   }
 
   const handleOpenModal = user => {

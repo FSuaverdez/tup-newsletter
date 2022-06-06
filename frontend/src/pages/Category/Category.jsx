@@ -61,6 +61,13 @@ const Category = () => {
     setSearchOption(option);
     refetch();
   };
+  useEffect(()=>{
+    const setCurrent = () =>{
+      setPage(1);
+      selected = 1;
+    } 
+    setCurrent();
+  },[categoryId])
 
   const config = useMemo(
     () => ({

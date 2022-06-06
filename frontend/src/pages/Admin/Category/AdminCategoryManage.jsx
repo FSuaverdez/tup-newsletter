@@ -132,14 +132,16 @@ const AdminCategoryManage = () => {
           >
             Update Category
           </Button>
-          <Button
-            type='danger'
-            onClick={() => {
-              handleOpenDelete();
-            }}
-          >
-            Delete Category
-          </Button>
+          {user.isAdmin && 
+            <Button
+              type='danger'
+              onClick={() => {
+                handleOpenDelete();
+              }}
+            >
+              Delete Category
+            </Button>
+          }
         </div>
       ) : null}
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto'>
