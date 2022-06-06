@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   useAddUserPermissionCategoryMutation,
+  useEditUserPermissionCategoryMutation,
   useGetCategoryQuery,
   useGetCategoryUserPermissionsQuery,
   useRemoveUserPermissionCategoryMutation,
@@ -11,7 +12,6 @@ import Modal from '../../../components/Modal/Modal';
 import Loading from '../../../components/Loading/Loading';
 import UserPermissionModal from './UserPermissionModal';
 
-
 const AdminCategoryAllUserPermissions = () => {
   const { categoryId } = useParams();
   const { data: category, isLoading } = useGetCategoryQuery({ id: categoryId });
@@ -19,15 +19,14 @@ const AdminCategoryAllUserPermissions = () => {
     useGetCategoryUserPermissionsQuery({ id: categoryId });
   const [openAdd, setOpenAdd] = useState(false);
   const [addUserPermission] = useAddUserPermissionCategoryMutation();
+  const [editUserPermission] = useEditUserPermissionCategoryMutation();
   const [removeUserPermission] = useRemoveUserPermissionCategoryMutation();
 
   const [userPermissionData, setUserPermissionData] = useState(null);
   const navigate = useNavigate();
 
   if (isLoading && isUserPermissionsLoading) {
-    return (
-     <Loading/>
-    );
+    return <Loading />;
   }
 
   const handleOpenAdd = () => {
@@ -37,8 +36,34 @@ const AdminCategoryAllUserPermissions = () => {
     setUserPermissionData(null);
     setOpenAdd(false);
   };
-  const handleSubmitUserPermission = async (email, role) => {
-    await addUserPermission({ email, role, categoryId }).unwrap();
+  const handleSubmitUserPermission = async (
+    email,
+    role,
+    handleError,
+    handleSuccess,
+    isEdit,
+    id
+  ) => {
+    try {
+      if (!isEdit) {
+        await addUserPermission({
+          email,
+          role,
+          categoryId,
+        }).unwrap();
+      } else {
+        await editUserPermission({
+          id,
+          email,
+          role,
+          categoryId,
+        });
+      }
+
+      handleSuccess();
+    } catch (error) {
+      handleError(error.data.message);
+    }
   };
 
   const handleDeleteUserPermission = async id => {

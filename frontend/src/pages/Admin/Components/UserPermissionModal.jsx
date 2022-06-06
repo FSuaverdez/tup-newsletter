@@ -8,7 +8,7 @@ import ConfirmDeleteUserPermission from './ConfirmDeleteUserPermission';
 const UserPermissionModal = ({
   handleCloseAdd,
   className: classes,
-  handleSubmit: handleAdd,
+  handleSubmit: submitHandler,
   userPermissionData,
   handleDelete,
 }) => {
@@ -18,7 +18,6 @@ const UserPermissionModal = ({
   const [role, setRole] = useState(userPermissionData?.role || 'Admin');
   const [roleError, setRoleError] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  console.log(userPermissionData);
   const handleError = message => {
     console.log(message);
     setErrorMessage(message);
@@ -32,10 +31,18 @@ const UserPermissionModal = ({
     e.preventDefault();
     try {
       if (email && role) {
+        const isEdit = userPermissionData?._id ? true : false;
         setEmailError(false);
         setRoleError(false);
         setErrorMessage('');
-        handleAdd(email, role, handleError, handleSuccess);
+        submitHandler(
+          email,
+          role,
+          handleError,
+          handleSuccess,
+          isEdit,
+          userPermissionData?._id
+        );
       } else {
         !email && setEmailError(true);
         !role && setRoleError(true);
@@ -62,7 +69,9 @@ const UserPermissionModal = ({
       className={`lg:w-656  sm:w-340shadow-xl bg-white p-5 rounded ${classes}`}
       onClick={e => e.stopPropagation()}
     >
-      <h1 className='text-2xl font-bold my-5'>Add User Permission</h1>
+      <h1 className='text-2xl font-bold my-5'>
+        {userPermissionData?._id ? 'Edit' : 'Add'} User Permission
+      </h1>
       <div className=' mx-auto'>
         <div className='py-3'>
           <Input
@@ -102,7 +111,7 @@ const UserPermissionModal = ({
             Close
           </Button>
           <Button type='success' onClick={handleSubmit}>
-            Add User Permission
+            {userPermissionData?._id ? 'Edit' : 'Add'} User Permission
           </Button>
         </div>
       </div>

@@ -76,7 +76,7 @@ export const deleteCategory = asyncHandler(async (req, res) => {
       path: 'userPermissions',
       populate: { path: 'user' },
     });
-    if (user.isAdmin) {
+    if (havePermissionsCategory(user, category)) {
       let removedCategory = await Category.findByIdAndDelete(id);
       await Post.deleteMany({ category: id });
       const subCatToRemove = [];
@@ -201,6 +201,51 @@ export const addPermission = asyncHandler(async (req, res) => {
       ).populate('userPermissions');
 
       res.status(201).json(updatedSubCategory);
+    } else {
+      res.status(401);
+      throw new Error('Not Authorized');
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+});
+
+// @desc    Add A user Permission
+// @router  GET /category/editPermission
+// @access  Private Required Auth
+export const editPermission = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { id, email, role, categoryId } = req.body;
+  try {
+    if (!categoryId) {
+      res.status(400);
+      throw new Error('Category Id is required');
+    }
+
+    let category = await Category.findById(categoryId);
+    if (havePermissionsCategory(user, category)) {
+      if (!category) {
+        res.status(401);
+        throw new Error('Category not found');
+      }
+
+      let userToUpdate = await User.findOne({ email });
+      if (!userToUpdate) {
+        res.status(401);
+        throw new Error(`Cannot find User with email ${email}.`);
+      }
+
+      let permission = await UserPermission.findById(id);
+      permission.user = user._id;
+      permission.role = role;
+      let updatedPermission = await UserPermission.findByIdAndUpdate(
+        id,
+        permission,
+        { new: true }
+      );
+
+      res.status(201).json(updatedPermission);
     } else {
       res.status(401);
       throw new Error('Not Authorized');

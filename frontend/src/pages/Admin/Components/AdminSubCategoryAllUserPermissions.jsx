@@ -5,6 +5,7 @@ import {
   useGetSubCategoryUserPermissionsQuery,
   useAddUserPermissionSubCategoryMutation,
   useRemoveUserPermissionSubCategoryMutation,
+  useEditUserPermissionSubCategoryMutation,
 } from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
@@ -18,6 +19,7 @@ const AdminSubCategoryAllUserPermissions = () => {
     useGetSubCategoryUserPermissionsQuery({ id: subCategoryId });
   const [openAdd, setOpenAdd] = useState(false);
   const [addUserPermission] = useAddUserPermissionSubCategoryMutation();
+  const [editUserPermission] = useEditUserPermissionSubCategoryMutation();
   const [userPermissionData, setUserPermissionData] = useState(null);
   const [removeUserPermission] = useRemoveUserPermissionSubCategoryMutation();
   const navigate = useNavigate();
@@ -33,8 +35,34 @@ const AdminSubCategoryAllUserPermissions = () => {
     setUserPermissionData(null);
     setOpenAdd(false);
   };
-  const handleSubmitUserPermission = async (email, role) => {
-    await addUserPermission({ email, role, subCategoryId }).unwrap();
+  const handleSubmitUserPermission = async (
+    email,
+    role,
+    handleError,
+    handleSuccess,
+    isEdit,
+    id
+  ) => {
+    try {
+      if (!isEdit) {
+        await addUserPermission({
+          email,
+          role,
+          subCategoryId,
+        }).unwrap();
+      } else {
+        await editUserPermission({
+          id,
+          email,
+          role,
+          subCategoryId,
+        });
+      }
+
+      handleSuccess();
+    } catch (error) {
+      handleError(error.data.message);
+    }
   };
 
   const handleDeleteUserPermission = async id => {

@@ -11,6 +11,7 @@ import {
   removeSubscriber,
   deleteSubCategory,
   removePermission,
+  editPermission,
 } from '../controllers/subCategoryController.js';
 import { requireAuth } from '../middleware/authMiddleware.js';
 
@@ -22,6 +23,7 @@ router.put('/unsubscribe', requireAuth, removeSubscriber);
 router.put('/edit/:id', requireAuth, editSubCategory);
 router.delete('/delete/:id', requireAuth, deleteSubCategory);
 router.post('/addPermission', requireAuth, addPermission);
+router.put('/editPermission', requireAuth, editPermission);
 router.delete('/removePermission', requireAuth, removePermission);
 router.get('/:id/userPermissions', getSubCategoryUserPermissions);
 router.get('/getAll', getSubCategories);

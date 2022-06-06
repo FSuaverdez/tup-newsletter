@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useGetPermissionsQuery } from '../../../app/services/authApi';
 import {
   useAddUserPermissionCategoryMutation,
+  useEditUserPermissionCategoryMutation,
   useGetCategoryQuery,
   useGetCategoryUserPermissionsQuery,
   useGetSubCategoriesByCategoryQuery,
@@ -31,6 +32,7 @@ const AdminCategoryManage = () => {
   const [openAddCategory, setOpenAddCategory] = useState(false);
   const [openAddUserPermission, setOpenAddUserPermission] = useState(false);
   const [addUserPermission] = useAddUserPermissionCategoryMutation();
+  const [editUserPermission] = useEditUserPermissionCategoryMutation();
   const [userPermissionData, setUserPermissionData] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -39,9 +41,7 @@ const AdminCategoryManage = () => {
   const navigate = useNavigate();
 
   if (isLoading && isSubCategoriesLoading && isUserPermissionsLoading) {
-    return (
-      <Loading/>
-    );
+    return <Loading />;
   }
 
   const handleOpenAddSubCategory = () => {
@@ -73,14 +73,27 @@ const AdminCategoryManage = () => {
     email,
     role,
     handleError,
-    handleSuccess
+    handleSuccess,
+    isEdit,
+    id
   ) => {
+    if (!isEdit) {
+    }
     try {
-      await addUserPermission({
-        email,
-        role,
-        categoryId,
-      }).unwrap();
+      if (!isEdit) {
+        await addUserPermission({
+          email,
+          role,
+          categoryId,
+        }).unwrap();
+      } else {
+        await editUserPermission({
+          id,
+          email,
+          role,
+          categoryId,
+        });
+      }
       handleSuccess();
     } catch (error) {
       handleError(error.data.message);

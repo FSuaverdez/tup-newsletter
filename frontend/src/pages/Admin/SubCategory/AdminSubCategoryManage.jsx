@@ -7,6 +7,7 @@ import {
   useAddUserPermissionSubCategoryMutation,
   useGetSubCategoryUserPermissionsQuery,
   useRemoveUserPermissionSubCategoryMutation,
+  useEditUserPermissionSubCategoryMutation,
 } from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
@@ -32,6 +33,7 @@ const AdminCategoryManage = () => {
   const [addUserPermission] = useAddUserPermissionSubCategoryMutation();
   const [userPermissionData, setUserPermissionData] = useState(null);
   const [removeUserPermission] = useRemoveUserPermissionSubCategoryMutation();
+  const [editUserPermission] = useEditUserPermissionSubCategoryMutation();
   const navigate = useNavigate();
 
   if (isLoading && isUserPermissionsLoading) {
@@ -69,10 +71,26 @@ const AdminCategoryManage = () => {
     email,
     role,
     handleError,
-    handleSuccess
+    handleSuccess,
+    isEdit,
+    id
   ) => {
     try {
-      await addUserPermission({ email, role, subCategoryId }).unwrap();
+      if (!isEdit) {
+        await addUserPermission({
+          email,
+          role,
+          subCategory,
+        }).unwrap();
+      } else {
+        await editUserPermission({
+          id,
+          email,
+          role,
+          subCategoryId,
+        });
+      }
+
       handleSuccess();
     } catch (error) {
       handleError(error.data.message);

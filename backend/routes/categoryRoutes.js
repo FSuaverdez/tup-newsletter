@@ -5,6 +5,7 @@ import {
   addSubscriber,
   deleteCategory,
   editCategory,
+  editPermission,
   getCategories,
   getCategory,
   getCategoryUserPermissions,
@@ -24,6 +25,7 @@ router.get('/getAll', getCategories);
 router.get('/:id', getCategory);
 router.get('/:id/userPermissions', getCategoryUserPermissions);
 router.post('/addPermission', requireAuth, addPermission);
+router.put('/editPermission', requireAuth, editPermission);
 router.delete('/removePermission', requireAuth, removePermission);
 
 export default router;

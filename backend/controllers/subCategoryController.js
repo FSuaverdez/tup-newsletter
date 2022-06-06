@@ -158,7 +158,7 @@ export const deleteSubCategory = asyncHandler(async (req, res) => {
       path: 'userPermissions',
       populate: { path: 'user' },
     });
-    if (user.isAdmin) {
+    if (havePermissionsSubCategory(user, subCategory)) {
       let removedSubCategory = await SubCategory.findByIdAndDelete(id);
       await Post.deleteMany({ subCategory: id });
       const userPermissionToRemove = [];
@@ -241,6 +241,57 @@ export const addPermission = asyncHandler(async (req, res) => {
       );
 
       res.status(201).json(updatedSubCategory);
+    } else {
+      res.status(401);
+      throw new Error('Not Authorized');
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+});
+
+// @desc    Add A user Permission
+// @router  GET /subcategory/editPermission
+// @access  Private Required Auth
+export const editPermission = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { id, email, role, subCategoryId } = req.body;
+  try {
+    const subCategory = await SubCategory.findById(subCategoryId).populate({
+      path: 'userPermissions',
+      populate: { path: 'user' },
+    });
+    const category = await Category.findById(subCategory.category).populate({
+      path: 'userPermissions',
+      populate: { path: 'user' },
+    });
+    if (
+      havePermissionsCategory(user, category) ||
+      havePermissionsSubCategory(user, subCategory)
+    ) {
+      if (!subCategory) {
+        res.status(401);
+        throw new Error('SubCategory not found');
+      }
+
+      let user = await User.findOne({ email });
+      if (!user) {
+        res.status(401);
+        throw new Error(`Cannot find User with email ${email}.`);
+      }
+
+      let permission = await UserPermission.findById(id);
+      permission.user = user._id;
+      permission.role = role;
+
+      let updatedPermission = await UserPermission.findByIdAndUpdate(
+        id,
+        permission,
+        { new: true }
+      );
+
+      res.status(201).json(updatedPermission);
     } else {
       res.status(401);
       throw new Error('Not Authorized');
