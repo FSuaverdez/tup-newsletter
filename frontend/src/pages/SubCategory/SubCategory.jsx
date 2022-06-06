@@ -8,7 +8,7 @@ import Button from '../../components/Button/Button';
 import SubscribeModal from '../../components/Subscribe/SubscribeModal';
 import { useSelector } from 'react-redux';
 import Input from '../../components/Input/Input';
-import { MetroSpinner } from "react-spinners-kit";
+import Loading from '../../components/Loading/Loading';
 import JoditEditor from 'jodit-react';
 
 const SubCategory = () => {
@@ -147,15 +147,7 @@ const SubCategory = () => {
           </Button>
         </div>
         {isLoading ? 
-          <div className='my-20'>
-            <div className='flex justify-center mt-1 mb-1'>
-                  <MetroSpinner  size={40} color="#FF2400" />
-              </div>
-
-              <div className='flex justify-center ml-5 mt-2.5'>
-                  <p className='text-xl font-bold'>Loading, Kindly wait for a moment.</p>
-              </div>   
-          </div>    
+          <Loading/>    
             :
             posts &&
               posts?.map(post => {
@@ -165,6 +157,7 @@ const SubCategory = () => {
                       <div className='shadow-lg my-5 border border-gray-200 rounded p-3'>
                         <h2 className='text-xl font-bold'>{post.title}</h2>
                         <h2 className='font-normal'>{post.category.name}</h2>
+                        <h2 className='font-normal'>{post.approvedAt.slice(0,10)}</h2>
                         <h2 className='text-xl'>{post?.subCategory?.name}</h2>
                         <JoditEditor 
                           value={post?.content} 
