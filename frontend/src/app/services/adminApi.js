@@ -140,10 +140,10 @@ export const adminApi = createApi({
       invalidatesTags: ['UserPermissions'],
     }),
     editUserPermissionSubCategory: builder.mutation({
-      query: ({ id, email, role, categoryId }) => ({
+      query: ({ id, email, role, subCategoryId }) => ({
         url: 'subcategory/editPermission',
         method: 'PUT',
-        body: { id, email, role, categoryId },
+        body: { id, email, role, subCategoryId },
       }),
       invalidatesTags: ['UserPermissions'],
     }),

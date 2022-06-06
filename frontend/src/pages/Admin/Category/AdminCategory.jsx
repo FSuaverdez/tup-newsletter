@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useGetPermissionsQuery } from '../../../app/services/authApi';
 import { useGetCategoriesQuery } from '../../../app/services/adminApi';
 import Modal from '../../../components/Modal/Modal';
+import Loading from '../../../components/Loading/Loading';
 import AdminCategoryModal from './AdminCategoryModal';
 
 const AdminCategory = () => {
@@ -15,7 +16,7 @@ const AdminCategory = () => {
   const { data: categories, isLoading: isCategoriesLoading } =
     useGetCategoriesQuery();
   if (isCategoriesLoading) {
-    return 'Loading...';
+    return <Loading/>;
   }
 
   const handleOpenAddCategory = () => {

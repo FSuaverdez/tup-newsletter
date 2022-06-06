@@ -9,6 +9,7 @@ import {
 } from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
+import Loading from '../../../components/Loading/Loading';
 import UserPermissionModal from './UserPermissionModal';
 const AdminSubCategoryAllUserPermissions = () => {
   const { subCategoryId } = useParams();
@@ -25,7 +26,7 @@ const AdminSubCategoryAllUserPermissions = () => {
   const navigate = useNavigate();
 
   if (isLoading && isUserPermissionsLoading) {
-    return 'Loading...';
+    return <Loading/>;
   }
 
   const handleOpenAdd = () => {

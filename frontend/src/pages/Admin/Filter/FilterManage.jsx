@@ -6,6 +6,7 @@ import {
   useRemoveFilteredWordMutation,
 } from '../../../app/services/adminApi';
 import Modal from '../../../components/Modal/Modal';
+import Loading from '../../../components/Loading/Loading';
 import FilterModal from './FilterModal';
 
 const FilterManage = () => {
@@ -15,7 +16,7 @@ const FilterManage = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   if (isLoading) {
-    return 'Loading....';
+    return <Loading/>;
   }
 
   const handleDelete = async id => {

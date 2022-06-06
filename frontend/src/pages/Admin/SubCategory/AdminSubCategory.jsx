@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useGetPermissionsQuery } from '../../../app/services/authApi';
 import { useGetSubCategoriesQuery } from '../../../app/services/adminApi';
 import Modal from '../../../components/Modal/Modal';
+import Loading from '../../../components/Loading/Loading';
 import AdminSubCategoryModal from './AdminSubCategoryModal';
 
 const AdminSubCategory = () => {
@@ -15,7 +16,7 @@ const AdminSubCategory = () => {
   const { data: subCategories, isLoading: isSubCategoriesLoading } =
     useGetSubCategoriesQuery();
   if (isSubCategoriesLoading) {
-    return 'Loading...';
+    return <Loading/>;
   }
 
   const handleOpenAddSubCategory = () => {

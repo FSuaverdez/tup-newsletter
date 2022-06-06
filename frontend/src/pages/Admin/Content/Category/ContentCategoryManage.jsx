@@ -8,6 +8,7 @@ import {
 } from '../../../../app/services/adminApi';
 import { useGetAllPostsQuery } from '../../../../app/services/postApi';
 import Button from '../../../../components/Button/Button';
+import Loading from '../../../../components/Loading/Loading';
 
 const ContentCategoryManage = () => {
   const user = useSelector(state => state.user);
@@ -23,7 +24,7 @@ const ContentCategoryManage = () => {
   const navigate = useNavigate();
 
   if (isLoading && isSubCategoriesLoading && isPostsLoading) {
-    return 'Loading...';
+    return <Loading/>;
   }
   const filteredPost = posts?.filter(post => post.category._id === categoryId);
   return (
