@@ -7,6 +7,7 @@ import { authActions } from '../../app/slices/authSlice';
 import { useCallback } from 'react';
 import SidebarRoutes from '../../routes/SidebarRoutes';
 import { useGetPermissionsQuery } from '../../app/services/authApi';
+import Loading from '../Loading/Loading'
 
 const isNotActiveStyle =
   'flex items-center px-5 gap-3 text-gray-500 hover:text-red-400 transition-all duration-200 ease-in-out capitalize py-2';
@@ -32,7 +33,7 @@ const Sidebar = ({ closeToggle }) => {
     navigate('/');
   }, [navigate, dispatch]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loading/>;
 
   return (
     <div className='flex flex-col  bg-white h-full overflow-y-scroll min-w-350 hide-scrollbar'>

@@ -8,7 +8,9 @@ import {
 } from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
+import Loading from '../../../components/Loading/Loading';
 import AdminSubCategoryModal from '../SubCategory/AdminSubCategoryModal';
+
 const AdminAllCategory = () => {
   const { categoryId } = useParams();
   const user = useSelector(state => state.user);
@@ -22,7 +24,9 @@ const AdminAllCategory = () => {
   const navigate = useNavigate();
 
   if (isLoading && isSubCategoriesLoading) {
-    return 'Loading...';
+    return(
+      <Loading/>
+    );
   }
 
   const handleOpenAdd = () => {

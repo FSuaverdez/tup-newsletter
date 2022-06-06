@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import ReactPlayer from 'react-player';
 import Modal from '../../../../components/Modal/Modal';
+import PostLoadingModal from '../../../../components/PostLoading/PostLoadingModal';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   useGetPostQuery,
@@ -16,10 +17,11 @@ const ContentPost = () => {
   const { postId } = useParams();
   const [id, setId] = useState('');
   const [isLoading,setIsLoading] = useState(true);
+  const [isLoadingPublish,setIsLoadingPublish] = useState(false);
   const { data: post } = useGetPostQuery({
     id: postId,
   });
-  const [approved, setApproved] = useState(post?.approved);
+  const [approved, setApproved] = useState();
   const [openModal, setOpenModal] = useState(false);
   const [approvePost] = useApprovePostMutation();
   const user = useSelector(state => state.user);
@@ -37,17 +39,19 @@ const ContentPost = () => {
     []
   );
   const handlePublish = async () => {
+    setIsLoadingPublish(true)
     try {
       await approvePost({ id, approved: true });
-      setApproved(true);
+      setIsLoadingPublish(false);
     } catch (error) {
       console.log(error);
     }
   };
   const handleUnpublish = async () => {
+    setIsLoadingPublish(true);
     try {
       await approvePost({ id, approved: false });
-      setApproved(false);
+      setIsLoadingPublish(false);
     } catch (error) {
       console.log(error);
     }
@@ -61,6 +65,7 @@ const ContentPost = () => {
   useEffect(() => {
     setId(post?._id);
     post&&setIsLoading(false);
+    post&&setApproved(post.approved);
   }, [post]);
   
   return (
@@ -129,6 +134,13 @@ const ContentPost = () => {
           />
         </Modal>
       )}
+      {isLoadingPublish && (
+           <Modal>
+           <PostLoadingModal
+             className='p-8'
+           />
+         </Modal>
+        )}
     </div>
   );
 };

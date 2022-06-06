@@ -8,7 +8,10 @@ import {
 } from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
+import Loading from '../../../components/Loading/Loading';
 import UserPermissionModal from './UserPermissionModal';
+
+
 const AdminCategoryAllUserPermissions = () => {
   const { categoryId } = useParams();
   const { data: category, isLoading } = useGetCategoryQuery({ id: categoryId });
@@ -22,7 +25,9 @@ const AdminCategoryAllUserPermissions = () => {
   const navigate = useNavigate();
 
   if (isLoading && isUserPermissionsLoading) {
-    return 'Loading...';
+    return (
+     <Loading/>
+    );
   }
 
   const handleOpenAdd = () => {

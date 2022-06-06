@@ -321,11 +321,12 @@ export const approvePost = asyncHandler(async (req, res) => {
   const { approved } = req.body;
   const user = req.user;
   try {
+    const date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Manila' })
     const approvedPost = await Post.findByIdAndUpdate(
       id,
       {
         approved,
-        approvedAt: new Date(),
+        approvedAt: date,
         approvedBy: user._id,
       },
       { new: true }

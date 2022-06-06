@@ -6,14 +6,10 @@ import { useGetAllPostsQuery } from '../../../../app/services/postApi';
 import Button from '../../../../components/Button/Button';
 const PostAllCategory = (type) => {
   const { categoryId } = useParams();
-  const { data: category, isLoading } = useGetCategoryQuery({ id: categoryId });
-  const { data: posts, isLoading: isPostsLoading } = useGetAllPostsQuery();
+  const { data: category } = useGetCategoryQuery({ id: categoryId });
+  const { data: posts } = useGetAllPostsQuery();
 
   const navigate = useNavigate();
-
-  if (isLoading && isPostsLoading) {
-    return 'Loading...';
-  }
 
   const filteredPost = posts?.filter(post => post.category._id === categoryId);
   console.log(filteredPost)

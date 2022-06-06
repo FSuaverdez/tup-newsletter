@@ -11,6 +11,7 @@ import {
 } from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
+import Loading from '../../../components/Loading/Loading';
 import UserPermissionModal from '../Components/UserPermissionModal';
 import AdminSubCategoryModal from '../SubCategory/AdminSubCategoryModal';
 import AdminEditCategoryModal from './AdminEditCategoryModal';
@@ -38,7 +39,9 @@ const AdminCategoryManage = () => {
   const navigate = useNavigate();
 
   if (isLoading && isSubCategoriesLoading && isUserPermissionsLoading) {
-    return 'Loading...';
+    return (
+      <Loading/>
+    );
   }
 
   const handleOpenAddSubCategory = () => {

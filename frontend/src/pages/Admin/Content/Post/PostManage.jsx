@@ -2,14 +2,15 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useGetAllPostsQuery } from '../../../../app/services/postApi';
 import Button from '../../../../components/Button/Button';
+import Loading from '../../../../components/Loading/Loading';
 
 const PostManage = () => {
   const navigate = useNavigate();
   const { data: posts, isLoading } = useGetAllPostsQuery();
-
-  if (isLoading) {
-    return 'Loading....';
+  if (isLoading){
+    return <Loading/>
   }
+
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>
