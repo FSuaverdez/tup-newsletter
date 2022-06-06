@@ -19,11 +19,12 @@ const Category = () => {
   const { categoryId } = useParams();
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
-  const [isLoading,setIsLoading] = useState(true);
   const { data: category } = useGetCategoryQuery({ id: categoryId });
   const {
     data: paginated,
     refetch,
+    isLoading,
+    isFetching,
   } = useGetAllPostsByCategoryQuery({
     id: categoryId,
     page,
@@ -42,7 +43,6 @@ const Category = () => {
   const handlePageChange = e => {
     selected = parseInt(e.selected + 1);
     setPage(selected);
-    setIsLoading(true);
   };
   const handleSearch = () => {
     let option = {};
@@ -60,7 +60,6 @@ const Category = () => {
     }
     setSearchOption(option);
     refetch();
-    setIsLoading(true)
   };
 
   const config = useMemo(
@@ -76,22 +75,6 @@ const Category = () => {
     }),
     []
   );
-
-  useEffect(() => {
-    const setCurrent = () => {
-      setPage(1);
-      selected = 1;
-      setIsLoading(true);
-    };
-    setCurrent();
-  }, [categoryId]);
-
-  useEffect(() => {
-    const setCurrent = () => {
-      paginated && posts && setIsLoading(false);
-    };
-    setCurrent();
-  }, [paginated,posts]);
 
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
@@ -112,7 +95,7 @@ const Category = () => {
             </Link>
           )}
         </div>
-        <div className='flex items-end justify-center mb-4'>
+        <div className='flex flex-col md:flex-row items-start md:items-end justify-center mb-4'>
           <Input
             onChange={e => setSearchQuery(e.target.value)}
             value={searchQuery}
@@ -120,7 +103,7 @@ const Category = () => {
             className='py-0 px-0 mb-0 w-full'
             placeholder='Search'
           />
-          <div className='ml-4'>
+          <div className='md:ml-4 mb-4 md:mb-0 mt-4 md:mt-0 '>
             <label htmlFor='fromDate'>From Date:</label>
             <input
               type='date'
@@ -130,7 +113,7 @@ const Category = () => {
               className='px-2 py-1  border border-gray-500'
             />
           </div>
-          <div className='ml-4'>
+          <div className='md:ml-4 mb-4 md:mb-0'>
             <label htmlFor='toDate'>To Date:</label>
             <input
               type='date'
@@ -144,29 +127,28 @@ const Category = () => {
             Search
           </Button>
         </div>
-        {isLoading?
-          <Loading/>
-          :
+        {isLoading || isFetching ? (
+          <Loading />
+        ) : (
           posts &&
-            posts?.map(post => {
-              if (post.approved) {
-                return (
-                  <Link to={`/post/${post._id}`} key={post._id}>
-                    <div className='shadow-lg my-5 border border-gray-200 rounded p-3'>
-                      <h2 className='text-xl font-bold'>{post.title}</h2>
-                      <h2 className='font-normal'>{post.category.name}</h2>
-                      <h2 className='font-normal'>{post.approvedAt.slice(0,10)}</h2>
-                      <h2 className='text-xl'>{post?.subCategory?.name}</h2>
-                      <JoditEditor 
-                        value={post?.content} 
-                        config={config} 
-                      />
-                    </div>
-                  </Link>
-                );
-              }
-            })
-          }
+          posts?.map(post => {
+            if (post.approved) {
+              return (
+                <Link to={`/post/${post._id}`} key={post._id}>
+                  <div className='shadow-lg my-5 border border-gray-200 rounded p-3'>
+                    <h2 className='text-xl font-bold'>{post.title}</h2>
+                    <h2 className='font-normal'>{post.category.name}</h2>
+                    <h2 className='font-normal'>
+                      {post.approvedAt.slice(0, 10)}
+                    </h2>
+                    <h2 className='text-xl'>{post?.subCategory?.name}</h2>
+                    <JoditEditor value={post?.content} config={config} />
+                  </div>
+                </Link>
+              );
+            }
+          })
+        )}
       </div>
       <div className='mt-5' key={categoryId}>
         <ReactPaginate
