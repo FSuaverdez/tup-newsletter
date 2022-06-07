@@ -31,7 +31,6 @@ const AdminEditCategoryModal = ({
     try {
       if (name && description) {
         await editCategory({ name, description, categoryId }).unwrap();
-        navigate('/admin/category/edit/' + categoryId);
         setNameError(false);
         handleCloseEdit();
       } else {
