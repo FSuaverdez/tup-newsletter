@@ -118,7 +118,6 @@ const SubscribeModal = ({
         setMobileNumber(userData?.mobileNumber)
       }
       setId(userData?._id);
-      console.log(id)
     }
     setCurrent();
     

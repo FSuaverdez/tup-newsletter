@@ -162,7 +162,6 @@ const EditPost = () => {
               name='liveUrl'
               label='Live URL'
               onChange={e => {
-                console.log(ReactPlayer.canPlay(e.target.value));
                 if (ReactPlayer.canPlay(e.target.value)) {
                   setCanPlay(true);
                 } else {

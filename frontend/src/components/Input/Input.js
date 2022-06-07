@@ -13,7 +13,6 @@ const Input = ({
 }) => {
   const textAreaRef = useRef();
   const auto_grow = element => {
-    console.log(element);
     element.style.height = '5px';
     element.style.height = element.scrollHeight + 'px';
   };

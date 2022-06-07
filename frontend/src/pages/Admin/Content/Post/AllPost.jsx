@@ -12,12 +12,11 @@ const AllPost = type => {
   const { data } = useGetPermissionsQuery(user?._id, {
     skip: !user,
   });
-  console.log(data);
   const { data: posts } = useGetAllPostsQuery();
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
-  const filteredPost = posts.filter(post =>
+  const filteredPost = posts?.filter(post =>
     post.title.toLowerCase().includes(search.toLowerCase())
   );
   useEffect(() => {
