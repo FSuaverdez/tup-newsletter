@@ -18,7 +18,7 @@ const ContentCategory = () => {
     return <Loading />;
   }
 
-  const filteredCategories = categories.filter(s =>
+  const filteredCategories = categories?.filter(s =>
     s.name.toLowerCase().includes(search.toLowerCase())
   );
 

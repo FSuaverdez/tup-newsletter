@@ -22,7 +22,6 @@ const ContentSubCategoryManagePosts = () => {
   const filteredPost = posts?.filter(
     post => post?.subCategory?._id === subCategoryId
   );
-  console.log(posts);
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>

@@ -19,7 +19,6 @@ const UserPermissionModal = ({
   const [roleError, setRoleError] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const handleError = message => {
-    console.log(message);
     setErrorMessage(message);
   };
 

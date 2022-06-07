@@ -28,7 +28,7 @@ const AdminCategory = () => {
     setOpenAdd(false);
   };
 
-  const filteredCategories = categories.filter(s =>
+  const filteredCategories = categories?.filter(s =>
     s.name.toLowerCase().includes(search.toLowerCase())
   );
   return (

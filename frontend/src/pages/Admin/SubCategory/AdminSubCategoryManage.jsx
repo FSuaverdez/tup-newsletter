@@ -67,7 +67,6 @@ const AdminCategoryManage = () => {
       console.log(error);
     }
   };
-  console.log(subCategoryId)
   const handleSubmitUserPermission = async (
     email,
     role,

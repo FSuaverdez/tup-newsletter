@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import ReactPlayer from 'react-player';
 import Modal from '../../../../components/Modal/Modal';
+import Loading from '../../../../components/Loading/Loading';
 import PostLoadingModal from '../../../../components/PostLoading/PostLoadingModal';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -11,7 +12,7 @@ import {
 } from '../../../../app/services/postApi';
 import Button from '../../../../components/Button/Button';
 import DeletePostModal from './DeletePostModal';
-import { MetroSpinner } from "react-spinners-kit";
+
 const ContentPost = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
@@ -74,15 +75,7 @@ const ContentPost = () => {
         <Button onClick={() => navigate(-1)}>Back</Button>
       </div>
       {isLoading ? 
-        <div className='my-20'>
-          <div className='flex justify-center mt-1 mb-1'>
-                <MetroSpinner  size={40} color="#FF2400" />
-            </div>
-
-            <div className='flex justify-center ml-5 mt-2.5'>
-                <p className='text-xl font-bold'>Loading, Kindly wait for a moment.</p>
-            </div>   
-        </div>    
+        <Loading/>   
         :
         <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
           <h1 className='text-5xl font-bold'>{post?.title}</h1>
@@ -98,15 +91,30 @@ const ContentPost = () => {
                 </Button>
               )}
               {approved && (
-                <Button type='danger' onClick={handleUnpublish}>
-                  Unpublish
-                </Button>
+                <div className='mr-5'>
+                  <Button type='danger' onClick={handleUnpublish}>
+                    Unpublish
+                  </Button>
+                </div>
               )}
-              <div className='mx-5'>
+              {!approved && (
+                <div className='mx-5'>
+                  <Button
+                    type='success'
+                    onClick={() => {
+                      navigate('edit');
+                    }}
+                  >
+                    Edit Post
+                  </Button>
+                </div>
+                )}
+              <div className='mr-5'>
                 <Button type='danger' onClick={handleConfirmDelete}>
                   Delete
                 </Button>
               </div>
+                
             </div>
           ) : (
             <div className='flex mt-10 justify-end'>
