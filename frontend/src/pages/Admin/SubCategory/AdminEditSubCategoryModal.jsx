@@ -45,7 +45,6 @@ const AdminEditSubCategoryModal = ({
         subCategoryId,
         categoryId: category.value,
       }).unwrap();
-      navigate('/admin/subcategory/edit/' + subCategoryId);
       setNameError(false);
       handleCloseEdit();
     } else {
