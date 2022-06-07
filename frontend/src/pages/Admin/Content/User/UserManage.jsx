@@ -11,7 +11,7 @@ const UserManage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [userData, setUserData] = useState(null);
   if (isLoading) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   const handleOpenModal = user => {
@@ -37,12 +37,7 @@ const UserManage = () => {
               >
                 <p className='font-bold'>{c.name}</p>
                 <p>{c.isAdmin ? 'Super Admin' : 'User'}</p>
-                <Button
-                  className='bg-cyan-500 text-white rounded py-2 px-3 hover:bg-cyan-600'
-                  onClick={() => handleOpenModal(c)}
-                >
-                  Edit
-                </Button>
+                <Button onClick={() => handleOpenModal(c)}>Edit</Button>
               </div>
             ))}
         </div>

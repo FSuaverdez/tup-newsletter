@@ -1,3 +1,4 @@
+import User from '../models/User.js';
 import Post from '../models/Post.js';
 import Category from '../models/Category.js';
 import asyncHandler from 'express-async-handler';
@@ -276,6 +277,10 @@ export const addPost = asyncHandler(async (req, res) => {
 
     res.status(200);
     res.json(post);
+
+    const users = await User.find({ isAdmin: true });
+    const emails = users.map(user => user.email);
+    sendPendingNotif(post, emails);
   } catch (error) {
     res.status(400);
     throw new Error(error.message);
@@ -417,6 +422,33 @@ export const addComment = asyncHandler(async (req, res) => {
     throw new Error(error.message);
   }
 });
+
+const sendPendingNotif = (post, emails) => {
+  var transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'tupnewsletter@gmail.com',
+      pass: 'biiywzzdkxalnygr',
+    },
+  });
+
+  var mailOptions = {
+    from: 'tupnewsletter@gmail.com',
+    to: emails,
+    subject: post.title,
+    text: post.title,
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+};
 
 const sendEmailNotif = (post, emails) => {
   var transporter = nodemailer.createTransport({
