@@ -8,6 +8,7 @@ import {
   useEditUserPermissionSubCategoryMutation,
 } from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
+import Input from '../../../components/Input/Input';
 import Modal from '../../../components/Modal/Modal';
 import Loading from '../../../components/Loading/Loading';
 import UserPermissionModal from './UserPermissionModal';
@@ -24,7 +25,7 @@ const AdminSubCategoryAllUserPermissions = () => {
   const [userPermissionData, setUserPermissionData] = useState(null);
   const [removeUserPermission] = useRemoveUserPermissionSubCategoryMutation();
   const navigate = useNavigate();
-
+  const [search, setSearch] = useState('');
   if (isLoading && isUserPermissionsLoading) {
     return <Loading />;
   }
@@ -74,6 +75,11 @@ const AdminSubCategoryAllUserPermissions = () => {
       console.log(error);
     }
   };
+  const filteredUserPermissions = userPermissions?.filter(
+    s =>
+      s.user.name.toLowerCase().includes(search.toLowerCase()) ||
+      s.user.email.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className='p-5 max-w-5xl mx-auto'>
@@ -99,8 +105,14 @@ const AdminSubCategoryAllUserPermissions = () => {
             </Button>
           </div>
           <div>
-            {userPermissions &&
-              userPermissions.map(c => (
+            <Input
+              fullWidth
+              className='p-5'
+              placeholder='Search'
+              onChange={e => setSearch(e.target.value)}
+            />
+            {filteredUserPermissions &&
+              filteredUserPermissions.map(c => (
                 <div
                   className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
                   key={c._id}

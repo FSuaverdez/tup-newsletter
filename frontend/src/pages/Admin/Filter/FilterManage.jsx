@@ -6,17 +6,18 @@ import {
   useRemoveFilteredWordMutation,
 } from '../../../app/services/adminApi';
 import Modal from '../../../components/Modal/Modal';
+import Input from '../../../components/Input/Input';
 import Loading from '../../../components/Loading/Loading';
 import FilterModal from './FilterModal';
 
 const FilterManage = () => {
   const navigate = useNavigate();
-  const { data: filteredWord, isLoading } = useGetFilteredWordsQuery();
+  const { data: filteredWords, isLoading } = useGetFilteredWordsQuery();
   const [removeWord] = useRemoveFilteredWordMutation();
   const [isOpen, setIsOpen] = useState(false);
-
+  const [search, setSearch] = useState('');
   if (isLoading) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   const handleDelete = async id => {
@@ -30,6 +31,10 @@ const FilterManage = () => {
   const handleClose = async id => {
     setIsOpen(false);
   };
+
+  const searchFilteredWords = filteredWords.filter(word =>
+    word.word.toLowerCase().includes(search.toLowerCase())
+  );
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>
@@ -46,9 +51,15 @@ const FilterManage = () => {
               Add
             </Button>
           </div>
+          <Input
+            fullWidth
+            className='p-5'
+            placeholder='Search'
+            onChange={e => setSearch(e.target.value)}
+          />
           <div>
-            {filteredWord &&
-              filteredWord.map(c => (
+            {searchFilteredWords &&
+              searchFilteredWords.map(c => (
                 <div
                   className='p-2 border border-gray-200 hover:border-gray-400 my-2 flex justify-between items-center text-black'
                   key={c._id}

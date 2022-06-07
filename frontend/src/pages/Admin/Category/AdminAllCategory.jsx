@@ -9,6 +9,7 @@ import {
 import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
 import Loading from '../../../components/Loading/Loading';
+import Input from '../../../components/Input/Input';
 import AdminSubCategoryModal from '../SubCategory/AdminSubCategoryModal';
 
 const AdminAllCategory = () => {
@@ -17,6 +18,7 @@ const AdminAllCategory = () => {
   const { data } = useGetPermissionsQuery(user?._id, {
     skip: !user,
   });
+  const [search, setSearch] = useState('');
   const { data: category, isLoading } = useGetCategoryQuery({ id: categoryId });
   const { data: subCategories, isLoading: isSubCategoriesLoading } =
     useGetSubCategoriesByCategoryQuery(categoryId);
@@ -24,10 +26,12 @@ const AdminAllCategory = () => {
   const navigate = useNavigate();
 
   if (isLoading && isSubCategoriesLoading) {
-    return(
-      <Loading/>
-    );
+    return <Loading />;
   }
+
+  const filteredSubCategories = subCategories.filter(s =>
+    s.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   const handleOpenAdd = () => {
     setOpenAdd(true);
@@ -58,8 +62,14 @@ const AdminAllCategory = () => {
             </Button>
           </div>
           <div>
-            {subCategories &&
-              subCategories.map(c => {
+            <Input
+              fullWidth
+              className='p-5'
+              placeholder='Search'
+              onChange={e => setSearch(e.target.value)}
+            />
+            {filteredSubCategories &&
+              filteredSubCategories.map(c => {
                 const show = data?.subCategoryPermissions.find(
                   p => p._id === c._id
                 );

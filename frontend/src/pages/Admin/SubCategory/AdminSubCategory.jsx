@@ -5,6 +5,7 @@ import { useGetPermissionsQuery } from '../../../app/services/authApi';
 import { useGetSubCategoriesQuery } from '../../../app/services/adminApi';
 import Modal from '../../../components/Modal/Modal';
 import Loading from '../../../components/Loading/Loading';
+import Input from '../../../components/Input/Input';
 import AdminSubCategoryModal from './AdminSubCategoryModal';
 
 const AdminSubCategory = () => {
@@ -12,11 +13,12 @@ const AdminSubCategory = () => {
   const { data } = useGetPermissionsQuery(user?._id, {
     skip: !user,
   });
+  const [search, setSearch] = useState('');
   const [openAdd, setOpenAdd] = useState(false);
   const { data: subCategories, isLoading: isSubCategoriesLoading } =
     useGetSubCategoriesQuery();
   if (isSubCategoriesLoading) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   const handleOpenAddSubCategory = () => {
@@ -25,6 +27,10 @@ const AdminSubCategory = () => {
   const handleCloseAddSubCategory = () => {
     setOpenAdd(false);
   };
+
+  const filteredSubCategories = subCategories.filter(s =>
+    s.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className='p-5 max-w-5xl mx-auto'>
@@ -41,8 +47,14 @@ const AdminSubCategory = () => {
           </button>
         </div>
         <div>
-          {subCategories &&
-            subCategories.map(c => {
+          <Input
+            fullWidth
+            className='p-5'
+            placeholder='Search'
+            onChange={e => setSearch(e.target.value)}
+          />
+          {filteredSubCategories &&
+            filteredSubCategories.map(c => {
               const show = data?.subCategoryPermissions?.find(p => {
                 const role = p.userPermissions.find(
                   p => user._id === p.user

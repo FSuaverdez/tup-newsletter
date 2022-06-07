@@ -5,6 +5,7 @@ import { useGetPermissionsQuery } from '../../../app/services/authApi';
 import { useGetCategoriesQuery } from '../../../app/services/adminApi';
 import Modal from '../../../components/Modal/Modal';
 import Loading from '../../../components/Loading/Loading';
+import Input from '../../../components/Input/Input';
 import AdminCategoryModal from './AdminCategoryModal';
 
 const AdminCategory = () => {
@@ -12,11 +13,12 @@ const AdminCategory = () => {
   const { data } = useGetPermissionsQuery(user?._id, {
     skip: !user,
   });
+  const [search, setSearch] = useState('');
   const [openAdd, setOpenAdd] = useState(false);
   const { data: categories, isLoading: isCategoriesLoading } =
     useGetCategoriesQuery();
   if (isCategoriesLoading) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   const handleOpenAddCategory = () => {
@@ -26,6 +28,9 @@ const AdminCategory = () => {
     setOpenAdd(false);
   };
 
+  const filteredCategories = categories.filter(s =>
+    s.name.toLowerCase().includes(search.toLowerCase())
+  );
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <h1 className='text-2xl font-bold my-5'>Manage Categories</h1>
@@ -41,8 +46,14 @@ const AdminCategory = () => {
           </button>
         </div>
         <div>
-          {categories &&
-            categories.map(c => {
+          <Input
+            fullWidth
+            className='p-5'
+            placeholder='Search'
+            onChange={e => setSearch(e.target.value)}
+          />
+          {filteredCategories &&
+            filteredCategories.map(c => {
               const show = data?.categoryPermissions?.find(p => {
                 const role = p.userPermissions.find(
                   p => user._id === p.user

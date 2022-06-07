@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useGetPermissionsQuery } from '../../../../app/services/authApi';
@@ -7,6 +7,7 @@ import {
   useGetSubCategoriesByCategoryQuery,
 } from '../../../../app/services/adminApi';
 import Button from '../../../../components/Button/Button';
+import Input from '../../../../components/Input/Input';
 import Loading from '../../../../components/Loading/Loading';
 const ContentAllSubCategory = () => {
   const user = useSelector(state => state.user);
@@ -18,10 +19,15 @@ const ContentAllSubCategory = () => {
   const { data: subCategories, isLoading: isSubCategoriesLoading } =
     useGetSubCategoriesByCategoryQuery(categoryId);
   const navigate = useNavigate();
+  const [search, setSearch] = useState('');
 
   if (isLoading && isSubCategoriesLoading) {
-    return <Loading/>;
+    return <Loading />;
   }
+
+  const filteredSubCategories = subCategories.filter(s =>
+    s.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className='p-5 max-w-5xl mx-auto'>
@@ -35,8 +41,14 @@ const ContentAllSubCategory = () => {
             Manage All {category?.name} Subcategories Content
           </h1>
           <div>
-            {subCategories &&
-              subCategories.map(c => {
+            <Input
+              fullWidth
+              className='p-5'
+              placeholder='Search'
+              onChange={e => setSearch(e.target.value)}
+            />
+            {filteredSubCategories &&
+              filteredSubCategories.map(c => {
                 const show = data?.subCategoryPermissions.find(
                   p => p._id === c._id
                 );

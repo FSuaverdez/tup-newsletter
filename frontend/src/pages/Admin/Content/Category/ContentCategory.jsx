@@ -3,25 +3,38 @@ import { Link } from 'react-router-dom';
 import { useGetPermissionsQuery } from '../../../../app/services/authApi';
 import { useGetCategoriesQuery } from '../../../../app/services/adminApi';
 import Loading from '../../../../components/Loading/Loading';
+import Input from '../../../../components/Input/Input';
+import { useState } from 'react';
 
 const ContentCategory = () => {
   const user = useSelector(state => state.user);
   const { data } = useGetPermissionsQuery(user?._id, {
     skip: !user,
   });
+  const [search, setSearch] = useState('');
   const { data: categories, isLoading: isCategoriesLoading } =
     useGetCategoriesQuery();
   if (isCategoriesLoading) {
-    return <Loading/>;
+    return <Loading />;
   }
+
+  const filteredCategories = categories.filter(s =>
+    s.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <h1 className='text-2xl font-bold my-5'>Manage Categories</h1>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto'>
         <div>
-          {categories &&
-            categories.map(c => {
+          <Input
+            fullWidth
+            className='p-5'
+            placeholder='Search'
+            onChange={e => setSearch(e.target.value)}
+          />
+          {filteredCategories &&
+            filteredCategories.map(c => {
               const show = data?.categoryPermissions.find(p => p._id === c._id);
               if (user.isAdmin || show) {
                 return (

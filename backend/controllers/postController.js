@@ -7,6 +7,7 @@ import Filter from 'bad-words';
 import nodemailer from 'nodemailer';
 import fetch from 'node-fetch';
 import SubCategory from '../models/SubCategory.js';
+import { generateHtml, generatePendingHtml } from '../utils/generateHtml.js';
 // @desc    get all  post
 // @router  GET /post/getAll
 // @access  Public
@@ -274,13 +275,14 @@ export const addPost = asyncHandler(async (req, res) => {
       category,
       subCategory,
     });
+    const categoryPost = await Category.findById(category);
+    const subCategoryPost = await SubCategory.findById(subCategory);
+    const users = await User.find({ isAdmin: true });
+    const emails = users.map(user => user.email);
+    sendPendingNotif(post, emails, categoryPost, subCategoryPost);
 
     res.status(200);
     res.json(post);
-
-    const users = await User.find({ isAdmin: true });
-    const emails = users.map(user => user.email);
-    sendPendingNotif(post, emails);
   } catch (error) {
     res.status(400);
     throw new Error(error.message);
@@ -338,15 +340,13 @@ export const approvePost = asyncHandler(async (req, res) => {
       },
       { new: true }
     ).select('-content');
-    res.status(200);
-    res.json(approvedPost);
 
     if (approved) {
       const category = await Category.findById(
-        approvedPost.category.toString()
+        approvedPost.category?.toString()
       ).populate('subscribers.user');
       const subCategory = await SubCategory.findById(
-        approvedPost.subCategory.toString()
+        approvedPost.subCategory?.toString()
       ).populate('subscribers.user');
       const categorySubscribers = category.subscribers.map(sub => sub);
       const subCategorySubscribers = subCategory.subscribers.map(sub => sub);
@@ -367,9 +367,15 @@ export const approvePost = asyncHandler(async (req, res) => {
             .map(sub => sub.user.mobileNumber)
         )
       );
-      sendEmailNotif(approvedPost, emailSubscribers);
-      // sendSMSNotif(approvedPost, smsSubscribers);
+      if (emailSubscribers.length > 0) {
+        sendEmailNotif(approvedPost, emailSubscribers, category, subCategory);
+      }
+      if (smsSubscribers.length > 0) {
+        // sendSMSNotif(approvedPost, smsSubscribers);
+      }
     }
+    res.status(200);
+    res.json(approvedPost);
   } catch (error) {
     res.status(400);
     throw new Error(error.message);
@@ -423,7 +429,7 @@ export const addComment = asyncHandler(async (req, res) => {
   }
 });
 
-const sendPendingNotif = (post, emails) => {
+const sendPendingNotif = (post, emails, category, subCategory) => {
   var transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
@@ -437,8 +443,8 @@ const sendPendingNotif = (post, emails) => {
   var mailOptions = {
     from: 'tupnewsletter@gmail.com',
     to: emails,
-    subject: post.title,
-    text: post.title,
+    subject: `TUP Newsletter - ${post.title} - ${category.name} - Pending Post`,
+    html: generatePendingHtml(post, category, subCategory),
   };
 
   transporter.sendMail(mailOptions, function (error, info) {
@@ -450,7 +456,7 @@ const sendPendingNotif = (post, emails) => {
   });
 };
 
-const sendEmailNotif = (post, emails) => {
+const sendEmailNotif = (post, emails, category, subCategory) => {
   var transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
@@ -460,17 +466,17 @@ const sendEmailNotif = (post, emails) => {
       pass: 'biiywzzdkxalnygr',
     },
   });
-
   var mailOptions = {
     from: 'tupnewsletter@gmail.com',
     to: emails,
-    subject: post.title,
-    text: post.title,
+    subject: `TUP Newsletter - ${post.title} - ${category.name}`,
+    html: generateHtml(post, category, subCategory),
   };
 
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);
+      console.log('test');
     } else {
       console.log('Email sent: ' + info.response);
     }

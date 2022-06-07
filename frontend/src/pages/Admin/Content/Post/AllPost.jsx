@@ -5,6 +5,7 @@ import { useGetPermissionsQuery } from '../../../../app/services/authApi';
 import { useGetAllPostsQuery } from '../../../../app/services/postApi';
 import Button from '../../../../components/Button/Button';
 import Loading from '../../../../components/Loading/Loading';
+import Input from '../../../../components/Input/Input';
 
 const AllPost = type => {
   const user = useSelector(state => state.user);
@@ -15,8 +16,10 @@ const AllPost = type => {
   const { data: posts } = useGetAllPostsQuery();
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-
-  const filteredPost = posts;
+  const [search, setSearch] = useState('');
+  const filteredPost = posts.filter(post =>
+    post.title.toLowerCase().includes(search.toLowerCase())
+  );
   useEffect(() => {
     const loading = () => {
       posts && setIsLoading(false);
@@ -36,6 +39,12 @@ const AllPost = type => {
             : 'Manage All Pending Posts'}
         </h1>
         <div className='border-t-2 border-black mt-5 mb-10'></div>
+        <Input
+          fullWidth
+          className='p-5'
+          placeholder='Search'
+          onChange={e => setSearch(e.target.value)}
+        />
         {isLoading ? (
           <Loading />
         ) : (

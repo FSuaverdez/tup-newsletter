@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useGetPermissionsQuery } from '../../../../app/services/authApi';
 import { useGetSubCategoriesQuery } from '../../../../app/services/adminApi';
 import Loading from '../../../../components/Loading/Loading';
+import Input from '../../../../components/Input/Input';
+import { useState } from 'react';
 
 const ContentSubCategory = () => {
   const user = useSelector(state => state.user);
@@ -11,17 +13,27 @@ const ContentSubCategory = () => {
   });
   const { data: subCategories, isLoading: isSubCategoriesLoading } =
     useGetSubCategoriesQuery();
+  const [search, setSearch] = useState('');
   if (isSubCategoriesLoading) {
-    return <Loading/>;
+    return <Loading />;
   }
 
+  const filteredSubCategories = subCategories.filter(s =>
+    s.name.toLowerCase().includes(search.toLowerCase())
+  );
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <h1 className='text-2xl font-bold my-5'>Manage Categories</h1>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto'>
         <div>
-          {subCategories &&
-            subCategories.map(c => {
+          <Input
+            fullWidth
+            className='p-5'
+            placeholder='Search'
+            onChange={e => setSearch(e.target.value)}
+          />
+          {filteredSubCategories &&
+            filteredSubCategories.map(c => {
               const show = data?.subCategoryPermissions.find(
                 p => p._id === c._id
               );
