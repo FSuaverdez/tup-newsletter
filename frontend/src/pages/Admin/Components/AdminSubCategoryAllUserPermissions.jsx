@@ -26,7 +26,7 @@ const AdminSubCategoryAllUserPermissions = () => {
   const navigate = useNavigate();
 
   if (isLoading && isUserPermissionsLoading) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   const handleOpenAdd = () => {
@@ -106,6 +106,7 @@ const AdminSubCategoryAllUserPermissions = () => {
                   key={c._id}
                 >
                   <p className='text-xl font-bold'>{c?.user?.name}</p>
+                  <p className='font-bold text-black'>{c?.role}</p>
                   <Button
                     type='info'
                     onClick={() => {
