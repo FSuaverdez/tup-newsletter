@@ -21,6 +21,7 @@ const Login = () => {
   }, [user, navigate]);
 
   const responseGoogle = async res => {
+    console.log(res);
     const googleUser = res?.profileObj;
     try {
       const { user, token } = await login(googleUser).unwrap();
