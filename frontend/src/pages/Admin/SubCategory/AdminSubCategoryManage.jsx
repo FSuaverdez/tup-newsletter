@@ -11,6 +11,7 @@ import {
 } from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Modal from '../../../components/Modal/Modal';
+import Loading from '../../../components/Loading/Loading';
 import UserPermissionModal from '../Components/UserPermissionModal';
 import AdminEditSubCategoryModal from './AdminEditSubCategoryModal';
 import AdminDeleteSubCategoryModal from './AdminDeleteSubCategoryModal';
@@ -37,7 +38,7 @@ const AdminCategoryManage = () => {
   const navigate = useNavigate();
 
   if (isLoading && isUserPermissionsLoading) {
-    return 'Loading...';
+    return <Loading/>;
   }
   const handleOpenEditSubCategory = () => {
     setOpenEdit(true);
@@ -67,7 +68,6 @@ const AdminCategoryManage = () => {
       console.log(error);
     }
   };
-  console.log(subCategoryId)
   const handleSubmitUserPermission = async (
     email,
     role,

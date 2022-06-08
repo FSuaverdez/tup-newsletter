@@ -32,7 +32,6 @@ const AdminSubCategoryModal = ({
         description,
         categoryId: id,
       }).unwrap();
-      console.log(resp);
 
       navigate('/admin/subcategory/edit/' + resp._id);
       setNameError(false);

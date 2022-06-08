@@ -12,7 +12,6 @@ const PostAllCategory = (type) => {
   const navigate = useNavigate();
 
   const filteredPost = posts?.filter(post => post.category._id === categoryId);
-  console.log(filteredPost)
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>
@@ -54,7 +53,6 @@ const PostAllCategory = (type) => {
             <div>
               {filteredPost &&
                 filteredPost.map(c => {
-                  console.log(c)
                   if (!c.approved) {
                     return(
                         <div  key={c._id}>

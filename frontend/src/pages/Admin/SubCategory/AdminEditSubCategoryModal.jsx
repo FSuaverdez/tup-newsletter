@@ -21,7 +21,6 @@ const AdminEditSubCategoryModal = ({
   const user = useSelector(state => state.user);
   useEffect(() => {
     const setCurrent = () => {
-      console.log(subCategory);
       setName(subCategory.name);
       setDescription(subCategory.description);
       setSubCategoryid(subCategory._id);
@@ -46,7 +45,6 @@ const AdminEditSubCategoryModal = ({
         subCategoryId,
         categoryId: category.value,
       }).unwrap();
-      navigate('/admin/subcategory/edit/' + subCategoryId);
       setNameError(false);
       handleCloseEdit();
     } else {

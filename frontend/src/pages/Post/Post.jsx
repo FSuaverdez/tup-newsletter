@@ -9,7 +9,7 @@ import {
 } from '../../app/services/postApi';
 import Button from '../../components/Button/Button';
 import Input from '../../components/Input/Input';
-import { MetroSpinner } from "react-spinners-kit";
+import Loading from '../../components/Loading/Loading';
 
 const Post = () => {
   const navigate = useNavigate();
@@ -65,15 +65,7 @@ const Post = () => {
         Back
       </Button>
       {isLoading ? 
-        <div className='my-20'>
-          <div className='flex justify-center mt-1 mb-1'>
-                <MetroSpinner  size={40} color="#FF2400" />
-            </div>
-
-            <div className='flex justify-center ml-5 mt-2.5'>
-                <p className='text-xl font-bold'>Loading, Kindly wait for a moment.</p>
-            </div>   
-         </div> 
+        <Loading/>
         :
           <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
             <h1 className='text-5xl font-bold'>{post?.title}</h1>

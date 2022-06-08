@@ -63,7 +63,6 @@ const Home = () => {
     if (toDate) {
       option = { ...option, toDate: toDate };
     }
-    console.log(option);
     setSearchOption(option);
     refetch();
   };

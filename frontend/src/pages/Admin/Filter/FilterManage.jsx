@@ -32,7 +32,7 @@ const FilterManage = () => {
     setIsOpen(false);
   };
 
-  const searchFilteredWords = filteredWords.filter(word =>
+  const searchFilteredWords = filteredWords?.filter(word =>
     word.word.toLowerCase().includes(search.toLowerCase())
   );
   return (

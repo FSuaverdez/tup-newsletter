@@ -18,7 +18,7 @@ const ContentSubCategory = () => {
     return <Loading />;
   }
 
-  const filteredSubCategories = subCategories.filter(s =>
+  const filteredSubCategories = subCategories?.filter(s =>
     s.name.toLowerCase().includes(search.toLowerCase())
   );
   return (
