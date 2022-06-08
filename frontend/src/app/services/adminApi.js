@@ -1,6 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const baseUrl = 'http://localhost:5000/';
+const baseUrl =
+  process.env.REACT_APP_ENV === 'production'
+    ? process.env.REACT_APP_SERVER
+    : 'http://localhost:5000/';
+
 export const adminApi = createApi({
   reducerPath: 'adminApi',
   tagTypes: ['Categories', 'UserPermissions', 'SubCategories'],
