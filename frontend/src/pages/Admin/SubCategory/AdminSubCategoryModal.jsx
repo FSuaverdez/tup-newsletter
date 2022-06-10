@@ -47,7 +47,7 @@ const AdminSubCategoryModal = ({
       className={`w-656 shadow-xl bg-white p-5 rounded ${classes}`}
       onClick={e => e.stopPropagation()}
     >
-      <h1 className='text-2xl font-bold my-5'>Add Category</h1>
+      <h1 className='text-2xl font-bold my-5'>Add Sub Category</h1>
       <div className=' mx-auto'>
         <div className='py-3'>
           {!categoryId ? (

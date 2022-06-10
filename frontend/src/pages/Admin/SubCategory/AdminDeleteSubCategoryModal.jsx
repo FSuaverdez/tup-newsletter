@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useDeleteSubCategoryMutation } from '../../../app/services/adminApi';
 import { postApi } from '../../../app/services/postApi';
+import Loading from '../../../components/Loading/Loading';
 import Button from '../../../components/Button/Button';
 
 const AdminDeleteSubCategoryModal = ({
@@ -14,6 +15,7 @@ const AdminDeleteSubCategoryModal = ({
   const navigate = useNavigate();
   const [subCategoryId, setSubCategoryId] = useState('');
   const [categoryId, setCategoryId] = useState('');
+  const [isLoading,setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,9 +26,11 @@ const AdminDeleteSubCategoryModal = ({
   const handleDelete = async () => {
     try {
       if (subCategoryId) {
-        await deleteSubCategory({ subCategoryId }).unwrap();
+        setIsLoading(true);
+        const data = await deleteSubCategory({ subCategoryId }).unwrap();
         dispatch(postApi.util.invalidateTags(['Post']));
-        navigate('/admin/category/edit/' + categoryId);
+        data && setIsLoading(false);
+        !isLoading && navigate('/admin/category/edit/' + categoryId);
         handleCloseDeleteSubCategory();
       }
     } catch (error) {
