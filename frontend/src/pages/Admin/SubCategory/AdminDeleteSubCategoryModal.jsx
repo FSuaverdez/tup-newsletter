@@ -44,12 +44,15 @@ const AdminDeleteSubCategoryModal = ({
       onClick={e => e.stopPropagation()}
     >
       <h1 className='text-2xl font-bold my-5'>Delete Category</h1>
-      <div className=' mx-auto'>
-        <div className='py-3'>
-          {`Are you sure you want to delete ${subCategory.name}? All
-                    of the posts under it will also be deleted.`}
+      {isLoading ? <Loading/> 
+        :
+        <div className=' mx-auto'>
+          <div className='py-3'>
+            {`Are you sure you want to delete ${subCategory.name}? All
+                      of the posts under it will also be deleted.`}
+          </div>
         </div>
-      </div>
+      }
       <div className='flex gap-2 justify-end'>
         <Button type='danger' onClick={handleCloseDeleteSubCategory}>
           Cancel
