@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAddCategoryMutation } from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Input from '../../../components/Input/Input';
-import PostLoadingModal from '../../../components/PostLoading/PostLoadingModal'
-import Modal from '../../../components/Modal/Modal';
+import Loading from '../../../components/Loading/Loading';
 const AdminCategoryModal = ({ handleCloseAdd, className: classes }) => {
   const [name, setName] = useState('');
   const [nameError, setNameError] = useState(false);
@@ -43,33 +42,36 @@ const AdminCategoryModal = ({ handleCloseAdd, className: classes }) => {
     >
       <h1 className='text-2xl font-bold my-5'>Add Category</h1>
       <div className=' mx-auto'>
-        <div className='py-3'>
-          <label htmlFor='name' className='font-bold text-gray-600'></label>
-          <Input
-            fullWidth
-            type='text'
-            name='name'
-            label='Category Name'
-            onChange={e => setName(e.target.value)}
-            value={name}
-            required
-          />
-          {nameError && (
-            <p className='text-red-500 text-sm'>Category Name is required.</p>
-          )}
-          <Input
-            fullWidth
-            type='textarea'
-            name='name'
-            label='Description'
-            onChange={e => setDescription(e.target.value)}
-            value={description}
-            required
-          />
-          {descriptionError && (
-            <p className='text-red-500 text-sm'>Description is required.</p>
-          )}
-        </div>
+        {isLoading ? <Loading/>
+          :
+          <div className='py-3'>
+            <label htmlFor='name' className='font-bold text-gray-600'></label>
+            <Input
+              fullWidth
+              type='text'
+              name='name'
+              label='Category Name'
+              onChange={e => setName(e.target.value)}
+              value={name}
+              required
+            />
+            {nameError && (
+              <p className='text-red-500 text-sm'>Category Name is required.</p>
+            )}
+            <Input
+              fullWidth
+              type='textarea'
+              name='name'
+              label='Description'
+              onChange={e => setDescription(e.target.value)}
+              value={description}
+              required
+            />
+            {descriptionError && (
+              <p className='text-red-500 text-sm'>Description is required.</p>
+            )}
+          </div>
+        }
 
         <div className='flex gap-2 justify-end'>
           <Button type='danger' onClick={handleCloseAdd}>
@@ -80,13 +82,6 @@ const AdminCategoryModal = ({ handleCloseAdd, className: classes }) => {
           </Button>
         </div>
       </div>
-      {isLoading && (
-         <Modal>
-           <PostLoadingModal
-             className='p-8'
-           />
-         </Modal>
-        )}
     </div>
   );
 };
