@@ -4,12 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { useAddCategoryMutation } from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Input from '../../../components/Input/Input';
-
+import PostLoadingModal from '../../../components/PostLoading/PostLoadingModal'
+import Modal from '../../../components/Modal/Modal';
 const AdminCategoryModal = ({ handleCloseAdd, className: classes }) => {
   const [name, setName] = useState('');
   const [nameError, setNameError] = useState(false);
   const [description, setDescription] = useState('');
   const [descriptionError, setDescriptionError] = useState(false);
+  const [isLoading,setIsLoading] = useState(false);
   const [addCategory] = useAddCategoryMutation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -19,10 +21,11 @@ const AdminCategoryModal = ({ handleCloseAdd, className: classes }) => {
 
     try {
       if (name && description) {
-        await addCategory({ name, description }).unwrap();
-
+        setIsLoading(true)
+        const data = await addCategory({ name, description }).unwrap();
         navigate('/admin/category');
         setNameError(false);
+        data && setIsLoading(false);
         handleCloseAdd();
       } else {
         !name && setNameError(true);
@@ -77,6 +80,13 @@ const AdminCategoryModal = ({ handleCloseAdd, className: classes }) => {
           </Button>
         </div>
       </div>
+      {isLoading && (
+         <Modal>
+           <PostLoadingModal
+             className='p-8'
+           />
+         </Modal>
+        )}
     </div>
   );
 };

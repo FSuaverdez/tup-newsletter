@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useEditCategoryMutation } from '../../../app/services/adminApi';
 import Button from '../../../components/Button/Button';
 import Input from '../../../components/Input/Input';
+import PostLoadingModal from '../../../components/PostLoading/PostLoadingModal'
+import Modal from '../../../components/Modal/Modal';
 
 const AdminEditCategoryModal = ({
   handleCloseEdit,
@@ -14,6 +16,7 @@ const AdminEditCategoryModal = ({
   const [nameError, setNameError] = useState(false);
   const [description, setDescription] = useState('');
   const [descriptionError, setDescriptionError] = useState(false);
+  const [isLoading,setIsLoading] = useState(false);
   const [editCategory] = useEditCategoryMutation();
   const navigate = useNavigate();
 
@@ -30,8 +33,10 @@ const AdminEditCategoryModal = ({
 
     try {
       if (name && description) {
-        await editCategory({ name, description, categoryId }).unwrap();
+        setIsLoading(true);
+        const data = await editCategory({ name, description, categoryId }).unwrap();
         setNameError(false);
+        data && setIsLoading(false)
         handleCloseEdit();
       } else {
         !name && setNameError(true);
