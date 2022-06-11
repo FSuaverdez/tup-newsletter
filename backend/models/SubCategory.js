@@ -16,6 +16,10 @@ const subCategorySchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category',
     },
+    creator: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
     userPermissions: {
       type: [
         {
