@@ -79,18 +79,28 @@ const Home = () => {
     }),
     []
   );
-  const postCut = (string) => {
-    const texts = string.replace(/<img[^>"']*((("[^"]*")|('[^']*'))[^"'>]*)*>/g,"");
-    let replaced = texts.replace(/(<([^>]+)>)/ig,'');
-    replaced = replaced.slice(0,600);
+  const postCut = string => {
+    const texts = string.replace(
+      /<img[^>"']*((("[^"]*")|('[^']*'))[^"'>]*)*>/g,
+      ''
+    );
+    let replaced = texts.replace(/(<([^>]+)>)/gi, '');
+    replaced = replaced.slice(0, 600);
     let arr = [];
-    arr+=string.match(/<img s([\w\W]+?)>/g)
-    
-    
-   
-    return '<span style = "font-size:16px;">'+replaced+'<span>' + '<b style="font-size:16px;"> ' + ' ...click to view full article' + 
-    '</b>'+'<div style="margin-top:20px;">' + arr +'</div>';
-  }
+    arr += string.match(/<img s([\w\W]+?)>/g);
+
+    return (
+      '<span style = "font-size:16px;">' +
+      replaced +
+      '<span>' +
+      '<b style="font-size:16px;"> ' +
+      ' ...click to view full article' +
+      '</b>' +
+      '<div style="margin-top:20px;">' +
+      arr +
+      '</div>'
+    );
+  };
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
@@ -162,7 +172,10 @@ const Home = () => {
                       {post.approvedAt.slice(0, 10)}
                     </h2>
                     <h2 className='text-xl'>{post?.subCategory?.name}</h2>
-                    <JoditEditor value={postCut(post?.content)} config={config} />
+                    <JoditEditor
+                      value={postCut(post?.content)}
+                      config={config}
+                    />
                   </div>
                 </Link>
               );
@@ -170,14 +183,18 @@ const Home = () => {
           })
         )}
       </div>
-      <div className='mt-5'>
+      <div className='mt-5 flex justify-center items-center'>
         <ReactPaginate
           previousLabel={'previous'}
           nextLabel={'next'}
           pageCount={parseInt(paginated?.numberOfPages)}
-          pageLinkClassName={'px-5 mx-2 hover:text-red-400'}
-          previousLinkClassName={'uppercase text-xs mx-4 hover:text-red-400 '}
-          nextLinkClassName={'uppercase text-xs mx-4 hover:text-red-400 '}
+          pageLinkClassName={'px-2 md:px-5 mx-2 hover:text-red-400'}
+          previousLinkClassName={
+            'uppercase text-xs mx-2 md:px-4 hover:text-red-400 '
+          }
+          nextLinkClassName={
+            'uppercase text-xs mx-2 md:px-4 hover:text-red-400 '
+          }
           activeClassName={'font-bold text-xl'}
           className={'flex justify-center items-center text-red-600 '}
           onPageChange={handlePageChange}
