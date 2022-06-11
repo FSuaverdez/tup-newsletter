@@ -371,7 +371,7 @@ export const approvePost = asyncHandler(async (req, res) => {
         sendEmailNotif(approvedPost, emailSubscribers, category, subCategory);
       }
       if (smsSubscribers.length > 0) {
-        // sendSMSNotif(approvedPost, smsSubscribers);
+        sendSMSNotif(approvedPost, smsSubscribers);
       }
     }
     res.status(200);
