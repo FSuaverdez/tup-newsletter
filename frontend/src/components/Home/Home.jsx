@@ -35,13 +35,11 @@ const Home = () => {
             </h2>
           </Link>
           {user && (
-            <Link to={`user-profile/${user?._id}`}>
               <img
                 src={user.imageUrl}
                 alt='logo'
                 className='w-16 rounded-full border border-gray-200 shadow-md'
               />
-            </Link>
           )}
         </div>
         {toggleSidebar && (
