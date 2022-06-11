@@ -102,7 +102,7 @@ const Post = () => {
                     />
                     <p className='text-sm font-bold'>{comment.postedBy.name}</p>
                   </div>
-                  {user._id === comment.postedBy._id || user?.isAdmin ? (
+                  {user?._id === comment?.postedBy?._id || user?.isAdmin ? (
                     <div>
                       <Button
                         className='text-xs'
