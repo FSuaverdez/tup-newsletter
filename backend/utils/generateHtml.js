@@ -232,7 +232,7 @@ export const generateHtml = (post, category, subCategory) => {
                       style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:5px; padding-bottom:5px; padding-right: 0px; padding-left: 0px;">
                       <div align="center" class="button-container"
                         style="padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
-                        <a href="${process.env.URL}/support/ticket/${post._id}"
+                        <a href="${process.env.URL}/post/${post._id}"
                           style="-webkit-text-size-adjust: none; text-decoration: none; display: inline-block; color: #ffffff; background-color: #ef4444; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; width: auto; width: auto; border-top: 1px solid #ef4444; border-right: 1px solid #ef4444; border-bottom: 1px solid #ef4444; border-left: 1px solid #ef4444; padding-top: 5px; padding-bottom: 5px; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; text-align: center; mso-border-alt: none; word-break: keep-all;"
                           target="_blank"><span
                             style="padding-left:20px;padding-right:20px;font-size:16px;display:inline-block;letter-spacing:undefined;"><span
@@ -491,7 +491,7 @@ export const generatePendingHtml = (post, category, subCategory) => {
                       style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:5px; padding-bottom:5px; padding-right: 0px; padding-left: 0px;">
                       <div align="center" class="button-container"
                         style="padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
-                        <a href="${process.env.URL}/support/ticket/${post._id}"
+                        <a href="${process.env.URL}/post/${post._id}"
                           style="-webkit-text-size-adjust: none; text-decoration: none; display: inline-block; color: #ffffff; background-color: #ef4444; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; width: auto; width: auto; border-top: 1px solid #ef4444; border-right: 1px solid #ef4444; border-bottom: 1px solid #ef4444; border-left: 1px solid #ef4444; padding-top: 5px; padding-bottom: 5px; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; text-align: center; mso-border-alt: none; word-break: keep-all;"
                           target="_blank"><span
                             style="padding-left:20px;padding-right:20px;font-size:16px;display:inline-block;letter-spacing:undefined;"><span
