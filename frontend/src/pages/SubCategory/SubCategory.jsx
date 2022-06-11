@@ -86,6 +86,19 @@ const SubCategory = () => {
     setCurrent();
   }, [subCategoryId]);
 
+  const postCut = (string) => {
+    const texts = string.replace(/<img[^>"']*((("[^"]*")|('[^']*'))[^"'>]*)*>/g,"");
+    let replaced = texts.replace(/(<([^>]+)>)/ig,'');
+    replaced = replaced.slice(0,600);
+    let arr = [];
+    arr+=string.match(/<img s([\w\W]+?)>/g)
+    
+    
+   
+    return '<span style = "font-size:16px;">'+replaced+'<span>' + '<b style="font-size:16px;"> ' + ' ...click to view full article' + 
+    '</b>'+'<div style="margin-top:20px;">' + arr +'</div>';
+  }
+
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
@@ -152,7 +165,7 @@ const SubCategory = () => {
                       {post.approvedAt.slice(0, 10)}
                     </h2>
                     <h2 className='text-xl'>{post?.subCategory?.name}</h2>
-                    <JoditEditor value={post?.content} config={config} />
+                    <JoditEditor value={postCut(post?.content)} config={config} />
                   </div>
                 </Link>
               );
