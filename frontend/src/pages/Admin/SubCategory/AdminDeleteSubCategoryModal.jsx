@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useDeleteSubCategoryMutation } from '../../../app/services/adminApi';
 import { postApi } from '../../../app/services/postApi';
+import Loading from '../../../components/Loading/Loading';
 import Button from '../../../components/Button/Button';
 
 const AdminDeleteSubCategoryModal = ({
@@ -14,6 +15,7 @@ const AdminDeleteSubCategoryModal = ({
   const navigate = useNavigate();
   const [subCategoryId, setSubCategoryId] = useState('');
   const [categoryId, setCategoryId] = useState('');
+  const [isLoading,setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,9 +26,11 @@ const AdminDeleteSubCategoryModal = ({
   const handleDelete = async () => {
     try {
       if (subCategoryId) {
-        await deleteSubCategory({ subCategoryId }).unwrap();
+        setIsLoading(true);
+        const data = await deleteSubCategory({ subCategoryId }).unwrap();
         dispatch(postApi.util.invalidateTags(['Post']));
-        navigate('/admin/category/edit/' + categoryId);
+        data && setIsLoading(false);
+        !isLoading && navigate('/admin/category/edit/' + categoryId);
         handleCloseDeleteSubCategory();
       }
     } catch (error) {
@@ -40,12 +44,15 @@ const AdminDeleteSubCategoryModal = ({
       onClick={e => e.stopPropagation()}
     >
       <h1 className='text-2xl font-bold my-5'>Delete Category</h1>
-      <div className=' mx-auto'>
-        <div className='py-3'>
-          {`Are you sure you want to delete ${subCategory.name}? All
-                    of the posts under it will also be deleted.`}
+      {isLoading ? <Loading/> 
+        :
+        <div className=' mx-auto'>
+          <div className='py-3'>
+            {`Are you sure you want to delete ${subCategory.name}? All
+                      of the posts under it will also be deleted.`}
+          </div>
         </div>
-      </div>
+      }
       <div className='flex gap-2 justify-end'>
         <Button type='danger' onClick={handleCloseDeleteSubCategory}>
           Cancel

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDeleteCategoryMutation } from '../../../app/services/adminApi';
 import { postApi } from '../../../app/services/postApi';
 import Button from '../../../components/Button/Button';
+import Loading from '../../../components/Loading/Loading';
 import { useDispatch } from 'react-redux';
 
 const AdminCategoryDeleteModal = ({
@@ -13,6 +14,7 @@ const AdminCategoryDeleteModal = ({
   const [deleteCategory] = useDeleteCategoryMutation();
   const navigate = useNavigate();
   const [categoryId, setCategoryId] = useState('');
+  const [isLoading,setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -22,9 +24,11 @@ const AdminCategoryDeleteModal = ({
   const handleDelete = async () => {
     try {
       if (categoryId) {
-        await deleteCategory({ categoryId }).unwrap();
+        setIsLoading(true)
+        const data = await deleteCategory({ categoryId }).unwrap();
         dispatch(postApi.util.invalidateTags(['Post']));
-        navigate('/admin/category');
+        data&&setIsLoading(false);
+        !isLoading && navigate('/admin/category');
         handleCloseDelete();
       }
     } catch (error) {
@@ -39,10 +43,13 @@ const AdminCategoryDeleteModal = ({
     >
       <h1 className='text-2xl font-bold my-5'>Delete Category</h1>
       <div className=' mx-auto'>
-        <div className='py-3'>
-          {`Are you sure you want to delete ${category.name}? All
-                     of the sub categories and posts under it will also be deleted`}
-        </div>
+        {isLoading? <Loading/>
+          :
+          <div className='py-3'>
+            {`Are you sure you want to delete ${category.name}? All
+                      of the sub categories and posts under it will also be deleted`}
+          </div>
+        }
       </div>
       <div className='flex gap-2 justify-end'>
         <Button type='danger' onClick={handleCloseDelete}>
