@@ -484,7 +484,10 @@ const sendEmailNotif = (post, emails, category, subCategory) => {
 };
 
 const sendSMSNotif = asyncHandler(async (post, numbers) => {
-  const SMSMessages = numbers.map(number => ({ body: post.title, to: number }));
+  const SMSMessages = numbers.map(number => ({
+    body: `New TUP Newsletter Post ${post.title}\nLink: ${process.env.URL}/${post._id}`,
+    to: number,
+  }));
   console.log(SMSMessages);
   try {
     const resp = await fetch('https://rest.clicksend.com/v3/sms/send', {
