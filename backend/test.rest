@@ -59,9 +59,19 @@ PUT http://localhost:5000/user/mobile/edit/61decae65a09f55afc984bed
 content-type: application/json
 
 {
+    
     "mobileNumber": "09277718892"
 }
 
+
+###
+DELETE http://localhost:5000/post/comment/delete
+content-type: application/json
+
+{
+    "postId": "62a2f314d9412bbc039cf7c9",
+    "commentId":"62a374c23163fca53d500c37"
+}
 
 
 

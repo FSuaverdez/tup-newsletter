@@ -320,6 +320,31 @@ export const editPost = asyncHandler(async (req, res) => {
     throw new Error(error.message);
   }
 });
+
+// @desc    create a new post
+// @router  POST /post/delete/comment
+// @access  Role Required
+export const deleteComment = asyncHandler(async (req, res) => {
+  const { postId, commentId } = req.body;
+
+  try {
+    // Check for permission
+    const post = await Post.findById(postId).select('-content');
+
+    post.comments.pull(commentId);
+
+    const updatedPost = await Post.findByIdAndUpdate(postId, post, {
+      new: true,
+    }).select('-content');
+
+    res.status(200);
+    res.json(post);
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
+});
+
 // @desc    create a new post
 // @router  PUT /put/approve/:id
 // @access  User Required

@@ -13,6 +13,7 @@ import {
   testSMS,
   getPostBySearch,
   getAllHomePosts,
+  deleteComment,
 } from '../controllers/postController.js';
 
 import { requireAuth } from '../middleware/authMiddleware.js';
@@ -23,6 +24,7 @@ router.post('/add', requireAuth, addPost);
 router.put('/edit/:id', requireAuth, editPost);
 router.put('/approve/:id', requireAuth, approvePost);
 router.post('/comment/:id', requireAuth, addComment);
+router.delete('/comment/delete', deleteComment);
 router.delete('/delete/:id', requireAuth, deletePost);
 router.get('/getAll/home/:page', getAllHomePosts);
 router.get('/getAll', getAllPosts);

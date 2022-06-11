@@ -140,6 +140,14 @@ export const postApi = createApi({
       }),
       invalidatesTags: ['Post'],
     }),
+    deleteComment: builder.mutation({
+      query: ({ postId, commentId }) => ({
+        url: 'post/comment/delete',
+        method: 'DELETE',
+        body: { postId, commentId },
+      }),
+      invalidatesTags: ['Post'],
+    }),
   }),
 });
 
@@ -155,4 +163,5 @@ export const {
   useGetPostQuery,
   useGetAllPostsByCategoryQuery,
   useGetAllPostsBySubCategoryQuery,
+  useDeleteCommentMutation,
 } = postApi;
