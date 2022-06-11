@@ -107,12 +107,12 @@ content-type: application/json
 
 
 ###
-GET http://localhost:5000/post/getAll/home/1?searchQuery=&fromDate=2022-04-04
+GET http://localhost:5000/post/getAll/home/1?searchQuery=entry
 content-type: application/json
 
 {
     "searchQuery":"",
     "category":"",
     "subcategory":"",
-    "fromDate":"2022-08-07"
+    "fromDate":""
 }

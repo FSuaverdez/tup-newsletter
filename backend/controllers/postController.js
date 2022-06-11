@@ -186,7 +186,7 @@ export const getAllHomePosts = asyncHandler(async (req, res) => {
     let findOption = {};
 
     if (searchQuery) {
-      findOption = { $or: [{ title: query }] };
+      findOption = { $or: [{ title: query }, { content: query }] };
     }
 
     if (category) {
