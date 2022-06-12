@@ -87,8 +87,13 @@ const Home = () => {
     let replaced = texts.replace(/(<([^>]+)>)/gi, '');
     replaced = replaced.slice(0, 600);
     let arr = [];
-    arr += string.match(/<img s([\w\W]+?)>/g);
-
+    if(string.match(/<img s([\w\W]+?)>/g)){
+      arr += string.match(/<img s([\w\W]+?)>/g);
+    }
+    else{
+      arr+='';
+    }
+    
     return (
       '<span style = "font-size:16px;">' +
       replaced +
@@ -97,7 +102,7 @@ const Home = () => {
       ' ...click to view full article' +
       '</b>' +
       '<div style="margin-top:20px;">' +
-      arr +
+       arr +
       '</div>'
     );
   };

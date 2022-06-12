@@ -91,10 +91,13 @@ const SubCategory = () => {
     let replaced = texts.replace(/(<([^>]+)>)/ig,'');
     replaced = replaced.slice(0,600);
     let arr = [];
-    arr+=string.match(/<img s([\w\W]+?)>/g)
+    if(string.match(/<img s([\w\W]+?)>/g)){
+      arr += string.match(/<img s([\w\W]+?)>/g);
+    }
+    else{
+      arr+='';
+    }
     
-    
-   
     return '<span style = "font-size:16px;">'+replaced+'<span>' + '<b style="font-size:16px;"> ' + ' ...click to view full article' + 
     '</b>'+'<div style="margin-top:20px;">' + arr +'</div>';
   }
