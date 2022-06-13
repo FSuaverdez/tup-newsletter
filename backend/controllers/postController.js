@@ -510,7 +510,7 @@ const sendEmailNotif = (post, emails, category, subCategory) => {
 
 const sendSMSNotif = asyncHandler(async (post, numbers) => {
   const SMSMessages = numbers.map(number => ({
-    body: `New TUP Newsletter Post ${post.title}\nLink: ${process.env.URL}/${post._id}`,
+    body: `New TUP Newsletter Post ${post.title}\nLink: ${process.env.URL}/post/${post._id}`,
     to: number,
   }));
   console.log(SMSMessages);
