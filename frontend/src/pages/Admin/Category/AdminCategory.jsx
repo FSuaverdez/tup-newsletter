@@ -36,14 +36,14 @@ const AdminCategory = () => {
       <h1 className='text-2xl font-bold my-5'>Manage Categories</h1>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto'>
         <div className='flex items-center w-full justify-end mb-5'>
-          <button
+          {user?.isAdmin && <button
             className='bg-green-500 text-white rounded py-2 px-3 hover:bg-green-600'
             onClick={() => {
               handleOpenAddCategory();
             }}
           >
             Add Category
-          </button>
+          </button>}
         </div>
         <div>
           <Input
