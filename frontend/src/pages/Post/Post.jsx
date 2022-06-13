@@ -75,8 +75,10 @@ const Post = () => {
         <Loading />
       ) : (
         <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
-          <h1 className='text-5xl font-bold'>{post?.title}</h1>
-          <h3 className='text-lg font-normal'>{post?.category?.name}</h3>
+          <h1 className='text-xl md:text-5xl font-bold'>{post?.title}</h1>
+          <h3 className='text-base md:text-lg font-normal'>
+            {post?.category?.name}
+          </h3>
           <h2 className='font-normal'>{post.approvedAt.slice(0, 10)}</h2>
           <h4 className='text-lg font-normal'>{post?.subCategory?.name}</h4>
           {post?.liveUrl && (
