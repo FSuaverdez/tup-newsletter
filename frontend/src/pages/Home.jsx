@@ -182,11 +182,6 @@ const Home = () => {
                       value={postCut(post?.content)}
                       config={config}
                     />
-                    {post?.liveUrl && 
-                      <div className='flex justify-center items-center mb-5'>
-                        <ReactPlayer url={post?.liveUrl} controls={true} muted={true} />
-                      </div>
-                    }
                   </div>
                 </Link>
               );
