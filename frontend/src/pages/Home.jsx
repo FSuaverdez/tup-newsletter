@@ -8,6 +8,7 @@ import SelectSubCategory from '../components/SelectSubCategory/SelectSubCategory
 import Button from '../components/Button/Button';
 import Loading from '../components/Loading/Loading';
 import JoditEditor from 'jodit-react';
+import ReactPlayer from 'react-player';
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [category, setCategory] = useState('');
@@ -181,6 +182,11 @@ const Home = () => {
                       value={postCut(post?.content)}
                       config={config}
                     />
+                    {post?.liveUrl && 
+                      <div className='flex justify-center items-center mb-5'>
+                        <ReactPlayer url={post?.liveUrl} controls={true} muted={true} />
+                      </div>
+                    }
                   </div>
                 </Link>
               );
