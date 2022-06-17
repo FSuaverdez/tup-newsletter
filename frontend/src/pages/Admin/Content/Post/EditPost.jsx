@@ -125,6 +125,7 @@ const EditPost = () => {
           label: post.subCategory?.name,
         });
         setContent(post.content);
+        setLive(post.liveUrl);
       }
     };
     setCurrent();
