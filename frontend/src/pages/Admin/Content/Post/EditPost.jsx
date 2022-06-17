@@ -26,7 +26,7 @@ const EditPost = () => {
   const [content, setContent] = useState('');
   const [contentError, setContentError] = useState(false);
   const [preview, setPreview] = useState(false);
-  const [canPlay, setCanPlay] = useState(false);
+  const [canPlay, setCanPlay] = useState(true);
   const [postType, setPostType] = useState({ value: 'post', label: 'Post' });
   const editor = useRef(null);
   const navigate = useNavigate();
@@ -126,6 +126,7 @@ const EditPost = () => {
         });
         setContent(post.content);
         setLive(post.liveUrl);
+        setCanPlay(post.liveUrl);
       }
     };
     setCurrent();

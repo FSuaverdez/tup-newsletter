@@ -11,8 +11,11 @@ import PostCompleteModal from '../../../../components/PostLoading/PostCompleteMo
 import CreatePostConfirmationModal from './CreatePostConfirmationModal';
 import JoditEditor from 'jodit-react';
 import { useAddPostMutation } from '../../../../app/services/postApi';
-import { useGetCategoryQuery,useGetSubCategoryQuery } from '../../../../app/services/adminApi';
-import { useNavigate,useParams } from 'react-router-dom';
+import {
+  useGetCategoryQuery,
+  useGetSubCategoryQuery,
+} from '../../../../app/services/adminApi';
+import { useNavigate, useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 
 const CreatePost = () => {
@@ -25,7 +28,7 @@ const CreatePost = () => {
   const [content, setContent] = useState('');
   const [contentError, setContentError] = useState(false);
   const [preview, setPreview] = useState(false);
-  const [canPlay, setCanPlay] = useState(false);
+  const [canPlay, setCanPlay] = useState(true);
   const [postType, setPostType] = useState({ value: 'post', label: 'Post' });
   const [isLoading, setIsLoading] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -33,26 +36,32 @@ const CreatePost = () => {
   const navigate = useNavigate();
   const [openSave, setOpenSave] = useState(false);
   const [addPost] = useAddPostMutation();
-  const {id} = useParams();
+  const { id } = useParams();
   const { data: passedCategory } = useGetCategoryQuery({
     id: id || '0',
   });
-  const { data: passedSubCategory} = useGetSubCategoryQuery({
+  const { data: passedSubCategory } = useGetSubCategoryQuery({
     id: id || '0',
   });
-  useEffect(()=>{
+  useEffect(() => {
     const setPassed = () => {
-      if (passedCategory){
-        setCategory({value:passedCategory._id, label:passedCategory.name})
+      if (passedCategory) {
+        setCategory({ value: passedCategory._id, label: passedCategory.name });
       }
-      if (passedSubCategory){
-        setCategory({value:passedSubCategory.category._id, label:passedSubCategory.category.name})
-        setSubCategory({value:passedSubCategory._id, label:passedSubCategory.name})
+      if (passedSubCategory) {
+        setCategory({
+          value: passedSubCategory.category._id,
+          label: passedSubCategory.category.name,
+        });
+        setSubCategory({
+          value: passedSubCategory._id,
+          label: passedSubCategory.name,
+        });
       }
-    }
+    };
     setPassed();
-  },[passedCategory,passedSubCategory])
- 
+  }, [passedCategory, passedSubCategory]);
+
   const config = useMemo(
     () => ({
       uploader: {
@@ -82,7 +91,7 @@ const CreatePost = () => {
   const handleCloseConfirmation = () => {
     setOpenSave(false);
   };
-  const handleCloseCompleted = () =>{
+  const handleCloseCompleted = () => {
     setIsCompleted(false);
     navigate('/content/category');
   };
@@ -120,9 +129,8 @@ const CreatePost = () => {
           category: category.value,
           subCategory: subCategory.value || null,
         }).unwrap();
-        data&&setIsLoading(false);
+        data && setIsLoading(false);
         setIsCompleted(true);
-        
       }
     } catch (error) {
       console.error(error);
@@ -131,7 +139,9 @@ const CreatePost = () => {
 
   return (
     <div className='p-5 max-w-5xl mx-auto'>
-     <div className='mb-5'><Button onClick={() => navigate(-1)}>Back</Button></div>
+      <div className='mb-5'>
+        <Button onClick={() => navigate(-1)}>Back</Button>
+      </div>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto'>
         <h1 className='text-2xl font-bold my-5'>Create Post</h1>
         <SelectPostType
@@ -221,19 +231,17 @@ const CreatePost = () => {
           </Modal>
         )}
         {isLoading && (
-           <Modal handleClose={handleCloseConfirmation}>
-           <PostLoadingModal
-             className='p-8'
-           />
-         </Modal>
+          <Modal handleClose={handleCloseConfirmation}>
+            <PostLoadingModal className='p-8' />
+          </Modal>
         )}
         {isCompleted && (
-           <Modal handleClose={handleCloseCompleted}>
-           <PostCompleteModal
-             className='p-8'
-             handleCloseCompleted = {handleCloseCompleted}
-           />
-         </Modal>
+          <Modal handleClose={handleCloseCompleted}>
+            <PostCompleteModal
+              className='p-8'
+              handleCloseCompleted={handleCloseCompleted}
+            />
+          </Modal>
         )}
       </div>
     </div>
