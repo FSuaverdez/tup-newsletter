@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState,useEffect } from 'react';
+import React, { useMemo, useRef, useState, useEffect } from 'react';
 
 import SelectCategory from '../../../../components/SelectCategory/SelectCategory';
 import SelectPostType from '../../../../components/SelectPostType/SelectPostType';
@@ -9,7 +9,10 @@ import Modal from '../../../../components/Modal/Modal';
 import PostLoadingModal from '../../../../components/PostLoading/PostLoadingModal';
 import CreatePostConfirmationModal from './CreatePostConfirmationModal';
 import JoditEditor from 'jodit-react';
-import { useEditPostMutation, useGetPostQuery } from '../../../../app/services/postApi';
+import {
+  useEditPostMutation,
+  useGetPostQuery,
+} from '../../../../app/services/postApi';
 import { useNavigate, useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 
@@ -28,7 +31,7 @@ const EditPost = () => {
   const editor = useRef(null);
   const navigate = useNavigate();
   const [openSave, setOpenSave] = useState(false);
-  const [isLoading,setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [editPost] = useEditPostMutation();
   const { postId } = useParams();
   const { data: post } = useGetPostQuery({
@@ -106,26 +109,32 @@ const EditPost = () => {
     }
   };
 
-    useEffect(()=>{
-        const setCurrent =  ()=> {
-            if(post){
-                const slice = post.type.slice(1);
-                const character = post.type.charAt(0).toUpperCase();
-                setTitle(post.title);
-                setPostType({value:post.type.toLowerCase(),label:character+slice});
-                setCategory({value:post.category._id, label:post.category.name});
-                setSubCategory({value:post.subCategory._id, label:post.subCategory.name});
-                setContent(post.content);
-            }
-        }
-        setCurrent();
-    },[post])
-
- 
+  useEffect(() => {
+    const setCurrent = () => {
+      if (post) {
+        const slice = post.type.slice(1);
+        const character = post.type.charAt(0).toUpperCase();
+        setTitle(post.title);
+        setPostType({
+          value: post.type.toLowerCase(),
+          label: character + slice,
+        });
+        setCategory({ value: post.category._id, label: post.category.name });
+        setSubCategory({
+          value: post.subCategory?._id,
+          label: post.subCategory?.name,
+        });
+        setContent(post.content);
+      }
+    };
+    setCurrent();
+  }, [post]);
 
   return (
     <div className='p-5 max-w-5xl mx-auto'>
-      <div className='mb-5'><Button onClick={() => navigate(-1)}>Back</Button></div>
+      <div className='mb-5'>
+        <Button onClick={() => navigate(-1)}>Back</Button>
+      </div>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto'>
         <h1 className='text-2xl font-bold my-5'>Edit Post</h1>
         <SelectPostType
@@ -215,11 +224,9 @@ const EditPost = () => {
           </Modal>
         )}
         {isLoading && (
-           <Modal handleClose={handleCloseConfirmation}>
-           <PostLoadingModal
-             className='p-8'
-           />
-         </Modal>
+          <Modal handleClose={handleCloseConfirmation}>
+            <PostLoadingModal className='p-8' />
+          </Modal>
         )}
       </div>
     </div>

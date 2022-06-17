@@ -17,8 +17,8 @@ const ContentPost = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
   const [id, setId] = useState('');
-  const [isLoading,setIsLoading] = useState(true);
-  const [isLoadingPublish,setIsLoadingPublish] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingPublish, setIsLoadingPublish] = useState(false);
   const { data: post } = useGetPostQuery({
     id: postId,
   });
@@ -40,7 +40,7 @@ const ContentPost = () => {
     []
   );
   const handlePublish = async () => {
-    setIsLoadingPublish(true)
+    setIsLoadingPublish(true);
     try {
       await approvePost({ id, approved: true });
       setIsLoadingPublish(false);
@@ -65,23 +65,27 @@ const ContentPost = () => {
   };
   useEffect(() => {
     setId(post?._id);
-    post&&setIsLoading(false);
-    post&&setApproved(post.approved);
+    post && setIsLoading(false);
+    post && setApproved(post.approved);
   }, [post]);
-  
+
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
       <div className='my-5'>
         <Button onClick={() => navigate(-1)}>Back</Button>
       </div>
-      {isLoading ? 
-        <Loading/>   
-        :
+      {isLoading ? (
+        <Loading />
+      ) : (
         <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
           <h1 className='text-5xl font-bold'>{post?.title}</h1>
           <h3 className='text-lg font-normal'>{post?.category?.name}</h3>
           <h4 className='text-lg font-normal'>{post?.subCategory?.name}</h4>
-          {post?.live && <ReactPlayer url={post?.live} controls={true} />}
+          {post?.liveUrl && (
+            <div className='flex justify-center items-center mb-5'>
+              <ReactPlayer url={post?.liveUrl} controls={true} muted={true} />
+            </div>
+          )}
           <JoditEditor value={post?.content} config={config} />
           {user?.isAdmin ? (
             <div className='flex mt-10 justify-end'>
@@ -108,13 +112,12 @@ const ContentPost = () => {
                     Edit Post
                   </Button>
                 </div>
-                )}
+              )}
               <div className='mr-5'>
                 <Button type='danger' onClick={handleConfirmDelete}>
                   Delete
                 </Button>
               </div>
-                
             </div>
           ) : (
             <div className='flex mt-10 justify-end'>
@@ -131,7 +134,7 @@ const ContentPost = () => {
             </div>
           )}
         </div>
-      }
+      )}
       {openModal && (
         <Modal handleClose={handleCloseModal}>
           <DeletePostModal
@@ -143,12 +146,10 @@ const ContentPost = () => {
         </Modal>
       )}
       {isLoadingPublish && (
-           <Modal>
-           <PostLoadingModal
-             className='p-8'
-           />
-         </Modal>
-        )}
+        <Modal>
+          <PostLoadingModal className='p-8' />
+        </Modal>
+      )}
     </div>
   );
 };
