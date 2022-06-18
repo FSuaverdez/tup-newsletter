@@ -161,7 +161,11 @@ const CreatePost = () => {
         {titleError && (
           <p className='text-red-500 text-sm mb-5'>Title is required.</p>
         )}
-        <SelectCategory value={category} onChange={handleCategoryChange} />
+        <SelectCategory
+          value={category}
+          onChange={handleCategoryChange}
+          requirePermission
+        />
         {categoryError && (
           <p className='text-red-500 text-sm mb-5'>Category is required.</p>
         )}
@@ -169,6 +173,7 @@ const CreatePost = () => {
           categoryId={category._id}
           value={subCategory}
           onChange={handleSubCategoryChange}
+          requirePermission
         />
         {postType.value === 'live' && (
           <>
