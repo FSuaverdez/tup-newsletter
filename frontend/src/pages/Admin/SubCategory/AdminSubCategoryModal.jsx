@@ -55,6 +55,7 @@ const AdminSubCategoryModal = ({
               <SelectCategory
                 value={category}
                 onChange={handleCategoryChange}
+                requirePermission
               />
             </>
           ) : null}

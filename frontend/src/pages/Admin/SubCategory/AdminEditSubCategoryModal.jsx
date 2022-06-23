@@ -17,7 +17,7 @@ const AdminEditSubCategoryModal = ({
   const [nameError, setNameError] = useState(false);
   const [description, setDescription] = useState('');
   const [descriptionError, setDescriptionError] = useState(false);
-  const [isLoading,setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [editSubCategory] = useEditSubCategoryMutation();
   const navigate = useNavigate();
   const user = useSelector(state => state.user);
@@ -64,10 +64,15 @@ const AdminEditSubCategoryModal = ({
     >
       <h1 className='text-2xl font-bold my-5'>Update Sub Category</h1>
       <div className=' mx-auto'>
-        {isLoading ? <Loading/>
-          :
+        {isLoading ? (
+          <Loading />
+        ) : (
           <div className='py-3'>
-            <SelectCategory value={category} onChange={handleCategoryChange} />
+            <SelectCategory
+              value={category}
+              onChange={handleCategoryChange}
+              requirePermission
+            />
             <label htmlFor='name' className='font-bold text-gray-600'>
               Sub Category Name:
             </label>
@@ -97,7 +102,7 @@ const AdminEditSubCategoryModal = ({
               <p className='text-red-500 text-sm'>Description is required.</p>
             )}
           </div>
-        }
+        )}
 
         <div className='flex gap-2 justify-end'>
           <Button type='danger' onClick={handleCloseEdit}>
