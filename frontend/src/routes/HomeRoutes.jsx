@@ -3,7 +3,6 @@ import Category from '../pages/Category/Category';
 import Home from '../pages/Home';
 import ContentPost from '../pages/Admin/Content/Post/ContentPost';
 import SubCategory from '../pages/SubCategory/SubCategory';
-import UserProfile from '../pages/UserProfile/UserProfile';
 import AdminCategory from '../pages/Admin/Category/AdminCategory';
 import NotFound from '../pages/NotFound/NotFound';
 import AdminCategoryManage from '../pages/Admin/Category/AdminCategoryManage';
@@ -38,72 +37,118 @@ const HomeRoutes = () => {
 
   return (
     <Routes>
-      <Route path='/user-profile/:userId' element={<UserProfile />} />
+      <Route path='/' element={<Home />} />
       <Route path='/category/:categoryId' element={<Category />} />
       <Route
         path='/category/:categoryId/:subCategoryId'
         element={<SubCategory />}
       />
-      <Route path='/admin/users' element={<UserManage />} />
-      <Route path='/admin/category' element={<AdminCategory />} />
-      <Route path='/admin/subcategory' element={<AdminSubCategory />} />
+      <Route path='/post/:postId' element={<Post />} />
+
+      <Route
+        path='/admin/users'
+        element={user ? <UserManage /> : <Navigate to='/' />}
+      />
+      <Route
+        path='/admin/category'
+        element={user ? <AdminCategory /> : <Navigate to='/' />}
+      />
+      <Route
+        path='/admin/subcategory'
+        element={user ? <AdminSubCategory /> : <Navigate to='/' />}
+      />
       <Route
         path='/admin/category/edit/:categoryId'
-        element={<AdminCategoryManage />}
+        element={user ? <AdminCategoryManage /> : <Navigate to='/' />}
       />
       <Route
         path='/admin/subcategory/edit/:subCategoryId'
-        element={<AdminSubCategoryManage />}
+        element={user ? <AdminSubCategoryManage /> : <Navigate to='/' />}
       />
       <Route
         path='/admin/category/edit/:categoryId/all-subcategories'
-        element={<AdminAllCategory />}
+        element={user ? <AdminAllCategory /> : <Navigate to='/' />}
       />
       <Route
         path='/admin/category/edit/:categoryId/all-permissions'
-        element={<AdminCategoryAllUserPermissions />}
+        element={
+          user ? <AdminCategoryAllUserPermissions /> : <Navigate to='/' />
+        }
       />
       <Route
         path='/admin/subcategory/edit/:subCategoryId/all-permissions'
-        element={<AdminSubCategoryAllUserPermissions />}
+        element={
+          user ? <AdminSubCategoryAllUserPermissions /> : <Navigate to='/' />
+        }
       />
-      <Route path='/content' element={<Navigate to='/content/category' />} />
-      <Route path='/content/category' element={<ContentCategory />} />
-      <Route path='/content/subcategory' element={<ContentSubCategory />} />
+
+      <Route
+        path='/content/category'
+        element={user ? <ContentCategory /> : <Navigate to='/' />}
+      />
+      <Route
+        path='/content/subcategory'
+        element={user ? <ContentSubCategory /> : <Navigate to='/' />}
+      />
       <Route
         path='/content/category/:categoryId'
-        element={<ContentCategoryManage />}
+        element={user ? <ContentCategoryManage /> : <Navigate to='/' />}
       />
       <Route
         path='/content/subcategory/:subCategoryId'
-        element={<ContentSubCategoryManagePosts />}
+        element={user ? <ContentSubCategoryManagePosts /> : <Navigate to='/' />}
       />
       <Route
         path='/content/subcategory/:subCategoryId/create'
-        element={<CreatePost />}
+        element={user ? <CreatePost /> : <Navigate to='/' />}
       />
       <Route
         path='/content/category/:categoryId/all-posts/approved'
-        element={<PostAllCategory type = {'A'}/>}
+        element={user ? <PostAllCategory type={'A'} /> : <Navigate to='/' />}
       />
-       <Route
+      <Route
         path='/content/category/:categoryId/all-posts/pending'
-        element={<PostAllCategory type = {'P'}/>}
+        element={user ? <PostAllCategory type={'P'} /> : <Navigate to='/' />}
       />
       <Route
         path='content/category/:categoryId/all-subcategories'
-        element={<ContentAllSubCategory />}
+        element={user ? <ContentAllSubCategory /> : <Navigate to='/' />}
       />
 
-      <Route path='/content/post/all/approved' element={<AllPost type = {'A'}/>} />
-      <Route path='/content/post/all/pending' element={<AllPost type = {'P'}/>} />
-      <Route path='/content/post/:postId' element={<ContentPost />} />
-      <Route path='/post/:postId' element={<Post />} />
-      <Route path='/content/post' element={<PostManage />} />
-      <Route path='/content/post/create' element={<CreatePost />} />
-      <Route path='/content/post/create/:id' element={<CreatePost />} />
-      <Route path='/content/post/:postId/edit' element={<EditPost />} />
-      <Route path='/admin/filter' element={<FilterManage />} />
+      <Route
+        path='/content/post/all/approved'
+        element={user ? <AllPost type={'A'} /> : <Navigate to='/' />}
+      />
+      <Route
+        path='/content/post/all/pending'
+        element={user ? <AllPost type={'P'} /> : <Navigate to='/' />}
+      />
+      <Route
+        path='/content/post/:postId'
+        element={user ? <ContentPost /> : <Navigate to='/' />}
+      />
+      <Route
+        path='/content/post'
+        element={user ? <PostManage /> : <Navigate to='/' />}
+      />
+      <Route
+        path='/content/post/create'
+        element={user ? <CreatePost /> : <Navigate to='/' />}
+      />
+      <Route
+        path='/content/post/create/:id'
+        element={user ? <CreatePost /> : <Navigate to='/' />}
+      />
+      <Route
+        path='/content/post/:postId/edit'
+        element={user ? <EditPost /> : <Navigate to='/' />}
+      />
+      <Route
+        path='/admin/filter'
+        element={user ? <FilterManage /> : <Navigate to='/' />}
+      />
+
+      <Route path='/content' element={<Navigate to='/content/category' />} />
       <Route
         path='/admin'
         element={
@@ -114,7 +159,6 @@ const HomeRoutes = () => {
           )
         }
       />
-      <Route path='/' element={<Home />} />
       <Route path='/*' element={<NotFound />} />
     </Routes>
   );

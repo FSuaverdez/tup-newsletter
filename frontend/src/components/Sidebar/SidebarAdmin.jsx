@@ -16,7 +16,7 @@ const SidebarAdmin = ({ handleCloseSidebar }) => {
 
   return (
     <div className='flex flex-col gap-'>
-      {user.isAdmin || data.showCategoryAdmin ? (
+      {user?.isAdmin || data?.showCategoryAdmin ? (
         <NavLink
           to='/admin/category'
           className={({ isActive }) =>
@@ -26,7 +26,7 @@ const SidebarAdmin = ({ handleCloseSidebar }) => {
           Categories
         </NavLink>
       ) : null}
-      {user.isAdmin || data.showSubCategoryAdmin ? (
+      {user?.isAdmin || data?.showSubCategoryAdmin ? (
         <NavLink
           to='/admin/subcategory'
           className={({ isActive }) =>
