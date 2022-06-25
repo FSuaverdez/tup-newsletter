@@ -116,3 +116,7 @@ content-type: application/json
     "subcategory":"",
     "fromDate":""
 }
+
+####
+GET http://localhost:5000/post/recommended/62a4196293e5c973c1e9ec82
+content-type: application/json

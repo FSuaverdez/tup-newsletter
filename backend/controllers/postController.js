@@ -30,6 +30,42 @@ export const getAllPosts = asyncHandler(async (req, res) => {
   }
 });
 // @desc    get all  post
+// @router  GET /post/recommended/:postId
+// @access  Public
+export const getRecommendedPosts = asyncHandler(async (req, res) => {
+  const { postId } = req.params;
+  try {
+    // Check for permission
+    const post = await Post.findById(postId)
+      .select('-content')
+      .populate('category')
+      .populate('subCategory')
+      .populate('postedBy')
+      .populate('updatedBy')
+      .populate('comments.postedBy');
+
+    const categoryPosts = await Post.find({ category: post.category._id })
+      .select('-content')
+      .populate('category')
+      .populate('subCategory')
+      .limit(5);
+
+    const subCategoryPosts = await Post.find({
+      subCategory: post.subCategory?._id,
+    })
+      .select('-content')
+      .populate('category')
+      .populate('subCategory')
+      .limit(5);
+
+    res.status(200);
+    res.json({ categoryPosts, subCategoryPosts });
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
+});
+// @desc    get all  post
 // @router  GET /post/getAll
 // @access  Public
 export const getPostBySearch = asyncHandler(async (req, res) => {

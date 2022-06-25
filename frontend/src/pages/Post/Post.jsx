@@ -7,6 +7,7 @@ import {
   useAddCommentMutation,
   useDeleteCommentMutation,
   useGetPostQuery,
+  useGetRecommendedPostsQuery,
 } from '../../app/services/postApi';
 import moment from 'moment';
 import Button from '../../components/Button/Button';
@@ -16,7 +17,10 @@ import 'moment-timezone';
 const Post = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
-  const { data: post, isLoading: isPostLoading } = useGetPostQuery({
+  const { data: post } = useGetPostQuery({
+    id: postId,
+  });
+  const { data: recommendedPosts } = useGetRecommendedPostsQuery({
     id: postId,
   });
   const [comment, setComment] = useState('');
@@ -38,6 +42,7 @@ const Post = () => {
     }),
     []
   );
+
   const handleDeleteComment = async commentId => {
     try {
       await deleteComment({ postId: postId, commentId });

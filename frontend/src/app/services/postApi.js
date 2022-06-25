@@ -70,6 +70,10 @@ export const postApi = createApi({
       query: ({ id }) => ({ url: 'post/get/' + id }),
       providesTags: ['Post'],
     }),
+    getRecommendedPosts: builder.query({
+      query: ({ id }) => ({ url: 'post/recommended/:postId' + id }),
+      providesTags: ['Post'],
+    }),
     getComments: builder.query({
       query: () => ({ url: 'post/getAll' }),
       providesTags: ['Post'],
@@ -164,4 +168,5 @@ export const {
   useGetAllPostsByCategoryQuery,
   useGetAllPostsBySubCategoryQuery,
   useDeleteCommentMutation,
+  useGetRecommendedPostsQuery,
 } = postApi;
