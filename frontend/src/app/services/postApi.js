@@ -71,7 +71,7 @@ export const postApi = createApi({
       providesTags: ['Post'],
     }),
     getRecommendedPosts: builder.query({
-      query: ({ id }) => ({ url: 'post/recommended/:postId' + id }),
+      query: ({ id }) => ({ url: 'post/recommended/' + id }),
       providesTags: ['Post'],
     }),
     getComments: builder.query({
