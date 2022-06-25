@@ -161,7 +161,8 @@ const Post = () => {
             </div>
           )}
           <div>
-            {recommendedPosts.categoryPosts && (
+            {recommendedPosts?.categoryPosts?.filter(p => p._id !== post._id)
+              .length > 0 ? (
               <div>
                 <h2 className='text-lg font-bold mb-4'>
                   Recommended Posts from{' '}
@@ -205,14 +206,17 @@ const Post = () => {
                     </Link>
                   ))}
               </div>
-            )}
-            {recommendedPosts.subCategoryPosts && (
+            ) : null}
+            {recommendedPosts?.subCategoryPosts &&
+            post.subCategory &&
+            recommendedPosts?.subCategoryPosts?.filter(p => p._id !== post._id)
+              .length > 0 ? (
               <div>
                 <h2 className='text-lg font-bold mb-4 mt-3'>
                   Recommended Posts from{' '}
-                  {recommendedPosts.subCategoryPosts[0].subCategory.name}
+                  {recommendedPosts?.subCategoryPosts[0]?.subCategory?.name}
                 </h2>
-                {recommendedPosts.subCategoryPosts
+                {recommendedPosts?.subCategoryPosts
                   ?.filter(p => p._id !== post._id)
                   .map(p => (
                     <Link to={`/post/${[p._id]}`} key={p._id}>
@@ -250,7 +254,7 @@ const Post = () => {
                     </Link>
                   ))}
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       )}
