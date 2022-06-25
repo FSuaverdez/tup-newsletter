@@ -74,7 +74,7 @@ export const getRecommendedPosts = asyncHandler(async (req, res) => {
 export const getNotifications = asyncHandler(async (req, res) => {
   try {
     // Check for permission
-    const posts = await Post.find()
+    const posts = await Post.find({ approved: true })
       .select('-content')
       .populate('category')
       .populate('subCategory')
