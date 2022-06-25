@@ -12,6 +12,7 @@ import {
   useArchivePostMutation,
 } from '../../../../app/services/postApi';
 import Button from '../../../../components/Button/Button';
+import ArchivePostModal from './ArchivePostModal';
 
 
 const ContentPost = () => {
@@ -21,6 +22,7 @@ const ContentPost = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingPublish, setIsLoadingPublish] = useState(false);
   const [isLoadingArchive,setIsLoadingArchive] = useState(false);
+  const [isOpenArchived,setIsOpenArchived] = useState(false);
   const { data: post } = useGetPostQuery({
     id: postId,
   });
@@ -59,12 +61,20 @@ const ContentPost = () => {
       console.log(error);
     }
   };
-  const handleArchivePost = async () => {
+  const handleOpenArchivedModal = () =>{
+    setIsOpenArchived(true)
+  }
+  const handleCloseArchivedModal = async() =>{
+    setIsOpenArchived(false);
     setIsLoadingArchive(true);
     const archive = await archivePost({id})
     archive&&setIsLoadingArchive(false);
     navigate('/archived');
   }
+  const handleCloseModal = () =>{
+    setIsOpenArchived(false);
+  }
+  
   useEffect(() => {
     setId(post?._id);
     post && setIsLoading(false);
@@ -116,7 +126,7 @@ const ContentPost = () => {
                 </div>
               )}
                {approved&&<div className='mr-5'>
-                <Button type='danger' onClick={handleArchivePost}>
+                <Button type='danger' onClick={handleOpenArchivedModal}>
                   Archive
                 </Button>
               </div>}
@@ -140,6 +150,17 @@ const ContentPost = () => {
       {isLoadingPublish && (
         <Modal>
           <PostLoadingModal className='p-8' />
+        </Modal>
+      )}
+      {isOpenArchived && (
+        <Modal handleClose={handleCloseModal}>
+          <ArchivePostModal
+            postId = {id}
+            handleCloseModal = {handleCloseModal}
+            handleCloseArchivedModal = {handleCloseArchivedModal}
+            post = {post}
+            className='p-8'
+          />
         </Modal>
       )}
     </div>
