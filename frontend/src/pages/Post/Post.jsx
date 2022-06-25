@@ -2,7 +2,7 @@ import JoditEditor from 'jodit-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   useAddCommentMutation,
   useDeleteCommentMutation,
@@ -160,6 +160,98 @@ const Post = () => {
               </Button>
             </div>
           )}
+          <div>
+            {recommendedPosts.categoryPosts && (
+              <div>
+                <h2 className='text-lg font-bold mb-4'>
+                  Recommended Posts from{' '}
+                  {recommendedPosts.categoryPosts[0].category.name}
+                </h2>
+                {recommendedPosts.categoryPosts
+                  ?.filter(p => p._id !== post._id)
+                  .map(p => (
+                    <Link to={`/post/${[p._id]}`} key={p._id}>
+                      <div className='border border-gray-300 p-2 rounded my-2'>
+                        <div className='flex  justify-between gap-2  items-center'>
+                          <div className='flex-col gap-2 items-center'>
+                            <p className='text-sm font-bold'>{p.title}</p>
+                            <p className='text-sm font-normal'>
+                              {Math.abs(
+                                new Date(
+                                  moment.tz(
+                                    p.approvedAt.slice(0, 19),
+                                    'Asia/Manila'
+                                  )
+                                ).getTime() - new Date().getTime()
+                              ) /
+                                (60 * 60 * 1000) <
+                              24
+                                ? moment(
+                                    moment.tz(
+                                      p.approvedAt.slice(0, 19),
+                                      'Asia/Manila'
+                                    )
+                                  ).fromNow()
+                                : moment(
+                                    moment.tz(
+                                      p.approvedAt.slice(0, 19),
+                                      'Asia/Manila'
+                                    )
+                                  ).calendar()}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+              </div>
+            )}
+            {recommendedPosts.subCategoryPosts && (
+              <div>
+                <h2 className='text-lg font-bold mb-4 mt-3'>
+                  Recommended Posts from{' '}
+                  {recommendedPosts.subCategoryPosts[0].subCategory.name}
+                </h2>
+                {recommendedPosts.subCategoryPosts
+                  ?.filter(p => p._id !== post._id)
+                  .map(p => (
+                    <Link to={`/post/${[p._id]}`} key={p._id}>
+                      <div className='border border-gray-300 p-2 rounded my-2'>
+                        <div className='flex  justify-between gap-2  items-center'>
+                          <div className='flex-col gap-2 items-center'>
+                            <p className='text-sm font-bold'>{p.title}</p>
+                            <p className='text-sm font-normal'>
+                              {Math.abs(
+                                new Date(
+                                  moment.tz(
+                                    p.approvedAt.slice(0, 19),
+                                    'Asia/Manila'
+                                  )
+                                ).getTime() - new Date().getTime()
+                              ) /
+                                (60 * 60 * 1000) <
+                              24
+                                ? moment(
+                                    moment.tz(
+                                      p.approvedAt.slice(0, 19),
+                                      'Asia/Manila'
+                                    )
+                                  ).fromNow()
+                                : moment(
+                                    moment.tz(
+                                      p.approvedAt.slice(0, 19),
+                                      'Asia/Manila'
+                                    )
+                                  ).calendar()}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
