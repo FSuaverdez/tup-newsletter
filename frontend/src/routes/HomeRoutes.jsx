@@ -27,6 +27,7 @@ import { useSelector } from 'react-redux';
 import { useGetPermissionsQuery } from '../app/services/authApi';
 import UserManage from '../pages/Admin/Content/User/UserManage';
 import FilterManage from '../pages/Admin/Filter/FilterManage';
+import Notifications from '../pages/Notifications/Notifications';
 
 const HomeRoutes = () => {
   const user = useSelector(state => state.user);
@@ -146,6 +147,10 @@ const HomeRoutes = () => {
       <Route
         path='/admin/filter'
         element={user ? <FilterManage /> : <Navigate to='/' />}
+      />
+      <Route
+        path='/notifications'
+        element={user ? <Notifications /> : <Navigate to='/' />}
       />
 
       <Route path='/content' element={<Navigate to='/content/category' />} />

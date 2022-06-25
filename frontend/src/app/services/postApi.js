@@ -74,6 +74,10 @@ export const postApi = createApi({
       query: ({ id }) => ({ url: 'post/recommended/' + id }),
       providesTags: ['Post'],
     }),
+    getNotifications: builder.query({
+      query: () => ({ url: 'post/notifications' }),
+      providesTags: ['Post'],
+    }),
     getComments: builder.query({
       query: () => ({ url: 'post/getAll' }),
       providesTags: ['Post'],
@@ -169,4 +173,5 @@ export const {
   useGetAllPostsBySubCategoryQuery,
   useDeleteCommentMutation,
   useGetRecommendedPostsQuery,
+  useGetNotificationsQuery,
 } = postApi;

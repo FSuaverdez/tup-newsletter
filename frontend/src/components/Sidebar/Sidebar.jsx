@@ -1,18 +1,23 @@
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { RiHomeFill } from 'react-icons/ri';
-
+import { AiFillBell } from 'react-icons/ai';
 import logo from '../../assets/logo.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from '../../app/slices/authSlice';
 import { useCallback } from 'react';
 import SidebarRoutes from '../../routes/SidebarRoutes';
 import { useGetPermissionsQuery } from '../../app/services/authApi';
-import Loading from '../Loading/Loading'
+import Loading from '../Loading/Loading';
 
 const isNotActiveStyle =
   'flex items-center px-5 gap-3 text-gray-500 hover:text-red-400 transition-all duration-200 ease-in-out capitalize py-2';
 const isActiveStyle =
   'flex items-center px-5 gap-3 font-bold text-red-600 border-r-2 border-red-500 transition-all duration-200 ease-in-out capitalize py-2';
+
+const isNotifNotActiveStyle =
+  'flex items-center px-5 gap-3 text-gray-500 hover:text-red-400 transition-all duration-200 ease-in-out capitalize py-2';
+const isNotifActiveStyle =
+  'flex items-center px-5 gap-3 font-bold text-red-600 transition-all duration-200 ease-in-out capitalize py-2';
 
 const Sidebar = ({ closeToggle }) => {
   const user = useSelector(state => state.user);
@@ -33,7 +38,7 @@ const Sidebar = ({ closeToggle }) => {
     navigate('/');
   }, [navigate, dispatch]);
 
-  if (isLoading) return <Loading/>;
+  if (isLoading) return <Loading />;
 
   return (
     <div className='flex flex-col  bg-white h-full overflow-y-scroll min-w-350 hide-scrollbar'>
@@ -60,6 +65,7 @@ const Sidebar = ({ closeToggle }) => {
                   alt='user-rpofile'
                   className='w-10 h-10 rounded-full'
                 />
+
                 <p className='text-sm'>{user.name}</p>
               </div>
               <button
@@ -70,9 +76,19 @@ const Sidebar = ({ closeToggle }) => {
                 Logout
               </button>
             </div>
+            <NavLink
+              to='/notifications'
+              className={({ isActive }) =>
+                isActive ? isActiveStyle : isNotActiveStyle
+              }
+              onClick={handleCloseSidebar}
+            >
+              Notifications <AiFillBell />
+            </NavLink>
+
             {user.isAdmin || data?.showAdmin || data?.showContent ? (
               <>
-                <div className='p-2'>
+                <div className=''>
                   {user.isAdmin || data?.showAdmin ? (
                     <NavLink
                       to='/admin'

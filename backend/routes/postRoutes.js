@@ -15,6 +15,7 @@ import {
   getAllHomePosts,
   deleteComment,
   getRecommendedPosts,
+  getNotifications,
 } from '../controllers/postController.js';
 
 import { requireAuth } from '../middleware/authMiddleware.js';
@@ -33,6 +34,7 @@ router.get('/getAll/category/:id/:page', getAllPostsByCategory);
 router.get('/getAll/subcategory/:id/:page', getAllPostsBySubCategory);
 router.get('/get/:id', getPost);
 router.get('/recommended/:postId', getRecommendedPosts);
+router.get('/notifications', getNotifications);
 router.get('/email', testMail);
 router.get('/sms', testSMS);
 router.get('/search', getPostBySearch);

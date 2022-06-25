@@ -67,6 +67,30 @@ export const getRecommendedPosts = asyncHandler(async (req, res) => {
     throw new Error(error.message);
   }
 });
+
+// @desc    get all  post
+// @router  GET /post/notifications
+// @access  Public
+export const getNotifications = asyncHandler(async (req, res) => {
+  try {
+    // Check for permission
+    const posts = await Post.find()
+      .select('-content')
+      .populate('category')
+      .populate('subCategory')
+      .populate('postedBy')
+      .populate('updatedBy')
+      .populate('comments.postedBy')
+      .sort({ approvedAt: 'desc' });
+
+    res.status(200);
+    res.json(posts);
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
+});
+
 // @desc    get all  post
 // @router  GET /post/getAll
 // @access  Public
