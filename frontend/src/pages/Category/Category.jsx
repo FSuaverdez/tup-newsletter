@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import Input from '../../components/Input/Input';
 import Loading from '../../components/Loading/Loading';
 import JoditEditor from 'jodit-react';
+import moment from 'moment';
 
 const Category = () => {
   const [page, setPage] = useState();
@@ -61,13 +62,13 @@ const Category = () => {
     setSearchOption(option);
     refetch();
   };
-  useEffect(()=>{
-    const setCurrent = () =>{
+  useEffect(() => {
+    const setCurrent = () => {
       setPage(1);
       selected = 1;
-    } 
+    };
     setCurrent();
-  },[categoryId])
+  }, [categoryId]);
 
   const config = useMemo(
     () => ({
@@ -83,21 +84,32 @@ const Category = () => {
     []
   );
 
-  const postCut = (string) => {
-    const texts = string.replace(/<img[^>"']*((("[^"]*")|('[^']*'))[^"'>]*)*>/g,"");
-    let replaced = texts.replace(/(<([^>]+)>)/ig,'');
-    replaced = replaced.slice(0,600);
+  const postCut = string => {
+    const texts = string.replace(
+      /<img[^>"']*((("[^"]*")|('[^']*'))[^"'>]*)*>/g,
+      ''
+    );
+    let replaced = texts.replace(/(<([^>]+)>)/gi, '');
+    replaced = replaced.slice(0, 600);
     let arr = [];
-    if(string.match(/<img s([\w\W]+?)>/g)){
+    if (string.match(/<img s([\w\W]+?)>/g)) {
       arr += string.match(/<img s([\w\W]+?)>/g);
+    } else {
+      arr += '';
     }
-    else{
-      arr+='';
-    }
-    
-    return '<span style = "font-size:16px;">'+replaced+'<span>' + '<b style="font-size:16px;"> ' + ' ...click to view full article' + 
-    '</b>'+'<div style="margin-top:20px;">' + arr +'</div>';
-  }
+
+    return (
+      '<span style = "font-size:16px;">' +
+      replaced +
+      '<span>' +
+      '<b style="font-size:16px;"> ' +
+      ' ...click to view full article' +
+      '</b>' +
+      '<div style="margin-top:20px;">' +
+      arr +
+      '</div>'
+    );
+  };
 
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
@@ -162,10 +174,31 @@ const Category = () => {
                     <h2 className='text-xl font-bold'>{post.title}</h2>
                     <h2 className='font-normal'>{post.category.name}</h2>
                     <h2 className='font-normal'>
-                      {post.approvedAt.slice(0, 10)}
+                      {Math.abs(
+                        new Date(
+                          moment.tz(post.approvedAt.slice(0, 19), 'Asia/Manila')
+                        ).getTime() - new Date().getTime()
+                      ) /
+                        (60 * 60 * 1000) <
+                      24
+                        ? moment(
+                            moment.tz(
+                              post.approvedAt.slice(0, 19),
+                              'Asia/Manila'
+                            )
+                          ).fromNow()
+                        : moment(
+                            moment.tz(
+                              post.approvedAt.slice(0, 19),
+                              'Asia/Manila'
+                            )
+                          ).calendar()}
                     </h2>
                     <h2 className='text-xl'>{post?.subCategory?.name}</h2>
-                    <JoditEditor value={postCut(post?.content)} config={config} />
+                    <JoditEditor
+                      value={postCut(post?.content)}
+                      config={config}
+                    />
                   </div>
                 </Link>
               );

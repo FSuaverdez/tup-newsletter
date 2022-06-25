@@ -8,7 +8,7 @@ import SelectSubCategory from '../components/SelectSubCategory/SelectSubCategory
 import Button from '../components/Button/Button';
 import Loading from '../components/Loading/Loading';
 import JoditEditor from 'jodit-react';
-import ReactPlayer from 'react-player';
+import moment from 'moment';
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [category, setCategory] = useState('');
@@ -88,13 +88,12 @@ const Home = () => {
     let replaced = texts.replace(/(<([^>]+)>)/gi, '');
     replaced = replaced.slice(0, 600);
     let arr = [];
-    if(string.match(/<img s([\w\W]+?)>/g)){
+    if (string.match(/<img s([\w\W]+?)>/g)) {
       arr += string.match(/<img s([\w\W]+?)>/g);
+    } else {
+      arr += '';
     }
-    else{
-      arr+='';
-    }
-    
+
     return (
       '<span style = "font-size:16px;">' +
       replaced +
@@ -103,7 +102,7 @@ const Home = () => {
       ' ...click to view full article' +
       '</b>' +
       '<div style="margin-top:20px;">' +
-       arr +
+      arr +
       '</div>'
     );
   };
@@ -175,7 +174,25 @@ const Home = () => {
                     <h2 className='text-xl font-bold'>{post.title}</h2>
                     <h2 className='font-normal'>{post.category.name}</h2>
                     <h2 className='font-normal'>
-                      {post.approvedAt.slice(0, 10)}
+                      {Math.abs(
+                        new Date(
+                          moment.tz(post.approvedAt.slice(0, 19), 'Asia/Manila')
+                        ).getTime() - new Date().getTime()
+                      ) /
+                        (60 * 60 * 1000) <
+                      24
+                        ? moment(
+                            moment.tz(
+                              post.approvedAt.slice(0, 19),
+                              'Asia/Manila'
+                            )
+                          ).fromNow()
+                        : moment(
+                            moment.tz(
+                              post.approvedAt.slice(0, 19),
+                              'Asia/Manila'
+                            )
+                          ).calendar()}
                     </h2>
                     <h2 className='text-xl'>{post?.subCategory?.name}</h2>
                     <JoditEditor

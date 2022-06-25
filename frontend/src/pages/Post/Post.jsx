@@ -8,14 +8,15 @@ import {
   useDeleteCommentMutation,
   useGetPostQuery,
 } from '../../app/services/postApi';
+import moment from 'moment';
 import Button from '../../components/Button/Button';
 import Input from '../../components/Input/Input';
 import Loading from '../../components/Loading/Loading';
-
+import 'moment-timezone';
 const Post = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
-  const { data: post } = useGetPostQuery({
+  const { data: post, isLoading: isPostLoading } = useGetPostQuery({
     id: postId,
   });
   const [comment, setComment] = useState('');
@@ -79,7 +80,21 @@ const Post = () => {
           <h3 className='text-base md:text-lg font-normal'>
             {post?.category?.name}
           </h3>
-          <h2 className='font-normal'>{post.approvedAt.slice(0, 10)}</h2>
+          <h2 className='font-normal'>
+            {Math.abs(
+              new Date(
+                moment.tz(post.approvedAt.slice(0, 19), 'Asia/Manila')
+              ).getTime() - new Date().getTime()
+            ) /
+              (60 * 60 * 1000) <
+            24
+              ? moment(
+                  moment.tz(post.approvedAt.slice(0, 19), 'Asia/Manila')
+                ).fromNow()
+              : moment(
+                  moment.tz(post.approvedAt.slice(0, 19), 'Asia/Manila')
+                ).calendar()}
+          </h2>
           <h4 className='text-lg font-normal'>{post?.subCategory?.name}</h4>
           {post?.liveUrl && (
             <div className='flex justify-center items-center mb-5'>
