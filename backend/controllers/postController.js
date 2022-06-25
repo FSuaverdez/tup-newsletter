@@ -144,7 +144,7 @@ export const getAllPostsByCategory = asyncHandler(async (req, res) => {
     const query = new RegExp(searchQuery, 'i');
     const limit = 5;
     const startIndex = Number(page) - 1;
-    let total = await Post.countDocuments({ category: id });
+    let total = await Post.countDocuments({ category: id, approved:true });
     let findOption = {};
     if (searchQuery) {
       findOption = { $or: [{ title: query }] };
@@ -195,7 +195,7 @@ export const getAllPostsBySubCategory = asyncHandler(async (req, res) => {
     const query = new RegExp(searchQuery, 'i');
     const limit = 5;
     const startIndex = Number(page) - 1;
-    let total = await Post.countDocuments({ subCategory: id });
+    let total = await Post.countDocuments({ subCategory: id, approved:true });
     let findOption = {};
     if (searchQuery) {
       findOption = { $or: [{ title: query }] };
@@ -273,7 +273,7 @@ export const getAllHomePosts = asyncHandler(async (req, res) => {
     findOption = { ...findOption, approved: true };
     const limit = 5;
     const startIndex = Number(page) - 1;
-    let total = await Post.countDocuments({});
+    let total = await Post.countDocuments({approved:true});
     const homePosts = await Post.find(findOption)
       .sort({ approvedAt: 'desc' })
       .limit(limit)

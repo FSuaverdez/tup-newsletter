@@ -9,9 +9,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import {
   useGetPostQuery,
   useApprovePostMutation,
+  useArchivePostMutation,
 } from '../../../../app/services/postApi';
 import Button from '../../../../components/Button/Button';
-import DeletePostModal from './DeletePostModal';
+
 
 const ContentPost = () => {
   const navigate = useNavigate();
@@ -19,12 +20,13 @@ const ContentPost = () => {
   const [id, setId] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingPublish, setIsLoadingPublish] = useState(false);
+  const [isLoadingArchive,setIsLoadingArchive] = useState(false);
   const { data: post } = useGetPostQuery({
     id: postId,
   });
   const [approved, setApproved] = useState();
-  const [openModal, setOpenModal] = useState(false);
   const [approvePost] = useApprovePostMutation();
+  const [archivePost] = useArchivePostMutation();
   const user = useSelector(state => state.user);
   const config = useMemo(
     () => ({
@@ -57,12 +59,12 @@ const ContentPost = () => {
       console.log(error);
     }
   };
-  const handleConfirmDelete = () => {
-    setOpenModal(true);
-  };
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
+  const handleArchivePost = async () => {
+    setIsLoadingArchive(true);
+    const archive = await archivePost({id})
+    archive&&setIsLoadingArchive(false);
+    navigate('/archived');
+  }
   useEffect(() => {
     setId(post?._id);
     post && setIsLoading(false);
@@ -74,7 +76,7 @@ const ContentPost = () => {
       <div className='my-5'>
         <Button onClick={() => navigate(-1)}>Back</Button>
       </div>
-      {isLoading ? (
+      {(isLoading||isLoadingArchive) ? (
         <Loading />
       ) : (
         <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
@@ -113,11 +115,11 @@ const ContentPost = () => {
                   </Button>
                 </div>
               )}
-              <div className='mr-5'>
-                <Button type='danger' onClick={handleConfirmDelete}>
-                  Delete
+               {approved&&<div className='mr-5'>
+                <Button type='danger' onClick={handleArchivePost}>
+                  Archive
                 </Button>
-              </div>
+              </div>}
             </div>
           ) : (
             <div className='flex mt-10 justify-end'>
@@ -134,16 +136,6 @@ const ContentPost = () => {
             </div>
           )}
         </div>
-      )}
-      {openModal && (
-        <Modal handleClose={handleCloseModal}>
-          <DeletePostModal
-            handleCloseModal={handleCloseModal}
-            postId={postId}
-            className='p-8'
-            post={post}
-          />
-        </Modal>
       )}
       {isLoadingPublish && (
         <Modal>

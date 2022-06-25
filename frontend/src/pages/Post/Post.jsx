@@ -180,7 +180,7 @@ const Post = () => {
                               {Math.abs(
                                 new Date(
                                   moment.tz(
-                                    p.approvedAt.slice(0, 19),
+                                    p.approvedAt?.slice(0, 19),
                                     'Asia/Manila'
                                   )
                                 ).getTime() - new Date().getTime()
@@ -189,13 +189,13 @@ const Post = () => {
                               24
                                 ? moment(
                                     moment.tz(
-                                      p.approvedAt.slice(0, 19),
+                                      p.approvedAt?.slice(0, 19),
                                       'Asia/Manila'
                                     )
                                   ).fromNow()
                                 : moment(
                                     moment.tz(
-                                      p.approvedAt.slice(0, 19),
+                                      p.approvedAt?.slice(0, 19),
                                       'Asia/Manila'
                                     )
                                   ).calendar()}
@@ -228,7 +228,7 @@ const Post = () => {
                               {Math.abs(
                                 new Date(
                                   moment.tz(
-                                    p.approvedAt.slice(0, 19),
+                                    p.approvedAt?.slice(0, 19),
                                     'Asia/Manila'
                                   )
                                 ).getTime() - new Date().getTime()
@@ -237,13 +237,13 @@ const Post = () => {
                               24
                                 ? moment(
                                     moment.tz(
-                                      p.approvedAt.slice(0, 19),
+                                      p.approvedAt?.slice(0, 19),
                                       'Asia/Manila'
                                     )
                                   ).fromNow()
                                 : moment(
                                     moment.tz(
-                                      p.approvedAt.slice(0, 19),
+                                      p.approvedAt?.slice(0, 19),
                                       'Asia/Manila'
                                     )
                                   ).calendar()}

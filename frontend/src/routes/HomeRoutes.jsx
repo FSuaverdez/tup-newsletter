@@ -17,6 +17,7 @@ import ContentSubCategoryManagePosts from '../pages/Admin/Content/SubCategory/Co
 
 import CreatePost from '../pages/Admin/Content/Post/CreatePost';
 import EditPost from '../pages/Admin/Content/Post/EditPost';
+import ArchivePost from '../pages/Admin/Content/Post/ArchivePost';
 import PostManage from '../pages/Admin/Content/Post/PostManage';
 import AllPost from '../pages/Admin/Content/Post/AllPost';
 import PostAllCategory from '../pages/Admin/Content/Post/PostAllCategory';
@@ -28,6 +29,7 @@ import { useGetPermissionsQuery } from '../app/services/authApi';
 import UserManage from '../pages/Admin/Content/User/UserManage';
 import FilterManage from '../pages/Admin/Filter/FilterManage';
 import Notifications from '../pages/Notifications/Notifications';
+import Archived from '../pages/Archived/Archived';
 
 const HomeRoutes = () => {
   const user = useSelector(state => state.user);
@@ -151,6 +153,14 @@ const HomeRoutes = () => {
       <Route
         path='/notifications'
         element={user ? <Notifications /> : <Navigate to='/' />}
+      />
+      <Route
+        path='/archived'
+        element={user ? <Archived /> : <Navigate to='/' />}
+      />
+      <Route
+        path='/archived/post/:archivedId'
+        element={user ? <ArchivePost /> : <Navigate to='/' />}
       />
 
       <Route path='/content' element={<Navigate to='/content/category' />} />
