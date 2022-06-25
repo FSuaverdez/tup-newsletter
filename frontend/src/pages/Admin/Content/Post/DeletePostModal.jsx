@@ -10,7 +10,7 @@ const DeletePostModal = ({handleCloseModal,postId,classes,post}) => {
     const handleDelete = async () => {
         try{
             await deletePost({postId});
-            navigate('/content/category');
+            navigate('/archived');
         }
         catch(error){
             console.log(error);

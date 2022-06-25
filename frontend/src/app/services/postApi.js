@@ -132,7 +132,7 @@ export const postApi = createApi({
     }),
     deletePost: builder.mutation({
       query: ({ postId }) => ({
-        url: 'post/delete/' + postId,
+        url: 'archivepost/delete/' + postId,
         method: 'DELETE',
         body: {},
       }),
@@ -156,6 +156,32 @@ export const postApi = createApi({
       }),
       invalidatesTags: ['Post'],
     }),
+    archivePost: builder.mutation({
+      query: ({ id }) => ({
+        url: 'archivepost/archive/' + id,
+        method: 'POST',
+      }),
+      invalidatesTags: ['Post'],
+    }),
+    getAllArchivedPosts: builder.query({
+      query: ({
+        page,
+        searchOption: { searchQuery, category, subCategory, fromDate, toDate },
+      }) => ({
+        url: `archivepost/getAll/archived/${page}?${
+          searchQuery ? `searchQuery=${searchQuery}` : ''
+        }${category ? `&category=${category}` : ''}${
+          subCategory ? `&subCategory=${subCategory}` : ''
+        }${fromDate ? `&fromDate=${fromDate}` : ''}${
+          toDate ? `&toDate=${toDate}` : ''
+        }`,
+      }),
+      providesTags: ['Post'],
+    }),
+    getArchived: builder.query({
+      query: ({ id }) => ({ url: 'archivepost/get/' + id }),
+      providesTags: ['Post'],
+    }),
   }),
 });
 
@@ -174,4 +200,7 @@ export const {
   useDeleteCommentMutation,
   useGetRecommendedPostsQuery,
   useGetNotificationsQuery,
+  useArchivePostMutation,
+  useGetAllArchivedPostsQuery,
+  useGetArchivedQuery,
 } = postApi;

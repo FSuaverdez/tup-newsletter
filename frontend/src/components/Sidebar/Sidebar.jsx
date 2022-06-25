@@ -1,5 +1,5 @@
 import { NavLink, Link, useNavigate } from 'react-router-dom';
-import { RiHomeFill } from 'react-icons/ri';
+import { RiHomeFill,RiInboxArchiveFill } from 'react-icons/ri';
 import { AiFillBell } from 'react-icons/ai';
 import logo from '../../assets/logo.png';
 import { useDispatch, useSelector } from 'react-redux';
@@ -134,6 +134,17 @@ const Sidebar = ({ closeToggle }) => {
           >
             <RiHomeFill /> Home
           </NavLink>
+
+          <NavLink
+            to='/archived'
+            className={({ isActive }) =>
+              isActive ? isActiveStyle : isNotActiveStyle
+            }
+            onClick={handleCloseSidebar}
+          >
+           <RiInboxArchiveFill/> Archived Posts
+          </NavLink>
+
           <SidebarRoutes handleCloseSidebar={handleCloseSidebar} />
         </div>
       </div>
