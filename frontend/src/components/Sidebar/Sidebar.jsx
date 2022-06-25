@@ -135,7 +135,7 @@ const Sidebar = ({ closeToggle }) => {
             <RiHomeFill /> Home
           </NavLink>
 
-          <NavLink
+          {user&&<NavLink
             to='/archived'
             className={({ isActive }) =>
               isActive ? isActiveStyle : isNotActiveStyle
@@ -143,7 +143,7 @@ const Sidebar = ({ closeToggle }) => {
             onClick={handleCloseSidebar}
           >
            <RiInboxArchiveFill/> Archived Posts
-          </NavLink>
+          </NavLink>}
 
           <SidebarRoutes handleCloseSidebar={handleCloseSidebar} />
         </div>
