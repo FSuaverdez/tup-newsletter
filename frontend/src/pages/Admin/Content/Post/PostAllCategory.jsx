@@ -1,17 +1,45 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useGetCategoryQuery } from '../../../../app/services/adminApi';
-import { useGetAllPostsQuery } from '../../../../app/services/postApi';
-
+import { useGetAllPostsQuery, useArchiveAllCategoryPostMutation } from '../../../../app/services/postApi';
+import ArchiveAllApprovePostModal from './ArchiveAllApprovePostModal';
+import { MetroSpinner } from "react-spinners-kit";
 import Button from '../../../../components/Button/Button';
+import Modal from '../../../../components/Modal/Modal';
+
 const PostAllCategory = (type) => {
+  const user = useSelector(state => state.user);
   const { categoryId } = useParams();
   const { data: category } = useGetCategoryQuery({ id: categoryId });
   const { data: posts } = useGetAllPostsQuery();
+  const [isOpen,setIsOpen] = useState(false);
+  const [isLoading,setIsLoading] = useState(false);
+  const [archiveAllApprovedPost] = useArchiveAllCategoryPostMutation();
 
   const navigate = useNavigate();
 
   const filteredPost = posts?.filter(post => post.category._id === categoryId);
+  let checkApprove = false;
+  filteredPost&&filteredPost.map ((e) => {
+    if (e.approved){
+      checkApprove = true;
+    }
+  })
+  const handleOpenModal = () => {
+    setIsOpen(true);
+  }
+  const handleCloseModal = () => {
+    setIsOpen(false);
+  }
+  const handleArchiveAllPost = async () => {
+    setIsLoading(true);
+    setIsOpen(false)
+    const resp = await archiveAllApprovedPost({id:categoryId})
+    resp && setIsLoading(false)
+    !isLoading && navigate('/archived');
+  }
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>
@@ -24,6 +52,19 @@ const PostAllCategory = (type) => {
           <h1 className='text-xl font-bold mt-5'>
            { type.type==='A'? `Manage All ${category?.name} Approved Posts` : `Manage All ${category?.name} Pending Posts` }
           </h1>
+          {(type?.type === 'A'&& checkApprove && user.isAdmin) && 
+            <div className='flex justify-end mb-5'>
+                {isLoading ?
+                  <Button type='danger'>
+                  <div className = 'flex'><p className = 'mr-3'>Archiving</p> <MetroSpinner size={20} color="white" /></div>
+                 </Button>
+                :
+                  <Button type='danger' onClick={handleOpenModal}>
+                    Archive All Approved Post
+                  </Button>
+                }
+            </div>
+          }
           {type.type==='A' && 
             <div>
               {filteredPost && 
@@ -76,6 +117,16 @@ const PostAllCategory = (type) => {
           }
         </div>
       </div>
+      {isOpen &&
+      <Modal handleClose={handleCloseModal}>
+          <ArchiveAllApprovePostModal
+            handleCloseModal={handleCloseModal}
+            name = {category.name}
+            handleArchiveAllPost = {handleArchiveAllPost}
+            className='p-8'
+          />
+      </Modal>
+      }
     </div>
   );
 };
