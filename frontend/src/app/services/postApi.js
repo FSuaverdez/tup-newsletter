@@ -138,6 +138,14 @@ export const postApi = createApi({
       }),
       invalidatesTags: ['Post'],
     }),
+    deletePendingPost: builder.mutation({
+      query: ({ postId }) => ({
+        url: 'post/delete/' + postId,
+        method: 'DELETE',
+        body: {},
+      }),
+      invalidatesTags: ['Post'],
+    }),
     approvePost: builder.mutation({
       query: ({ id, approved }) => ({
         url: 'post/approve/' + id,
@@ -163,6 +171,20 @@ export const postApi = createApi({
       }),
       invalidatesTags: ['Post'],
     }),
+    archiveAllCategoryPost: builder.mutation({
+      query: ({ id }) => ({
+        url: 'archivepost/all/category/' + id,
+        method: 'POST',
+      }),
+      invalidatesTags: ['Post'],
+    }),
+    archiveAllSubCategoryPost: builder.mutation({
+      query: ({ id }) => ({
+        url: 'archivepost/all/subcategory/' + id,
+        method: 'POST',
+      }),
+      invalidatesTags: ['Post'],
+    }),
     getAllArchivedPosts: builder.query({
       query: ({
         page,
@@ -182,6 +204,7 @@ export const postApi = createApi({
       query: ({ id }) => ({ url: 'archivepost/get/' + id }),
       providesTags: ['Post'],
     }),
+    
   }),
 });
 
@@ -203,4 +226,7 @@ export const {
   useArchivePostMutation,
   useGetAllArchivedPostsQuery,
   useGetArchivedQuery,
+  useArchiveAllCategoryPostMutation,
+  useArchiveAllSubCategoryPostMutation,
+  useDeletePendingPostMutation,
 } = postApi;

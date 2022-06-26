@@ -225,6 +225,78 @@ export const archivePost = asyncHandler(async (req, res) => {
   }
 });
 
+export const archiveAllCategoryPost = asyncHandler(async (req, res) => {
+  const id = req.params.id
+  let archive = [];
+  try {
+    const post = await Post.find({category:id});
+    for (let i = 0 ; i < post.length ; i++){
+      const category = await Category.findById(post[i].category);
+      const subCategory = await SubCategory.findById(post[i].subCategory);
+      const postBy = await User.findById(post[i].postedBy);
+      const updateBy = await User.findById(post[i].updateBy);
+      const approveBy = await User.findById(post[i].approveBy);
+      archive += await ArchivedPost.create({
+          title:post[i].title,
+          type: post[i].type,
+          liveUrl:post[i].liveUrl,
+          content: post[i].content,
+          postedBy: postBy?.name,
+          updatedBy: updateBy?.name,
+          category: category?.name,
+          subCategory: subCategory?.name||'',
+          approved: post[i].approved,
+          comments: post[i]?.comments,
+          approvedAt: post[i].approvedAt,
+          approvedBy: approveBy?.name
+      })
+    }
+    
+    await Post.deleteMany({category:id,approved:true});
+    res.status(200);
+    res.json(archive);
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
+});
+
+export const archiveAllSubCategoryPost = asyncHandler(async (req, res) => {
+  const id = req.params.id
+  let archive = [];
+  try {
+    const post = await Post.find({subCategory:id});
+    for (let i = 0 ; i < post.length ; i++){
+      const category = await Category.findById(post[i].category);
+      const subCategory = await SubCategory.findById(post[i].subCategory);
+      const postBy = await User.findById(post[i].postedBy);
+      const updateBy = await User.findById(post[i].updateBy);
+      const approveBy = await User.findById(post[i].approveBy);
+      archive += await ArchivedPost.create({
+          title:post[i].title,
+          type: post[i].type,
+          liveUrl:post[i].liveUrl,
+          content: post[i].content,
+          postedBy: postBy?.name,
+          updatedBy: updateBy?.name,
+          category: category?.name,
+          subCategory: subCategory?.name||'',
+          approved: post[i].approved,
+          comments: post[i]?.comments,
+          approvedAt: post[i].approvedAt,
+          approvedBy: approveBy?.name
+      })
+    }
+    
+    await Post.deleteMany({subCategory:id,approved:true});
+    res.status(200);
+    res.json(archive);
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
+});
+
 
 // @desc    delete a post
 // @router  DELETE /post/delete/:id

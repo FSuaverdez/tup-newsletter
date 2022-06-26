@@ -13,6 +13,7 @@ import {
 } from '../../../../app/services/postApi';
 import Button from '../../../../components/Button/Button';
 import ArchivePostModal from './ArchivePostModal';
+import DeletePendingPostModal from './DeletePendingPostModal';
 
 
 const ContentPost = () => {
@@ -23,6 +24,7 @@ const ContentPost = () => {
   const [isLoadingPublish, setIsLoadingPublish] = useState(false);
   const [isLoadingArchive,setIsLoadingArchive] = useState(false);
   const [isOpenArchived,setIsOpenArchived] = useState(false);
+  const [isOpenDeletePending,setIsOpenDeletePending] = useState(false);
   const { data: post } = useGetPostQuery({
     id: postId,
   });
@@ -73,6 +75,12 @@ const ContentPost = () => {
   }
   const handleCloseModal = () =>{
     setIsOpenArchived(false);
+  }
+  const handleCloseDeleteModal = () =>{
+    setIsOpenDeletePending(false);
+  }
+  const handleConfrimDelete = () => {
+    setIsOpenDeletePending(true)
   }
   
   useEffect(() => {
@@ -125,6 +133,16 @@ const ContentPost = () => {
                   </Button>
                 </div>
               )}
+              {!approved && (
+                <div className='mr-5'>
+                  <Button
+                    type='danger'
+                    onClick={handleConfrimDelete}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              )}
                {approved&&<div className='mr-5'>
                 <Button type='danger' onClick={handleOpenArchivedModal}>
                   Archive
@@ -160,6 +178,16 @@ const ContentPost = () => {
             handleCloseArchivedModal = {handleCloseArchivedModal}
             post = {post}
             className='p-8'
+          />
+        </Modal>
+      )}
+      {isOpenDeletePending && (
+        <Modal handleClose={handleCloseDeleteModal}>
+          <DeletePendingPostModal
+            handleCloseModal={handleCloseDeleteModal}
+            postId={postId}
+            className='p-8'
+            post={post}
           />
         </Modal>
       )}

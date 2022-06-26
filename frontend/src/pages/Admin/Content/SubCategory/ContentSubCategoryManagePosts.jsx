@@ -1,12 +1,17 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useGetAllPostsQuery } from '../../../../app/services/postApi';
-
+import { useGetAllPostsQuery,useArchiveAllSubCategoryPostMutation } from '../../../../app/services/postApi';
+import { useState } from 'react';
 import { useGetSubCategoryQuery } from '../../../../app/services/adminApi';
 import Button from '../../../../components/Button/Button';
 import Loading from '../../../../components/Loading/Loading';
+import Modal from '../../../../components/Modal/Modal';
+import ArchiveAllApprovePostModal from '../Post/ArchiveAllApprovePostModal';
+import { MetroSpinner } from "react-spinners-kit";
 
 const ContentSubCategoryManagePosts = () => {
+  const user = useSelector(state => state.user);
   const { subCategoryId } = useParams();
   const { data: subCategory, isLoading } = useGetSubCategoryQuery({
     id: subCategoryId,
@@ -15,6 +20,10 @@ const ContentSubCategoryManagePosts = () => {
   const { data: posts, isLoading: isPostsLoading } = useGetAllPostsQuery();
   const checker = subCategoryId;
   const navigate = useNavigate();
+  const [isOpen,setIsOpen] = useState(false);
+  const [archiving,setArchiving] = useState(false);
+  const [archiveAllApprovedPost] = useArchiveAllSubCategoryPostMutation();
+  let checkApprove = false;
 
   if (isLoading && isPostsLoading) {
     return <Loading/>;
@@ -22,6 +31,24 @@ const ContentSubCategoryManagePosts = () => {
   const filteredPost = posts?.filter(
     post => post?.subCategory?._id === subCategoryId
   );
+  const handleOpenModal = () => {
+    setIsOpen(true);
+  }
+  const handleCloseModal = () => {
+    setIsOpen(false);
+  }
+  const handleArchiveAllPost = async () => {
+    setArchiving(true);
+    setIsOpen(false)
+    const resp = await archiveAllApprovedPost({id:subCategoryId})
+    resp && setArchiving(false)
+    !isLoading && navigate('/archived');
+  }
+  filteredPost && filteredPost.map((e) => {
+    if (e.approved){
+      checkApprove = true;
+    }
+  })
   return (
     <div className='p-5 max-w-5xl mx-auto'>
       <Button onClick={() => navigate(-1)}>Back</Button>
@@ -47,6 +74,17 @@ const ContentSubCategoryManagePosts = () => {
           </div>
           <div>
           <p className='text-lg font-bold my-5 text-green-500'>Approved Posts</p>
+          {(checkApprove && user.isAdmin) &&<div className='flex justify-end mb-5'>
+              {archiving ?
+                  <Button type='danger'>
+                  <div className = 'flex'><p className = 'mr-3'>Archiving</p> <MetroSpinner size={20} color="white" /></div>
+                 </Button>
+                :
+                  <Button type='danger' onClick={handleOpenModal}>
+                    Archive All Approved Post
+                  </Button>
+                }
+          </div>}
             {filteredPost && filteredPost.map(c => {
               if(c.approved){
                 return (
@@ -91,6 +129,16 @@ const ContentSubCategoryManagePosts = () => {
           </div>
         </div>
       </div>
+      {isOpen &&
+      <Modal handleClose={handleCloseModal}>
+          <ArchiveAllApprovePostModal
+            handleCloseModal={handleCloseModal}
+            name = {subCategory.name}
+            handleArchiveAllPost = {handleArchiveAllPost}
+            className='p-8'
+          />
+      </Modal>
+      }
     </div>
   );
 };
