@@ -43,7 +43,6 @@ export const getRecommendedPosts = asyncHandler(async (req, res) => {
       .populate('postedBy')
       .populate('updatedBy')
       .populate('comments.postedBy');
-    console.log(post)
     const categoryPosts = await Post.find({ category: post.category._id, approved:true})
       .select('-content')
       .populate('category')
