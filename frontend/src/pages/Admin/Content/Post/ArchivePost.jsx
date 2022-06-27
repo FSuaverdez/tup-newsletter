@@ -10,6 +10,7 @@ import {
 } from '../../../../app/services/postApi';
 import Button from '../../../../components/Button/Button';
 import DeletePostModal from './DeletePostModal';
+import moment from 'moment';
 
 const ArchivePost = () => {
   const navigate = useNavigate();
@@ -60,8 +61,18 @@ const ArchivePost = () => {
           <h1 className='text-5xl font-bold'>{post?.title}</h1>
           <h3 className='text-lg font-normal'>{post?.category}</h3>
           <h4 className='text-lg font-normal'>{post?.subCategory}</h4>
-          <h4 className='text-lg font-normal'>Publish Date: {post?.approvedAt.slice(0,10)}</h4>
-          <h4 className='text-lg font-normal'>Archived Date: {post?.createdAt.slice(0,10)}</h4>
+          <h4 className='text-lg font-normal'>Published Date: {moment(
+                            moment.tz(
+                              post?.approvedAt.slice(0, 19),
+                              'Asia/Manila'
+                            )
+                          ).calendar()}</h4>
+          <h4 className='text-lg font-normal'>Archived Date: {moment(
+                            moment.tz(
+                              post?.createdAt.slice(0, 19),
+                              'Asia/Manila'
+                            )
+                          ).calendar()}</h4>
           {post?.liveUrl && (
             <div className='flex justify-center items-center mb-5'>
               <ReactPlayer url={post?.liveUrl} controls={true} muted={true} />

@@ -146,10 +146,20 @@ const Archived = () => {
                   <div className='shadow-lg my-5 border border-gray-200 rounded p-3'>
                     <h2 className='text-xl font-bold'>{post.title}</h2>
                     <h2 className='font-normal'>
-                      publish Date: {post.approvedAt}
+                      Published Date: {moment(
+                            moment.tz(
+                              post?.approvedAt.slice(0, 19),
+                              'Asia/Manila'
+                            )
+                          ).calendar()}
                     </h2>
                     <h2 className='font-normal'>
-                      Archived Date: {post.createdAt}
+                      Archived Date: {moment(
+                            moment.tz(
+                              post?.createdAt.slice(0, 19),
+                              'Asia/Manila'
+                            )
+                          ).calendar()}
                     </h2>
                     <h2 className='font-normal'>{post.category}</h2>
                     <h2 className='text-xl'>{post?.subCategory}</h2>
