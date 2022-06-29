@@ -42,6 +42,7 @@ export const getAllFeaturedPosts = asyncHandler(async (req, res) => {
       .populate('postedBy')
       .populate('updatedBy')
       .populate('comments.postedBy')
+      .sort({approvedAt:'desc'})
       .limit(5)
 
     res.status(200);
