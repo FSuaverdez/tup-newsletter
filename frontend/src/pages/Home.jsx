@@ -3,6 +3,7 @@ import { useGetAllHomePostsQuery } from '../app/services/postApi';
 import ReactPaginate from 'react-paginate';
 import { useEffect, useState, useMemo } from 'react';
 import Input from '../components/Input/Input';
+import Featured from '../components/Featured/Featured';
 import SelectCategory from '../components/SelectCategory/SelectCategory';
 import SelectSubCategory from '../components/SelectSubCategory/SelectSubCategory';
 import Button from '../components/Button/Button';
@@ -109,7 +110,9 @@ const Home = () => {
   return (
     <div className='p-5 max-w-5xl mx-auto article-container'>
       <div className='bg-white p-5 rounded-lg shadow-lg mx-auto mb-5'>
-        <h1 className='text-2xl font-bold mb-10'>All Posts</h1>
+      <h1 className='text-2xl font-bold mb-10'>Featured Posts</h1>
+        <Featured config ={config}/>
+        <h1 className='text-2xl font-bold mt-10 mb-10 mb-5'>All Posts</h1>
         <div className='flex flex-col md:flex-row items-start md:items-end justify-center mb-4'>
           <Input
             onChange={e => setSearchQuery(e.target.value)}

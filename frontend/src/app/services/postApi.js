@@ -66,6 +66,10 @@ export const postApi = createApi({
       }),
       providesTags: ['Post'],
     }),
+    getAllFeaturedPosts: builder.query({
+      query: () => ({ url: 'post/getAll/featured' }),
+      providesTags: ['Post'],
+    }),
     getPost: builder.query({
       query: ({ id }) => ({ url: 'post/get/' + id }),
       providesTags: ['Post'],
@@ -204,6 +208,14 @@ export const postApi = createApi({
       query: ({ id }) => ({ url: 'archivepost/get/' + id }),
       providesTags: ['Post'],
     }),
+    featurePosts: builder.mutation({
+      query: ({ postId:id,action }) => (
+        { 
+          url: `post/feature/${id}/${action}`,
+          method: 'PUT',
+        }),
+      invalidatesTags: ['Post'],
+    }),
     
   }),
 });
@@ -229,4 +241,6 @@ export const {
   useArchiveAllCategoryPostMutation,
   useArchiveAllSubCategoryPostMutation,
   useDeletePendingPostMutation,
+  useFeaturePostsMutation,
+  useGetAllFeaturedPostsQuery,
 } = postApi;
