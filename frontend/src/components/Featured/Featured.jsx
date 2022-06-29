@@ -4,6 +4,7 @@ import img1 from '../../assets/background.jpg';
 import { useGetAllFeaturedPostsQuery } from '../../app/services/postApi';
 import JoditEditor from 'jodit-react';
 import parse from 'html-react-parser';
+import { Link } from 'react-router-dom';
 const Featured = props => {
   const { config } = props;
   const { data, isLoading, isFetching } = useGetAllFeaturedPostsQuery();
@@ -17,6 +18,9 @@ const Featured = props => {
 
     return arr[0] || `<img src = ${img1} />`;
   };
+  const handleFeaturedClick = (e) =>{
+    console.log(e)
+  }
   const breakPoints = [
     { width: 1, itemsToShow: 1 },
     { width: 550, itemsToShow: 2 },
@@ -30,14 +34,19 @@ const Featured = props => {
         breakPoints={breakPoints}
         showThumbs={false}
         swipeable={true}
-        autoplay={true}
+        infiniteLoop={true}
+        onSwipeMove = {handleFeaturedClick}
+        emulateTouch = {true}
+        autoPlay = {true}
       >
         {data?.map(c => {
           return (
             <div key={c._id} className='featured'>
               {/* <JoditEditor value={getImage(c.content)} config={config} /> */}
               <div className='featured-img'>{parse(getImage(c.content))} </div>
-              <p className='legend text-xl font-bold'>{c.title}</p>
+              <Link to={`/post/${c._id}`} key={c._id}>
+                <p className='legend text-xl font-bold'>{c.title}</p>
+              </Link>
             </div>
           );
         })}
