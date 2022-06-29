@@ -41,3 +41,10 @@
 .react-select__menu {
   background-color: aqua;
 }
+
+.featured-img img {
+  height: 300px;
+  width: auto;
+  object-fit: cover;
+  object-position: center;
+}
