@@ -29,6 +29,29 @@ export const getAllPosts = asyncHandler(async (req, res) => {
     throw new Error(error.message);
   }
 });
+
+// @desc    get all  post
+// @router  GET /post/getAll
+// @access  Public
+export const getAllFeaturedPosts = asyncHandler(async (req, res) => {
+  try {
+    // Check for permission
+    const posts = await Post.find({approved:true,isFeatured:true})
+      .populate('category')
+      .populate('subCategory')
+      .populate('postedBy')
+      .populate('updatedBy')
+      .populate('comments.postedBy')
+      .limit(5)
+
+    res.status(200);
+    res.json(posts);
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
+});
+
 // @desc    get all  post
 // @router  GET /post/recommended/:postId
 // @access  Public
@@ -640,5 +663,29 @@ export const testSMS = asyncHandler(async (req, res) => {
     console.log(data);
   } catch (error) {
     console.log(error);
+  }
+});
+
+// @desc    delete a post
+// @router  DELETE /post/delete/:id
+// @access  User Required
+export const featurePost = asyncHandler(async (req, res) => {
+  const { id, action } = req.params;
+  const user = req.user;
+  try {
+    if (user.isAdmin) {
+      let featuredPost
+      if (action == 'feature'){
+        featuredPost = await Post.findByIdAndUpdate(id,{isFeatured:true},{new:true});
+      }
+      else{
+        featuredPost = await Post.findByIdAndUpdate(id,{isFeatured:false},{new:true});
+      }
+      res.status(200);
+      res.json(featuredPost);
+    }
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
   }
 });

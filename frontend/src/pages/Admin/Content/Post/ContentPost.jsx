@@ -10,6 +10,7 @@ import {
   useGetPostQuery,
   useApprovePostMutation,
   useArchivePostMutation,
+  useFeaturePostsMutation,
 } from '../../../../app/services/postApi';
 import Button from '../../../../components/Button/Button';
 import ArchivePostModal from './ArchivePostModal';
@@ -29,8 +30,10 @@ const ContentPost = () => {
     id: postId,
   });
   const [approved, setApproved] = useState();
+  const [isFeatured, setIsFeatured] = useState();
   const [approvePost] = useApprovePostMutation();
   const [archivePost] = useArchivePostMutation();
+  const [featurePost] = useFeaturePostsMutation();
   const user = useSelector(state => state.user);
   const config = useMemo(
     () => ({
@@ -82,11 +85,24 @@ const ContentPost = () => {
   const handleConfrimDelete = () => {
     setIsOpenDeletePending(true)
   }
+  const handleFeaturePost = async (action) => {
+    setIsLoadingPublish(true)
+    try{
+      const {data} = await featurePost({postId,action})
+      data && setIsLoadingPublish(false);
+    }
+    catch(error){
+      console.log(error)
+    }
+    
+  }
   
   useEffect(() => {
     setId(post?._id);
     post && setIsLoading(false);
     post && setApproved(post.approved);
+    post && setIsFeatured(post.isFeatured);
+    console.log(post?.isFeatured)
   }, [post]);
 
   return (
@@ -148,6 +164,20 @@ const ContentPost = () => {
                   Archive
                 </Button>
               </div>}
+              {approved && !isFeatured &&
+                <div className='mr-5'>
+                  <Button type='success' onClick={()=>{handleFeaturePost('feature')}}>
+                    Feature
+                  </Button>
+                </div> 
+              }
+              { approved && isFeatured &&
+                <div className='mr-5'>
+                  <Button type='danger' onClick={() => {handleFeaturePost('unfeature')}}>
+                    Unfeature
+                  </Button>
+                </div>
+              }
             </div>
           ) : (
             <div className='flex mt-10 justify-end'>

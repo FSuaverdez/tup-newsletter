@@ -16,6 +16,8 @@ import {
   deleteComment,
   getRecommendedPosts,
   getNotifications,
+  featurePost,
+  getAllFeaturedPosts,
 } from '../controllers/postController.js';
 
 import { requireAuth } from '../middleware/authMiddleware.js';
@@ -38,5 +40,7 @@ router.get('/notifications', getNotifications);
 router.get('/email', testMail);
 router.get('/sms', testSMS);
 router.get('/search', getPostBySearch);
+router.put('/feature/:id/:action', requireAuth,featurePost);
+router.get('/getAll/featured', getAllFeaturedPosts);
 
 export default router;

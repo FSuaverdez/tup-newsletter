@@ -30,6 +30,7 @@ const postSchema = mongoose.Schema(
       type: [commentSchema],
       default: [],
     },
+    isFeatured: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
