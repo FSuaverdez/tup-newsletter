@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink,useParams } from 'react-router-dom';
 import { useGetPermissionsQuery } from '../../app/services/authApi';
+import Manual from '../../assets/files/UserManual.pdf'
 
 const isNotActiveStyle =
   'flex items-center px-5 gap-3 text-gray-500 hover:text-red-400 transition-all duration-200 ease-in-out capitalize py-2';
@@ -13,7 +14,12 @@ const SidebarAdmin = ({ handleCloseSidebar }) => {
   const { data } = useGetPermissionsQuery(user?._id, {
     skip: !user,
   });
-
+  const url = useParams();
+  const downloadPDF = () => {
+    let win = window.open(Manual);
+    setTimeout(function() { win.close();}, 100);
+  
+  }
   return (
     <div className='flex flex-col gap-'>
       {user?.isAdmin || data?.showCategoryAdmin ? (
@@ -54,6 +60,17 @@ const SidebarAdmin = ({ handleCloseSidebar }) => {
           }
         >
           Filtered Words
+        </NavLink>
+      )}
+      {user?.isAdmin && (
+        <NavLink
+          to={url}
+          className={({ isActive }) =>
+            `${isNotActiveStyle} ml-5`
+          }
+          onClick ={downloadPDF}
+        >
+          Download User Manual
         </NavLink>
       )}
     </div>

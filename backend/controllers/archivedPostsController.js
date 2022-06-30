@@ -139,12 +139,12 @@ export const getAllArchivedPosts = asyncHandler(async (req, res) => {
     if (fromDate && toDate) {
       findOption = {
         ...findOption,
-        approvedAt: { $gte: new Date(fromDate), $lte: new Date(toDate) },
+        createdAt: { $gte: new Date(fromDate), $lte: new Date(toDate) },
       };
     } else if (fromDate && !toDate) {
       findOption = {
         ...findOption,
-        approvedAt: { $gte: new Date(fromDate) },
+        createdAt: { $gte: new Date(fromDate) },
       };
     }
     findOption = { ...findOption, approved: true };
