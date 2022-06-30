@@ -17,7 +17,7 @@ const SidebarAdmin = ({ handleCloseSidebar }) => {
   const url = useParams();
   const downloadPDF = () => {
     let win = window.open(Manual);
-    setTimeout(function() { win.close();}, 100);
+    setTimeout(function() { win.close();}, 1000);
   
   }
   return (
