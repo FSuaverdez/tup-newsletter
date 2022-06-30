@@ -102,7 +102,6 @@ const ContentPost = () => {
     post && setIsLoading(false);
     post && setApproved(post.approved);
     post && setIsFeatured(post.isFeatured);
-    console.log(post?.isFeatured)
   }, [post]);
 
   return (
