@@ -17,7 +17,8 @@ const SidebarAdmin = ({ handleCloseSidebar }) => {
   const url = useParams();
   const downloadPDF = () => {
     let win = window.open(Manual);
-    setTimeout(function() { win.close();}, 1000);
+    //only use this for local testing
+    // setTimeout(function() { win.close();}, 1000);
   
   }
   return (
