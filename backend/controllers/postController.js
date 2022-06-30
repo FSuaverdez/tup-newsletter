@@ -42,7 +42,7 @@ export const getAllFeaturedPosts = asyncHandler(async (req, res) => {
       .populate('postedBy')
       .populate('updatedBy')
       .populate('comments.postedBy')
-      .sort({approvedAt:'desc'})
+      .sort({featuredAt:'desc'})
       .limit(5)
 
     res.status(200);
@@ -676,8 +676,12 @@ export const featurePost = asyncHandler(async (req, res) => {
   try {
     if (user.isAdmin) {
       let featuredPost
+      
       if (action == 'feature'){
-        featuredPost = await Post.findByIdAndUpdate(id,{isFeatured:true},{new:true});
+        const date = new Date().toLocaleString('en-US', {
+          timeZone: 'Asia/Manila',
+        });
+        featuredPost = await Post.findByIdAndUpdate(id,{isFeatured:true,featuredAt:date},{new:true});
       }
       else{
         featuredPost = await Post.findByIdAndUpdate(id,{isFeatured:false},{new:true});

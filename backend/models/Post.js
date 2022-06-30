@@ -31,6 +31,7 @@ const postSchema = mongoose.Schema(
       default: [],
     },
     isFeatured: { type: Boolean, default: false },
+    featuredAt: { type: Date },
   },
   { timestamps: true }
 );
