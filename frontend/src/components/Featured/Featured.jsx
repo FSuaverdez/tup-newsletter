@@ -27,9 +27,9 @@ const Featured = props => {
     { width: 768, itemsToShow: 3 },
     { width: 1200, itemsToShow: 4 },
   ];
-
   return (
     <div>
+      {data?.length>0 && <h1 className='text-2xl font-bold mb-10'>Featured Posts</h1>}
       <Carousel
         breakPoints={breakPoints}
         showThumbs={false}
