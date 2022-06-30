@@ -63,7 +63,7 @@ const SidebarAdmin = ({ handleCloseSidebar }) => {
           Filtered Words
         </NavLink>
       )}
-      {user?.isAdmin && (
+     
         <NavLink
           to={url}
           className={({ isActive }) =>
@@ -73,7 +73,7 @@ const SidebarAdmin = ({ handleCloseSidebar }) => {
         >
           Download User Manual
         </NavLink>
-      )}
+      
     </div>
   );
 };
